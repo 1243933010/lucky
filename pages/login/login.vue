@@ -55,8 +55,8 @@
 .page-container{
 	height: 100%;
 	// background-color: red;
-	background: url('../../static/login_bk.png') no-repeat 100% 100%;
-	
+	// background: url('../../static/login_bk.png') no-repeat 100% 100%;
+	background:  url('../../static/login_bk.png') no-repeat center center / 100% 100%;
 	.logo{
 		width: 175rpx;
 		height: 175rpx;

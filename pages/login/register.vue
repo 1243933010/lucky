@@ -1,53 +1,55 @@
 <template>
 	<view class="page-container">
-		<view class="logo">
-			<image src="../../static/logo.png" mode="widthFix"></image>
-		</view>
-		<view class="form">
-			<view class="form-item">
-				<view class="label">
-					<text>Surname</text>
+		<view class="page-container-box">
+			<view class="logo">
+				<image src="../../static/logo.png" mode="widthFix"></image>
+			</view>
+			<view class="form">
+				<view class="form-item">
+					<view class="label">
+						<text>Surname</text>
+					</view>
+					<view class="input">
+						<input type="text" v-model="formData.form1" />
+					</view>
 				</view>
-				<view class="input">
-					<input type="text" v-model="formData.form1" />
+				<view class="form-item">
+					<view class="label">
+						<text>Name</text>
+					</view>
+					<view class="input">
+						<input type="password" v-model="formData.form2" />
+					</view>
+				</view>
+				<view class="form-item">
+					<view class="label">
+						<text>Email</text>
+					</view>
+					<view class="input">
+						<input type="password" v-model="formData.form2" />
+					</view>
+				</view>
+				<view class="form-item">
+					<view class="label">
+						<text>Login password</text>
+					</view>
+					<view class="input">
+						<input type="password" v-model="formData.form2" />
+					</view>
+				</view>
+				<view class="form-item">
+					<view class="label">
+						<text>Confirm password</text>
+					</view>
+					<view class="input">
+						<input type="password" v-model="formData.form2" />
+					</view>
 				</view>
 			</view>
-			<view class="form-item">
-				<view class="label">
-					<text>Name</text>
+			<view class="submit-btn">
+				<view class="">
+					<text>Login In</text>
 				</view>
-				<view class="input">
-					<input type="password" v-model="formData.form2" />
-				</view>
-			</view>
-			<view class="form-item">
-				<view class="label">
-					<text>Email</text>
-				</view>
-				<view class="input">
-					<input type="password" v-model="formData.form2" />
-				</view>
-			</view>
-			<view class="form-item">
-				<view class="label">
-					<text>Login password</text>
-				</view>
-				<view class="input">
-					<input type="password" v-model="formData.form2" />
-				</view>
-			</view>
-			<view class="form-item">
-				<view class="label">
-					<text>Confirm password</text>
-				</view>
-				<view class="input">
-					<input type="password" v-model="formData.form2" />
-				</view>
-			</view>
-		</view>
-		<view class="submit-btn">
-			<view class="">
-				<text>Login In</text>
 			</view>
 		</view>
 	</view>
@@ -69,9 +71,10 @@
 <style lang="less" scoped>
 	page{
 		height: 100%;
-		// background-color: #040405;
+		background-color: #040405;
 		// background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
-	background: #09090c url('../../static/login_bk.png') no-repeat 100% 100%;
+		 
+	
 	}
 	text{
 		line-height: 0;
@@ -80,8 +83,10 @@
 .page-container{
 	height: 100%;
 	// background-color: red;
-	
-	
+	background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
+	.page-container-box{
+		background:  url('../../static/login_bk.png') no-repeat center center / 100% 100%;
+	}
 	.logo{
 		width: 175rpx;
 		height: 175rpx;
