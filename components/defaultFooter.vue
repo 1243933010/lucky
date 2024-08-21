@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="fixed">
+		<view :class="fiexed?'fixed':'fixed1'" >
 			<view class="submit-btn">
 				<view class=""></view>
 				<view class="text">
@@ -16,6 +16,11 @@
 <script>
 	export default {
 		name: "defaultFooter",
+		props:{
+			fiexed:{
+				default:true
+			}
+		},
 		data() {
 			return {
 
@@ -29,6 +34,12 @@
 		position: fixed;
 		width: 100%;
 		bottom: 36rpx;
+		z-index: 10;
+	}
+	.fixed1{
+		// position: fixed;
+		width: 100%;
+		// bottom: 36rpx;
 		z-index: 10;
 	}
 	.submit-btn {
