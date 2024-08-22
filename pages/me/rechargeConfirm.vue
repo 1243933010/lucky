@@ -2,27 +2,20 @@
 	<view class="page-container">
 		<DefaultHeader />
 		<view class="recharge">
-			<view class="click">
-				<view class="recharge-btn">
-					<text>Recharge</text>
-					<image src="../../static/recharge.png" mode="widthFix"></image>
-				</view>
-				<view class="logo">
-					<image src="../../static/logo.png" mode="widthFix"></image>
-				</view>
-				<view class="withdraw">
-
-					<image src="../../static/withdraw.png" mode="widthFix"></image>
-					<text>Withdraw</text>
-				</view>
-			</view>
 			<view class="recharge-container">
 				<view class="header">
 					<view class="title">
 						<text>Recharge</text>
 					</view>
-					<view class="icon">
+					<!-- <view class="icon">
 						<image src="../../static/order.png" mode="widthFix"></image>
+					</view> -->
+					<view class="time">
+						<view class="box"><text>11</text></view>
+						<view class="fu"><text>:</text></view>
+						<view class="box"><text>11</text></view>
+						<view class="fu"><text>:</text></view>
+						<view class="box"><text>11</text></view>
 					</view>
 				</view>
 				<view class="content">
@@ -106,66 +99,10 @@
 
 	.recharge {
 		width: 100%;
-		padding-top: 87rpx;
+		padding-top: 61rpx;
 		box-sizing: border-box;
-		padding-left: 52rpx;
-		padding-right: 52rpx;
-
-		.click {
-			width: 100%;
-			margin-bottom: 127rpx;
-			.flex-space-between;
-
-			.recharge-btn,
-			.withdraw {
-				width: 267rpx;
-				height: 91rpx;
-				background: #222222;
-				box-shadow: -2rpx -2rpx 5rpx 0rpx rgba(255, 255, 255, 0.25);
-				border-radius: 18rpx 18rpx 18rpx 18rpx;
-
-				.flex-direction;
-
-				text {
-					color: #DDDDDD;
-					font-size: 21rpx;
-				}
-
-				image {
-					width: 50rpx;
-				}
-			}
-
-			.recharge-btn {
-				padding-left: 21rpx;
-
-				text {
-					margin-right: 14rpx;
-				}
-			}
-
-			.withdraw {
-				padding-right: 21rpx;
-				display: flex;
-				flex-direction: row;
-				justify-content: flex-end;
-
-				text {
-					margin-left: 14rpx;
-				}
-			}
-
-			.logo {
-				width: 105rpx;
-				margin: 0 32rpx;
-
-				image {
-					width: 100%;
-					border-radius: 50%;
-				}
-			}
-		}
-
+		padding-left: 47rpx;
+		padding-right: 47rpx;
 		.recharge-container {
 			width: 100%;
 
@@ -173,23 +110,30 @@
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-				margin-bottom: 54rpx;
+				margin-bottom: 78rpx;
 
 				.title {
 					font-size: 42rpx;
 					color: white;
 				}
-
-				.icon {
-					width: 61rpx;
-					height: 61rpx;
-					background: #222222;
-					box-shadow: 2rpx -2rpx 5rpx 0rpx rgba(255, 255, 255, 0.3);
-					border-radius: 50%;
-					.flex-center;
-
-					image {
-						width: 28rpx;
+				.time{
+					.flex-direction;
+					.box{
+						width: 35rpx;
+						height: 35rpx;
+						background: linear-gradient( 146deg, rgba(68,68,68,0.5) 0%, rgba(0,0,0,0.5) 100%);
+						box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84,84,84,0.2118);
+						border-radius: 4rpx 4rpx 4rpx 4rpx;
+						border: 1rpx solid #666666;
+						.flex-center;
+						color: #FFFFFF;
+						font-size: 24rpx;
+						margin-right: 7rpx;
+					}
+					.fu{
+						color: #FFFFFF;
+						font-size: 24rpx;
+						margin-right: 7rpx;
 					}
 				}
 			}
