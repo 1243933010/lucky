@@ -19,70 +19,118 @@
 					</view>
 				</view>
 				<view class="content">
-					<view class="input">
-						<image src="../../static/me_icon.png" mode="widthFix"></image>
-						<view class="input-con">
-							<input type="number" v-model="formData.num" />
+					<view class="list">
+						<view class="item">
+							<view class="title">
+								<text>Payment Method:</text>
+							</view>
+							<view class="label">
+								<text>USDT-TRC20</text>
+							</view>
+						</view>
+						<view class="item">
+							<view class="title">
+								<text>Amount:</text>
+							</view>
+							<view class="num">
+								<image src="../../static/me_icon.png" mode="widthFix"></image>
+								<text>1000</text>
+							</view>
 						</view>
 					</view>
-					<view class="radio">
-						<view class="title">
-							<text>Choose Payment Method</text>
-						</view>
-						<view class="radio-con">
-							<view class="radio-item">
-								<view class="label">
-									<text>USDT-TRC20</text>
-								</view>
-								<view class="btn" @click="chooseRadio(0)">
-									<view class="border">
-										<view class="active" v-if="radioIndex==0"></view>
-									</view>
-								</view>
+					<view class="urcode">
+						<view class="bk">
+							<view class="white">
+								<uqrcode :size="160" ref="uqrcode" :options="options" canvas-id="qrcode" :value="options.value">
+								</uqrcode>
 							</view>
-							<view class="radio-item">
-								<view class="label">
-									<text>USDT-BNB Smart Chain/BEP20</text>
-								</view>
-								<view class="btn" @click="chooseRadio(1)">
-									<view class="border">
-										<view class="active" v-if="radioIndex==1"></view>
-									</view>
-								</view>
+						</view>
+					</view>
+					<view class="copy">
+						<view class="title">
+							<text>Address Link:</text>
+						</view>
+						<view class="input">
+							<view class="left">
+								<input type="text" />
+							</view>
+							<view class="right">
+								<text>Copy</text>
 							</view>
 						</view>
 					</view>
 					<view class="recharge-submit">
-						<view class="con">
-							<text>recharge</text>
+						<view class="con" @click="payment">
+							<text>Payment completed</text>
 						</view>
+					</view>
+					<view class="footer-text">
+						<text>choose your cryptocurrency: Please scan the QR codsor copy the details to your wallet or exchange tocomplete the payment.</text>
 					</view>
 				</view>
 			</view>
 		</view>
+		
+		<DefaultPopup ref="defaultPopup" />
 	</view>
 </template>
 
 <script>
 	import DefaultHeader from '../../components/defaultHeader.vue';
+	import DefaultPopup from '../../components/defaultPopup.vue';
+	import logo from '../../static/logo.png'
 	// import DefaultFooter from '../../components/defaultFooter.vue';
+	import ayQrcode from "@/components/ay-qrcode/ay-qrcode.vue"
 	export default {
 		components: {
 			DefaultHeader,
+			ayQrcode,
+			DefaultPopup
 			// DefaultFooter
 		},
 		data() {
 			return {
 				radioIndex: 0,
-				formData:{
-					num:''
+				formData: {
+					num: ''
+				},
+				options: {
+					value: 'https://uqrcode.cn/doc',
+					// width:160,
+					// height:160,
+					// margin: 10,
+					foregroundImageSrc: logo
 				}
 			};
 		},
-		methods:{
-			chooseRadio(index){
+		mounted() {
+			let that = this;
+			that.showQrcode(); //一加载生成二维码
+		},
+		methods: {
+			payment(){
+				this.$refs.defaultPopup.open({
+					type:'bottom'
+				})
+			},
+			chooseRadio(index) {
 				this.radioIndex = index;
-			}
+			},
+			// 展示二维码
+			showQrcode() {
+				let _this = this;
+				this.modal_qr = true;
+				// uni.showLoading()
+				setTimeout(function() {
+					// uni.hideLoading()
+					_this.$refs.qrcode.crtQrCode()
+				}, 50)
+			},
+
+			//传入组件的方法
+			hideQrcode() {
+				this.modal_qr = false;
+			},
 		}
 	}
 </script>
@@ -103,6 +151,7 @@
 		box-sizing: border-box;
 		padding-left: 47rpx;
 		padding-right: 47rpx;
+
 		.recharge-container {
 			width: 100%;
 
@@ -116,13 +165,15 @@
 					font-size: 42rpx;
 					color: white;
 				}
-				.time{
+
+				.time {
 					.flex-direction;
-					.box{
+
+					.box {
 						width: 35rpx;
 						height: 35rpx;
-						background: linear-gradient( 146deg, rgba(68,68,68,0.5) 0%, rgba(0,0,0,0.5) 100%);
-						box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84,84,84,0.2118);
+						background: linear-gradient(146deg, rgba(68, 68, 68, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%);
+						box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84, 84, 84, 0.2118);
 						border-radius: 4rpx 4rpx 4rpx 4rpx;
 						border: 1rpx solid #666666;
 						.flex-center;
@@ -130,7 +181,8 @@
 						font-size: 24rpx;
 						margin-right: 7rpx;
 					}
-					.fu{
+
+					.fu {
 						color: #FFFFFF;
 						font-size: 24rpx;
 						margin-right: 7rpx;
@@ -141,86 +193,117 @@
 			.content {
 				width: 100%;
 
-				.input {
-					margin-bottom: 29rpx;
-					.flex-direction;
+				.list {
+					width: 100%;
+					margin-bottom: 140rpx;
 
-					image {
-						width: 70rpx;
-						margin-right: 7rpx;
-					}
+					// background-color: red;
+					.item {
+						width: 100%;
+						margin-bottom: 43rpx;
+						.flex-space-between;
 
-					.input-con {
-						width: 554rpx;
-						height: 70rpx;
-						background: #111111;
-						border-radius: 18rpx 18rpx 18rpx 18rpx;
-						border: 1rpx solid #999999;
-						color: #999999;
-						.flex-direction;
-						padding-left: 25rpx;
-					}
-				}
+						.title {
+							color: #AAAAAA;
+							font-size: 24rpx;
+						}
 
-				.radio {
-					display: flex;
-					flex-direction: column;
-					margin-bottom: 381rpx;
-					.title {
-						color: #AAAAAA;
-						font-size: 24rpx;
-						line-height: 1.5;
-						margin-bottom: 14rpx;
-					}
+						.label {
+							color: #FFFFFF;
+							font-size: 28rpx;
+						}
 
-					.radio-con {
-						width: 643rpx;
-						// height: 140rpx;
-						background: linear-gradient(146deg, rgba(68, 68, 68, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%);
-						box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84, 84, 84, 0.2118);
-						border-radius: 25rpx 25rpx 25rpx 25rpx;
-						border: 1rpx solid #666666;
-						box-sizing: border-box;
-						padding: 26rpx 26rpx 0 26rpx;
-						.radio-item {
-							.flex-space-between;
-							box-sizing: border-box;
-							margin-bottom: 26rpx;
-							.label {
-								color: #999999;
-								font-size: 28rpx;
+						.num {
+							color: #FFFFFF;
+							.flex-direction;
+							image {
+								width: 60rpx;
+								margin-right: 24rpx;
 							}
 
-							.btn {
-								width: 28rpx;
-								height: 28rpx;
-								background: #111111;
-								border-radius: 18rpx 18rpx 18rpx 18rpx;
-								border: 1rpx solid #999999;
-								.flex-center;
-							}
-							.active{
-								width: 11rpx;
-								height: 11rpx;
-								background: #FFFFFF;
-								border-radius: 18rpx 18rpx 18rpx 18rpx;
-							}
 						}
 					}
 				}
-				.recharge-submit{
+
+				.urcode {
 					width: 100%;
-					padding-bottom: 200rpx;
+					margin-bottom: 87rpx;
 					.flex-center;
-					.con{
+					.bk{
+						background: #666666;
+						box-sizing: border-box;
+						padding: 17rpx;
+						background: linear-gradient( 146deg, rgba(68,68,68,0.5) 0%, rgba(0,0,0,0.5) 100%);
+						box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84,84,84,0.2118);
+						border-radius: 25rpx;
+						border: 1rpx solid #666666;
+						.white{
+							box-sizing: border-box;
+							padding: 20rpx;
+							background: white;
+							border-radius: 25rpx;
+						}
+					}
+				}
+				.copy{
+					width: 100%;
+					display: flex;
+					flex-direction: column;
+					margin-bottom: 194rpx;
+					.title{
+						color: #AAAAAA;
+						font-size: 24rpx;
+						margin-bottom: 17rpx;
+					}
+					.input{
+						width: 613rpx;
+						// height: 70rpx;
+						box-sizing: border-box;
+						padding: 15rpx 17rpx;
+						background: #111111;
+						border-radius: 18rpx 18rpx 18rpx 18rpx;
+						border: 1rpx solid #999999;
+						.flex-space-between;
+						.left{
+							color: #999999;
+							font-size: 24rpx;
+							input{
+								line-height: 1.5;
+							}
+						}
+						.right{
+							background-image: linear-gradient(55.53466052546843deg, #9DFE00 0%, #14D9E5 100%);
+							-webkit-background-clip: text;
+							background-clip: text;
+							color: transparent;
+							font-size: 28rpx;
+							padding-left: 21rpx;
+							border-left: 1px solid #555555;
+							
+						}
+					}
+				}
+
+				.recharge-submit {
+					width: 100%;
+					// padding-bottom: 200rpx;
+					margin-bottom: 35rpx;
+					.flex-center;
+
+					.con {
 						width: 526rpx;
 						height: 88rpx;
-						background: linear-gradient( 146deg, #9DFE00 0%, #14D9E5 100%);
+						background: linear-gradient(146deg, #9DFE00 0%, #14D9E5 100%);
 						border-radius: 44rpx;
 						.flex-center;
 						color: #000000;
 						font-size: 31rpx;
 					}
+				}
+				.footer-text{
+					color: #AAAAAA;
+					font-size: 24rpx;
+					padding-bottom: 95rpx;
 				}
 			}
 

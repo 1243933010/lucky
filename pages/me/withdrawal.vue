@@ -19,7 +19,7 @@
 			<view class="recharge-container">
 				<view class="header">
 					<view class="title">
-						<text>Recharge</text>
+						<text>Withdraw</text>
 					</view>
 					<view class="icon">
 						<image src="../../static/order.png" mode="widthFix"></image>
@@ -28,8 +28,12 @@
 				<view class="content">
 					<view class="input">
 						<image src="../../static/me_icon.png" mode="widthFix"></image>
-						<view class="input-con">
-							<input type="number" v-model="formData.num" />
+						<view class="all">
+							<view class="input-con">
+								<input type="number" placeholder="Minimum withdrawal amount 50" v-model="formData.num" />
+						
+							</view>
+							<text class="label">Withdrawable: 1000.33 USDT</text>
 						</view>
 					</view>
 					<view class="radio">
@@ -57,6 +61,26 @@
 									</view>
 								</view>
 							</view>
+						</view>
+					</view>
+					<view class="urcode">
+						<view class="bk">
+							<view class="white">
+								<image src="../../static/add.png" mode="widthFix"></image>
+							</view>
+						</view>
+					</view>
+					<view class="copy">
+						<view class="title">
+							<text>Address Link:</text>
+						</view>
+						<view class="input">
+							<view class="left">
+								<input type="text" />
+							</view>
+							<!-- <view class="right">
+								<text>Copy</text>
+							</view> -->
 						</view>
 					</view>
 					<view class="recharge-submit">
@@ -135,8 +159,7 @@
 					width: 50rpx;
 				}
 			}
-
-			.recharge-btn {
+.recharge-btn {
 				padding-left: 21rpx;
 				background: #201f29 url('../../static/bk_icon1.png')  no-repeat center center / 100%;;
 				text {
@@ -199,13 +222,18 @@ background: #201f29 url('../../static/bk_icon2.png')  no-repeat center center / 
 
 				.input {
 					margin-bottom: 29rpx;
-					.flex-direction;
-
+					// .flex-direction;
+					display: flex;
+					flex-direction: row;
+					justify-content: flex-start;
 					image {
 						width: 70rpx;
 						margin-right: 7rpx;
 					}
-
+					.all{
+						display: flex;
+						flex-direction: column;
+					}
 					.input-con {
 						width: 554rpx;
 						height: 70rpx;
@@ -214,17 +242,26 @@ background: #201f29 url('../../static/bk_icon2.png')  no-repeat center center / 
 						border: 1rpx solid #999999;
 						color: #999999;
 						.flex-direction;
+						
 						padding-left: 25rpx;
 						input{
+							width: 100%;
 							font-size: 28rpx;
 						}
+						
+					}
+					.label{
+						color: #EEEEEE;
+						font-size: 24rpx;
+						padding-top: 5rpx;
+						line-height: 1;
 					}
 				}
 
 				.radio {
 					display: flex;
 					flex-direction: column;
-					margin-bottom: 381rpx;
+					margin-bottom: 105rpx;
 					.title {
 						color: #AAAAAA;
 						font-size: 24rpx;
@@ -264,6 +301,71 @@ background: #201f29 url('../../static/bk_icon2.png')  no-repeat center center / 
 								background: #FFFFFF;
 								border-radius: 18rpx 18rpx 18rpx 18rpx;
 							}
+						}
+					}
+				}
+				.urcode {
+					width: 100%;
+					margin-bottom: 35rpx;
+					.flex-center;
+					.bk{
+						background: #666666;
+						box-sizing: border-box;
+						padding: 17rpx;
+						background: linear-gradient( 146deg, rgba(68,68,68,0.5) 0%, rgba(0,0,0,0.5) 100%);
+						box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84,84,84,0.2118);
+						border-radius: 25rpx;
+						border: 1rpx solid #666666;
+						.white{
+							width: 322rpx;
+							height: 315rpx;
+							margin: 0 auto;
+							box-sizing: border-box;
+							padding: 20rpx;
+							background: #2F2F2F;
+							border-radius: 25rpx;
+							.flex-center;
+							image{
+								width: 43rpx;
+							}
+						}
+					}
+				}
+				.copy{
+					width: 100%;
+					display: flex;
+					flex-direction: column;
+					margin-bottom: 82rpx;
+					.title{
+						color: #AAAAAA;
+						font-size: 24rpx;
+						margin-bottom: 17rpx;
+					}
+					.input{
+						width: 613rpx;
+						// height: 70rpx;
+						box-sizing: border-box;
+						padding: 15rpx 17rpx;
+						background: #111111;
+						border-radius: 18rpx 18rpx 18rpx 18rpx;
+						border: 1rpx solid #999999;
+						.flex-space-between;
+						.left{
+							color: #999999;
+							font-size: 24rpx;
+							input{
+								line-height: 1.5;
+							}
+						}
+						.right{
+							background-image: linear-gradient(55.53466052546843deg, #9DFE00 0%, #14D9E5 100%);
+							-webkit-background-clip: text;
+							background-clip: text;
+							color: transparent;
+							font-size: 28rpx;
+							padding-left: 21rpx;
+							border-left: 1px solid #555555;
+							
 						}
 					}
 				}

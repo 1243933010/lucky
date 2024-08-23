@@ -7,11 +7,16 @@
 		<view class="form">
 			<view class="form-item">
 				<view class="label">
-					<text>Name</text>
+					<text>UserName</text>
 				</view>
 				<view class="input">
-					<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
-					<input type="text" v-model="formData.form1" />
+					<view class="box">
+						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
+						<input type="text" v-model="formData.form1" />
+					</view>
+					<view class="arrow">
+						<image src="../../static/right_arrow.png" mode="widthFix"></image>
+					</view>
 				</view>
 			</view>
 			<view class="form-item">
@@ -19,9 +24,27 @@
 					<text>Login password</text>
 				</view>
 				<view class="input">
-					<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
-					<input type="password" v-model="formData.form2" />
-					<image class="arrow" src="../../static/right_arrow.png" mode="widthFix"></image>
+					<view class="box">
+						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
+						<input type="text" v-model="formData.form2" />
+					</view>
+					<view class="arrow">
+						<image src="../../static/right_arrow.png" mode="widthFix"></image>
+					</view>
+				</view>
+			</view>
+			<view class="form-item">
+				<view class="label">
+					<text>Transaction password</text>
+				</view>
+				<view class="input">
+					<view class="box">
+						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
+						<input type="text" v-model="formData.form2" />
+					</view>
+					<view class="arrow">
+						<image src="../../static/right_arrow.png" mode="widthFix"></image>
+					</view>
 				</view>
 			</view>
 			<view class="form-item">
@@ -31,22 +54,26 @@
 				</view>
 				<view class="input">
 					<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
-					<input type="password" v-model="formData.form2" />
-					<image class="arrow" src="../../static/right_arrow.png" mode="widthFix"></image>
+					<input style="width: 100%;" type="password" v-model="formData.form2" />
+					<!-- <image class="arrow" src="../../static/right_arrow.png" mode="widthFix"></image> -->
 				</view>
 			</view>
-			<view class="form-item">
+			<view class="form-item" :style="sysInfo.screenHeight < 800 ? 'padding-bottom:200rpx' : ''">
 				<view class="label">
-					<text>Withdrawal address</text>
+					<text>Withdrawal address{{sysInfo.screenHeight}}1</text>
 				</view>
 				<view class="input">
-					<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
-					<input type="password" v-model="formData.form2" />
-					<image class="arrow" src="../../static/right_arrow.png" mode="widthFix"></image>
+					<view class="box">
+						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
+						<input type="text" v-model="formData.form1" />
+					</view>
+					<view class="arrow">
+						<image src="../../static/right_arrow.png" mode="widthFix"></image>
+					</view>
 				</view>
 			</view>
 		</view>
-		
+
 		<!-- <view class="" style="padding-top: 212rpx;padding-bottom: 36rpx;">
 			<DefaultFooter />
 		</view> -->
@@ -58,14 +85,28 @@
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import DefaultFooter from '../../components/defaultFooter.vue';
 	export default {
-		components:{DefaultHeader,DefaultFooter},
+		components: {
+			DefaultHeader,
+			DefaultFooter
+		},
 		data() {
 			return {
 				formData: {
 					form1: '',
 					form2: ""
-				}
+				},
+				sysInfo: {screenHeight:100}
 			};
+		},
+		onLoad() {
+			let sysInfo = uni.getSystemInfo({
+				success:(res)=>{
+					console.log(res.screenHeight)
+					this.sysInfo = res;
+				}
+			})
+			// this.sysInfo = sysInfo.screenHeight;
+			// console.log(sysInfo.screenHeight)
 		}
 	}
 </script>
@@ -87,8 +128,8 @@
 	.page-container {
 		height: 100%;
 		// background-color: red;
-        padding-bottom: 40rpx;
-		
+		padding-bottom: 40rpx;
+
 
 		.logo {
 			width: 175rpx;
@@ -105,7 +146,7 @@
 
 		.form {
 			padding-top: 136rpx;
-			width: calc(100% - 77rpx);
+			width: calc(100% - 84rpx);
 			margin: 0 auto;
 
 			.form-item {
@@ -146,28 +187,42 @@
 					align-items: center;
 					padding-left: 43.81rpx;
 
+					.box {
+						width: 100%;
+						.flex-direction;
+
+						.img1 {
+							width: 26rpx;
+							height: 26rpx;
+							margin-right: 24rpx;
+						}
+
+						input {
+							width: 100%;
+							color: #FFFFFF;
+							font-size: 31.54rpx;
+							color: white;
+						}
+					}
+
 					.img1 {
 						width: 26rpx;
 						height: 26rpx;
 						margin-right: 24rpx;
 					}
 
-					input {
-						width: 100%;
-
-						color: #FFFFFF;
-						font-size: 31.54rpx;
-						color: white;
-					}
-					.arrow{
+					.arrow {
 						width: 11rpx;
 						margin-right: 20rpx;
+						image{
+							width: 100%;
+						}
 						// height: 35rpx;
 					}
 				}
 			}
 		}
 
-		
+
 	}
 </style>
