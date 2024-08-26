@@ -21,7 +21,7 @@
 					<view class="title">
 						<text>Recharge</text>
 					</view>
-					<view class="icon">
+					<view class="icon" @click="orderPopupClick">
 						<image src="../../static/order.png" mode="widthFix"></image>
 					</view>
 				</view>
@@ -67,16 +67,18 @@
 				</view>
 			</view>
 		</view>
+			<OrderPopup ref="orderPopup"></OrderPopup>
 	</view>
 </template>
 
 <script>
 	import DefaultHeader from '../../components/defaultHeader.vue';
+	import OrderPopup from '../../components/orderPopup.vue';
 	// import DefaultFooter from '../../components/defaultFooter.vue';
 	export default {
 		components: {
 			DefaultHeader,
-			// DefaultFooter
+			 OrderPopup
 		},
 		data() {
 			return {
@@ -87,6 +89,10 @@
 			};
 		},
 		methods:{
+			orderPopupClick(){
+				this.$refs.orderPopup.open()
+				
+			},
 			chooseRadio(index){
 				this.radioIndex = index;
 			}
