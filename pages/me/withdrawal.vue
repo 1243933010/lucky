@@ -92,19 +92,6 @@
 				</view>
 			</view>
 		</view>
-		<defaultPopup ref="popup">
-			<template #popupCon>
-				<view class="popup-container">
-					<view class="tit">
-						<text>Authorize this transaction</text>
-						<text>
-							<!-- TODO: 缺图 -->
-							X
-						</text>
-					</view>
-				</view>
-			</template>
-		</defaultPopup>
 	</view>
 </template>
 
@@ -129,7 +116,7 @@
 				this.radioIndex = index;
 			},
 			openPopUpHandle() {
-				this.$refs.popup.open("bottom")
+				this.$refs.popup.open()
 			}
 		}
 	}
@@ -430,7 +417,6 @@
 
 		}
 		
-		.popup-container {
-		}
+		
 	}
 </style>
