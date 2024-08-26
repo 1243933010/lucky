@@ -1,9 +1,7 @@
 <template>
 	<view>
 		<uni-popup ref="popup" borderRadius="20 20 0 0 " :type="type" style="background-color: red;">
-			<view class="popup-container">
-				
-			</view>
+			<template v-solt="popupCon"> </template>
 		</uni-popup>
 	</view>
 </template>

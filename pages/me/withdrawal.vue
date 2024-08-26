@@ -30,8 +30,9 @@
 						<image src="../../static/me_icon.png" mode="widthFix"></image>
 						<view class="all">
 							<view class="input-con">
-								<input type="number" placeholder="Minimum withdrawal amount 50" v-model="formData.num" />
-						
+								<input type="number" placeholder="Minimum withdrawal amount 50"
+									v-model="formData.num" />
+
 							</view>
 							<text class="label">Withdrawable: 1000.33 USDT</text>
 						</view>
@@ -84,35 +85,51 @@
 						</view>
 					</view>
 					<view class="recharge-submit">
-						<view class="con">
+						<view class="con" @click="openPopUpHandle">
 							<text>recharge</text>
 						</view>
 					</view>
 				</view>
 			</view>
 		</view>
+		<defaultPopup ref="popup">
+			<template #popupCon>
+				<view class="popup-container">
+					<view class="tit">
+						<text>Authorize this transaction</text>
+						<text>
+							<!-- TODO: 缺图 -->
+							X
+						</text>
+					</view>
+				</view>
+			</template>
+		</defaultPopup>
 	</view>
 </template>
 
 <script>
 	import DefaultHeader from '../../components/defaultHeader.vue';
-	// import DefaultFooter from '../../components/defaultFooter.vue';
+	import defaultPopup from '../../components/defaultPopup.vue';
 	export default {
 		components: {
 			DefaultHeader,
-			// DefaultFooter
+			defaultPopup
 		},
 		data() {
 			return {
 				radioIndex: 0,
-				formData:{
-					num:''
+				formData: {
+					num: ''
 				}
 			};
 		},
-		methods:{
-			chooseRadio(index){
+		methods: {
+			chooseRadio(index) {
 				this.radioIndex = index;
+			},
+			openPopUpHandle() {
+				this.$refs.popup.open("bottom")
 			}
 		}
 	}
@@ -159,9 +176,12 @@
 					width: 50rpx;
 				}
 			}
-.recharge-btn {
+
+			.recharge-btn {
 				padding-left: 21rpx;
-				background: #201f29 url('../../static/bk_icon1.png')  no-repeat center center / 100%;;
+				background: #201f29 url('../../static/bk_icon1.png') no-repeat center center / 100%;
+				;
+
 				text {
 					margin-right: 14rpx;
 				}
@@ -172,7 +192,9 @@
 				display: flex;
 				flex-direction: row;
 				justify-content: flex-end;
-background: #201f29 url('../../static/bk_icon2.png')  no-repeat center center / 100%;;
+				background: #201f29 url('../../static/bk_icon2.png') no-repeat center center / 100%;
+				;
+
 				text {
 					margin-left: 14rpx;
 				}
@@ -226,14 +248,17 @@ background: #201f29 url('../../static/bk_icon2.png')  no-repeat center center / 
 					display: flex;
 					flex-direction: row;
 					justify-content: flex-start;
+
 					image {
 						width: 70rpx;
 						margin-right: 7rpx;
 					}
-					.all{
+
+					.all {
 						display: flex;
 						flex-direction: column;
 					}
+
 					.input-con {
 						width: 554rpx;
 						height: 70rpx;
@@ -242,15 +267,17 @@ background: #201f29 url('../../static/bk_icon2.png')  no-repeat center center / 
 						border: 1rpx solid #999999;
 						color: #999999;
 						.flex-direction;
-						
+
 						padding-left: 25rpx;
-						input{
+
+						input {
 							width: 100%;
 							font-size: 28rpx;
 						}
-						
+
 					}
-					.label{
+
+					.label {
 						color: #EEEEEE;
 						font-size: 24rpx;
 						padding-top: 5rpx;
@@ -262,6 +289,7 @@ background: #201f29 url('../../static/bk_icon2.png')  no-repeat center center / 
 					display: flex;
 					flex-direction: column;
 					margin-bottom: 105rpx;
+
 					.title {
 						color: #AAAAAA;
 						font-size: 24rpx;
@@ -278,10 +306,12 @@ background: #201f29 url('../../static/bk_icon2.png')  no-repeat center center / 
 						border: 1rpx solid #666666;
 						box-sizing: border-box;
 						padding: 26rpx 26rpx 0 26rpx;
+
 						.radio-item {
 							.flex-space-between;
 							box-sizing: border-box;
 							margin-bottom: 26rpx;
+
 							.label {
 								color: #999999;
 								font-size: 28rpx;
@@ -295,7 +325,8 @@ background: #201f29 url('../../static/bk_icon2.png')  no-repeat center center / 
 								border: 1rpx solid #999999;
 								.flex-center;
 							}
-							.active{
+
+							.active {
 								width: 11rpx;
 								height: 11rpx;
 								background: #FFFFFF;
@@ -304,19 +335,22 @@ background: #201f29 url('../../static/bk_icon2.png')  no-repeat center center / 
 						}
 					}
 				}
+
 				.urcode {
 					width: 100%;
 					margin-bottom: 35rpx;
 					.flex-center;
-					.bk{
+
+					.bk {
 						background: #666666;
 						box-sizing: border-box;
 						padding: 17rpx;
-						background: linear-gradient( 146deg, rgba(68,68,68,0.5) 0%, rgba(0,0,0,0.5) 100%);
-						box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84,84,84,0.2118);
+						background: linear-gradient(146deg, rgba(68, 68, 68, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%);
+						box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84, 84, 84, 0.2118);
 						border-radius: 25rpx;
 						border: 1rpx solid #666666;
-						.white{
+
+						.white {
 							width: 322rpx;
 							height: 315rpx;
 							margin: 0 auto;
@@ -325,23 +359,27 @@ background: #201f29 url('../../static/bk_icon2.png')  no-repeat center center / 
 							background: #2F2F2F;
 							border-radius: 25rpx;
 							.flex-center;
-							image{
+
+							image {
 								width: 43rpx;
 							}
 						}
 					}
 				}
-				.copy{
+
+				.copy {
 					width: 100%;
 					display: flex;
 					flex-direction: column;
 					margin-bottom: 82rpx;
-					.title{
+
+					.title {
 						color: #AAAAAA;
 						font-size: 24rpx;
 						margin-bottom: 17rpx;
 					}
-					.input{
+
+					.input {
 						width: 613rpx;
 						// height: 70rpx;
 						box-sizing: border-box;
@@ -350,14 +388,17 @@ background: #201f29 url('../../static/bk_icon2.png')  no-repeat center center / 
 						border-radius: 18rpx 18rpx 18rpx 18rpx;
 						border: 1rpx solid #999999;
 						.flex-space-between;
-						.left{
+
+						.left {
 							color: #999999;
 							font-size: 24rpx;
-							input{
+
+							input {
 								line-height: 1.5;
 							}
 						}
-						.right{
+
+						.right {
 							background-image: linear-gradient(55.53466052546843deg, #9DFE00 0%, #14D9E5 100%);
 							-webkit-background-clip: text;
 							background-clip: text;
@@ -365,18 +406,20 @@ background: #201f29 url('../../static/bk_icon2.png')  no-repeat center center / 
 							font-size: 28rpx;
 							padding-left: 21rpx;
 							border-left: 1px solid #555555;
-							
+
 						}
 					}
 				}
-				.recharge-submit{
+
+				.recharge-submit {
 					width: 100%;
 					padding-bottom: 200rpx;
 					.flex-center;
-					.con{
+
+					.con {
 						width: 526rpx;
 						height: 88rpx;
-						background: linear-gradient( 146deg, #9DFE00 0%, #14D9E5 100%);
+						background: linear-gradient(146deg, #9DFE00 0%, #14D9E5 100%);
 						border-radius: 44rpx;
 						.flex-center;
 						color: #000000;
@@ -385,6 +428,9 @@ background: #201f29 url('../../static/bk_icon2.png')  no-repeat center center / 
 				}
 			}
 
+		}
+		
+		.popup-container {
 		}
 	}
 </style>
