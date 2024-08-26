@@ -2,17 +2,17 @@
 	<view class="page-container">
 		<DefaultHeader />
 		<view class="logo">
-			<image src="../../static/logo.png" mode="widthFix"></image>
+			<image @click="changeImg" src="../../static/logo.png" mode="widthFix"></image>
 		</view>
 		<view class="form">
-			<view class="form-item">
+			<view class="form-item" @click="setUser">
 				<view class="label">
 					<text>UserName</text>
 				</view>
 				<view class="input">
 					<view class="box">
 						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
-						<input type="text" v-model="formData.form1" />
+						<input type="text" v-model="formData.form1" :disabled="true" />
 					</view>
 					<view class="arrow">
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
@@ -26,7 +26,7 @@
 				<view class="input">
 					<view class="box">
 						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
-						<input type="text" v-model="formData.form2" />
+						<input type="password" v-model="formData.form2"   :disabled="true" />
 					</view>
 					<view class="arrow">
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
@@ -40,7 +40,7 @@
 				<view class="input">
 					<view class="box">
 						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
-						<input type="text" v-model="formData.form2" />
+						<input type="password" v-model="formData.form2" :disabled="true" />
 					</view>
 					<view class="arrow">
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
@@ -54,7 +54,7 @@
 				</view>
 				<view class="input">
 					<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
-					<input style="width: 100%;" type="password" v-model="formData.form2" />
+					<input style="width: 100%;" type="text" v-model="formData.form2" :disabled="true" />
 					<!-- <image class="arrow" src="../../static/right_arrow.png" mode="widthFix"></image> -->
 				</view>
 			</view>
@@ -65,7 +65,7 @@
 				<view class="input">
 					<view class="box">
 						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
-						<input type="text" v-model="formData.form1" />
+						<input type="text" v-model="formData.form1"  :disabled="true" />
 					</view>
 					<view class="arrow">
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
@@ -78,22 +78,28 @@
 			<DefaultFooter />
 		</view> -->
 		<DefaultFooter />
+		<UserPopup ref="userPopup" />
+		<ImgPopup ref="imgPopup" />
 	</view>
 </template>
 
 <script>
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import DefaultFooter from '../../components/defaultFooter.vue';
+	import UserPopup from './components/userPopup.vue';
+	import ImgPopup from './components/imgPopup.vue';
 	export default {
 		components: {
 			DefaultHeader,
-			DefaultFooter
+			DefaultFooter,
+			UserPopup,
+			ImgPopup
 		},
 		data() {
 			return {
 				formData: {
-					form1: '',
-					form2: ""
+					form1: 'test',
+					form2: "123456"
 				},
 				sysInfo: {screenHeight:100}
 			};
@@ -107,6 +113,15 @@
 			})
 			// this.sysInfo = sysInfo.screenHeight;
 			// console.log(sysInfo.screenHeight)
+		},
+		methods:{
+			changeImg(){
+				// this.userPopup
+				this.$refs.imgPopup.open();
+			},
+			setUser(){
+				this.$refs.userPopup.open();
+			}
 		}
 	}
 </script>

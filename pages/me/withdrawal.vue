@@ -21,7 +21,7 @@
 					<view class="title">
 						<text>Withdraw</text>
 					</view>
-					<view class="icon">
+					<view class="icon" @click="orderPopupClick">
 						<image src="../../static/order.png" mode="widthFix"></image>
 					</view>
 				</view>
@@ -92,16 +92,20 @@
 				</view>
 			</view>
 		</view>
+		<defaultPopup ref="popup"></defaultPopup>
+		<OrderPopup ref="orderPopup"></OrderPopup>
 	</view>
 </template>
 
 <script>
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import defaultPopup from '../../components/defaultPopup.vue';
+	import OrderPopup from '../../components/orderPopup.vue';
 	export default {
 		components: {
 			DefaultHeader,
-			defaultPopup
+			defaultPopup,
+			OrderPopup
 		},
 		data() {
 			return {
@@ -112,6 +116,10 @@
 			};
 		},
 		methods: {
+			orderPopupClick(){
+				this.$refs.orderPopup.open()
+				
+			},
 			chooseRadio(index) {
 				this.radioIndex = index;
 			},
