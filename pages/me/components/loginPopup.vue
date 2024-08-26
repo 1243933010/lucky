@@ -6,18 +6,16 @@
 					<image src="../../../static/close.png" mode="widthFix"></image>
 				</view>
 				<view class="title">
-					<text>user name</text>
+					<text>Login password</text>
 				</view>
 				<view class="form">
 					<view class="form-item">
-						<input type="text" placeholder="姓氏">
+						<input type="text" placeholder="更换登录密码">
 					</view>
 					<view class="form-item">
-						<input type="text" placeholder="名字">
+						<input type="text" placeholder="确认密码">
 					</view>
-					<view class="form-item">
-						<input type="text" placeholder="用户名">
-					</view>
+					
 					<view class="send">
 						<input type="text" placeholder="邮箱验证码">
 						<view class="btn">
