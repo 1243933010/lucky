@@ -22,7 +22,7 @@
 			</view>
 		</view>
 		<view class="submit-btn">
-			<view class="">
+			<view class="" @click="loginSubmit">
 				<text>Login In</text>
 			</view>
 		</view>
@@ -38,6 +38,13 @@
 					form2:""
 				}
 			};
+		},
+		methods:{
+			loginSubmit(){
+				uni.redirectTo({
+					url:'/pages/index/index'
+				})
+			}
 		}
 	}
 </script>
