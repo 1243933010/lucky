@@ -91,7 +91,7 @@
 		methods:{
 			async submitBtn(){
 				let res = await $request('region',this.formData);
-				console.log(res)
+				// console.log(res)
 				$totast(res.data.message)
 				// if(res.data.code==200){
 					

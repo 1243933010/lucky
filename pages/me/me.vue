@@ -8,7 +8,7 @@
 				</view>
 				<view class="usdt">
 					<image src="../../static/me_icon.png" mode="widthFix"></image>
-					<view class="text"><text>45454545</text> <text>USDT</text></view>
+					<view class="text"><text>{{userInfo.balance*1}}</text> <text>USDT</text></view>
 				</view>
 				<view class="small">
 					<text>0.0295 (+1.34%)</text>
@@ -90,6 +90,9 @@
 </template>
 
 <script>
+	import {
+		$request,$totast
+	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import DefaultFooter from '../../components/defaultFooter.vue';
 	export default {
@@ -99,14 +102,24 @@
 		},
 		data() {
 			return {
-				
+				userInfo:{}
 			};
+		},
+		onLoad(){
+			this.getUser();
 		},
 		methods:{
 			goUrl(url){
 				uni.navigateTo({
 					url
 				})
+			},
+			async getUser(){
+				let res = await $request('userInfo',{});
+				console.log(res)
+				if(res.data.code==200){
+					this.userInfo = res.data.data;
+				}
 			}
 		}
 	}

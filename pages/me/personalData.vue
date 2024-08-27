@@ -12,7 +12,7 @@
 				<view class="input">
 					<view class="box">
 						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
-						<input type="text" v-model="formData.form1" :disabled="true" />
+						<input type="text" v-model="userInfo.nickname" :disabled="true" />
 					</view>
 					<view class="arrow">
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
@@ -26,7 +26,7 @@
 				<view class="input" @click="setLoginPassword">
 					<view class="box">
 						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
-						<input type="password" v-model="formData.form2"   :disabled="true" />
+						<input type="password" v-model="userInfo.password"   :disabled="true" />
 					</view>
 					<view class="arrow">
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
@@ -40,7 +40,7 @@
 				<view class="input" @click="setTransactionPassword">
 					<view class="box">
 						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
-						<input type="password" v-model="formData.form2" :disabled="true" />
+						<input type="password" v-model="formData.transactionPassword" :disabled="true" />
 					</view>
 					<view class="arrow">
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
@@ -54,7 +54,7 @@
 				</view>
 				<view class="input">
 					<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
-					<input style="width: 100%;" type="text" v-model="formData.form2" :disabled="true" />
+					<input style="width: 100%;" type="text" v-model="userInfo.email" :disabled="true" />
 					<!-- <image class="arrow" src="../../static/right_arrow.png" mode="widthFix"></image> -->
 				</view>
 			</view>
@@ -65,7 +65,7 @@
 				<view class="input" style="margin-bottom: 20rpx;">
 					<view class="box">
 						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
-						<input type="text" v-model="formData.form1"  :disabled="true" />
+						<input type="text" v-model="userInfo.trc20_address"  :disabled="true" />
 					</view>
 					<view class="arrow">
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
@@ -95,6 +95,9 @@
 </template>
 
 <script>
+	import {
+		$request,$totast
+	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import DefaultFooter from '../../components/defaultFooter.vue';
 	import UserPopup from './components/userPopup.vue';
@@ -114,9 +117,11 @@
 			return {
 				formData: {
 					form1: 'test',
-					form2: "123456"
+					form2: "123456",
+					transactionPassword:'******'
 				},
-				sysInfo: {screenHeight:100}
+				sysInfo: {screenHeight:100},
+				userInfo:{}
 			};
 		},
 		onLoad() {
@@ -126,6 +131,7 @@
 					this.sysInfo = res;
 				}
 			})
+			this.getUser();
 			// this.sysInfo = sysInfo.screenHeight;
 			// console.log(sysInfo.screenHeight)
 		},
@@ -143,6 +149,13 @@
 			},
 			setTransactionPassword(){
 				this.$refs.transactionPassword.open();
+			},
+			async getUser(){
+				let res = await $request('userInfo',{});
+				// console.log(res)
+				if(res.data.code==200){
+					this.userInfo = res.data.data;
+				}
 			}
 		}
 	}

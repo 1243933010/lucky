@@ -55,7 +55,7 @@
 		methods:{
 			async submitBtn(){
 				let res = await $request('login',this.formData);
-				console.log(res)
+				// console.log(res)
 				$totast(res.data.message)
 				if(res.data.code==200){
 					let {token} = res.data.data;
