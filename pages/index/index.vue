@@ -11,6 +11,9 @@
 				<view class=""></view>
 			</view>
 		</view>
+		<view class="" style="color: white;" @click="goUrl">
+			跳转个人中心临时地址
+		</view>
 		<view class="invite">
 			<view class="container">
 				<view class="people">
@@ -305,6 +308,11 @@
 
 				return result;
 			},
+			goUrl(){
+				uni.navigateTo({
+					url:'/pages/me/me'
+				})
+			}
 		}
 	}
 </script>

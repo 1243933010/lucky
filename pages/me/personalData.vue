@@ -23,7 +23,7 @@
 				<view class="label">
 					<text>Login password</text>
 				</view>
-				<view class="input">
+				<view class="input" @click="setLoginPassword">
 					<view class="box">
 						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
 						<input type="password" v-model="formData.form2"   :disabled="true" />
@@ -37,7 +37,7 @@
 				<view class="label">
 					<text>Transaction password</text>
 				</view>
-				<view class="input">
+				<view class="input" @click="setTransactionPassword">
 					<view class="box">
 						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
 						<input type="password" v-model="formData.form2" :disabled="true" />
@@ -62,6 +62,15 @@
 				<view class="label">
 					<text>Withdrawal address{{sysInfo.screenHeight}}1</text>
 				</view>
+				<view class="input" style="margin-bottom: 20rpx;">
+					<view class="box">
+						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
+						<input type="text" v-model="formData.form1"  :disabled="true" />
+					</view>
+					<view class="arrow">
+						<image src="../../static/right_arrow.png" mode="widthFix"></image>
+					</view>
+				</view>
 				<view class="input">
 					<view class="box">
 						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
@@ -80,6 +89,8 @@
 		<DefaultFooter />
 		<UserPopup ref="userPopup" />
 		<ImgPopup ref="imgPopup" />
+		<LoginPopup ref="loginPopup" />
+		<TransactionPassword ref="transactionPassword" />
 	</view>
 </template>
 
@@ -88,12 +99,16 @@
 	import DefaultFooter from '../../components/defaultFooter.vue';
 	import UserPopup from './components/userPopup.vue';
 	import ImgPopup from './components/imgPopup.vue';
+	import LoginPopup from './components/loginPopup.vue';
+	import TransactionPassword from './components/transactionPassword.vue';
 	export default {
 		components: {
 			DefaultHeader,
 			DefaultFooter,
 			UserPopup,
-			ImgPopup
+			ImgPopup,
+			LoginPopup,
+			TransactionPassword
 		},
 		data() {
 			return {
@@ -121,6 +136,13 @@
 			},
 			setUser(){
 				this.$refs.userPopup.open();
+			},
+			setLoginPassword(){
+				this.$refs.loginPopup.open();
+				
+			},
+			setTransactionPassword(){
+				this.$refs.transactionPassword.open();
 			}
 		}
 	}
@@ -201,7 +223,7 @@
 					justify-content: center;
 					align-items: center;
 					padding-left: 43.81rpx;
-
+					
 					.box {
 						width: 100%;
 						.flex-direction;

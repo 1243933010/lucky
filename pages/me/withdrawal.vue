@@ -124,7 +124,7 @@
 				this.radioIndex = index;
 			},
 			openPopUpHandle() {
-				this.$refs.popup.open("bottom")
+				this.$refs.popup.open()
 			}
 		}
 	}
@@ -425,7 +425,6 @@
 
 		}
 		
-		.popup-container {
-		}
+		
 	}
 </style>

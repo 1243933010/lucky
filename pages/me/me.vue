@@ -15,15 +15,15 @@
 				</view>
 			</view>
 			<view class="button">
-				<view class="item">
+				<view class="item" @click="goUrl('/pages/me/recharge')">
 					<image src="../../static/logo.png" mode="widthFix"></image>
 					<text>Recharge</text>
 				</view>
-				<view class="item">
+				<view class="item" @click="goUrl('/pages/me/withdrawal')">
 					<image src="../../static/logo.png" mode="widthFix"></image>
 					<text>Withdraw</text>
 				</view>
-				<view class="item">
+				<view class="item" @click="goUrl('/pages/me/bill')">
 					<image src="../../static/logo.png" mode="widthFix"></image>
 					<text>bill</text>
 				</view>
@@ -32,7 +32,7 @@
 				<text>ACCOUNT SETTING</text>
 			</view>
 			<view class="menu">
-				<view class="item">
+				<view class="item" @click="goUrl('/pages/me/personalData')">
 					<view class="left">
 						<image src="../../static/logo.png" mode="widthFix"></image>
 						<text>Personal data</text>
@@ -50,7 +50,7 @@
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
 					</view>
 				</view>
-				<view class="item">
+				<view class="item" @click="goUrl('/pages/team/team')">
 					<view class="left">
 						<image src="../../static/logo.png" mode="widthFix"></image>
 						<text>Team</text>
@@ -59,7 +59,7 @@
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
 					</view>
 				</view>
-				<view class="item">
+				<view class="item" @click="goUrl('/pages/me/fqas')">
 					<view class="left">
 						<image src="../../static/logo.png" mode="widthFix"></image>
 						<text>FQA</text>
@@ -101,6 +101,13 @@
 			return {
 				
 			};
+		},
+		methods:{
+			goUrl(url){
+				uni.navigateTo({
+					url
+				})
+			}
 		}
 	}
 </script>

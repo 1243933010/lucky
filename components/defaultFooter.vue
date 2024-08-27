@@ -5,7 +5,8 @@
 				<view class=""></view>
 				<view class="text">
 					<text>Create a room</text>
-					<text>Quick start</text>
+					<!-- <text @click="goUrl('/pages/me/me')">Quick start</text> -->
+					<text @click="goUrl('/pages/me/me')">临时个人中心</text>
 					<text>Share link</text>
 				</view>
 			</view>
@@ -25,6 +26,13 @@
 			return {
 
 			};
+		},
+		methods:{
+			goUrl(url){
+				uni.navigateTo({
+					url
+				})
+			}
 		}
 	}
 </script>

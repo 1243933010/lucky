@@ -2,32 +2,23 @@
 	<view>
 		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="center">
 			<view class="popup-content">
-				<view class="close">
-					<image @click="$refs.popup.close()" src="../../../static/close.png" mode="widthFix"></image>
+				<view class="close" @click="$refs.popup.close()">
+					<image src="../../../static/close.png" mode="widthFix"></image>
 				</view>
 				<view class="title">
-					<text>Historical records</text>
+					<text>user picture</text>
 				</view>
-				<scroll-view scroll-y="true" style="height: 800rpx;">
-					<view class="list">
-						<view class="item" v-for="(item,index) in list" :key="index">
-							<view class="left">
-								<view class="title">
-									<text>{{item.type}}</text>
-								</view>
-								<view class="time">
-									<text>{{item.time}}</text>
-								</view>
-							</view>
-							<view class="right">
-								<text>{{item.num}}</text>
-							</view>
-							<view class="status">
-								<text>success</text>
-							</view>
-						</view>
+				<view class="list">
+					<view class="item upload">
+						<image src="../../../static/add.png" mode="widthFix"></image>
 					</view>
-				</scroll-view>
+					<view class="item" :class="index==activeIndex?'active':''" v-for="(item,index) in list" :key="index">
+						<image :src="item.url" mode="aspectFill"></image>
+					</view>
+				</view>
+				<view class="submit">
+					<text>complete</text>
+				</view>
 			</view>
 	</uni-popup>
 	</view>
@@ -39,19 +30,8 @@
 		data() {
 			return {
 				type: 'center',
-				list:[
-					{time:'2022-15-66',num:'-100',type:'Withdraw'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
-				]
-				
+				list:[{url:'../../../static/close.png'}],
+				activeIndex:null
 			};
 		},
 		methods: {
@@ -59,14 +39,12 @@
 				this.type = options.type;
 				this.$refs.popup.open()
 			},
-			close(){
-				this.$refs.popup.close()
-			}
 		}
 	}
 </script>
 
 <style lang="less" scoped>
+	@import url("../../../static/default.less");
 	/deep/ .uni-popup__wrapper {
 		border-radius: 25rpx;
 	}
@@ -86,7 +64,7 @@
 		position: relative;
 	
 		padding-top: 52rpx;
-
+		padding-bottom: 52rpx;
 		.close {
 			position: absolute;
 			right: 43rpx;
@@ -108,57 +86,42 @@
 		}
 		.list{
 			width: 100%;
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			margin-bottom: 52rpx;
+			box-sizing: border-box;
+			padding: 0 26rpx;
 			.item{
-				width: 613rpx;
-				height: 105rpx;
-				background: linear-gradient( 146deg, rgba(68,68,68,0.5) 0%, rgba(0,0,0,0.5) 100%);
-				box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84,84,84,0.2118);
-				border-radius: 18rpx;
-				position: relative;
-				box-sizing: border-box;
-				padding:17rpx;
-				margin-bottom: 19rpx;
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				.left{
-					display: flex;
-					flex-direction: column;
-					justify-content: flex-start;
-					.title{
-						color: #FFFFFF;
-						font-size: 28rpx;
-						margin-bottom: 17rpx;
-						padding-left: 0;
-						text{
-							text-align: left;
-						}
-					}
-					.time{
-						color: #999999;
-						font-size: 21rpx;
-					}
-				}
-				.right{
-					color: #FFFFFF;
-					font-size: 35rpx;
-				}
-				.status{
-					width: 105rpx;
-					height: 32rpx;
-					background: linear-gradient( 136deg, rgba(21,191,253,0.7) 0%, rgba(156,55,253,0.7) 100%);
-					border-radius: 2rpx 18rpx 2rpx 18rpx;
-					position: absolute;
-					top: 0;
-					right: 0;
-					display: flex;
-					justify-content: center;
-					align-items: center;
-					font-size: 17rpx;
+				width: 140rpx;
+				height: 140rpx;
+				background: #111111;
+				border-radius: 18rpx 18rpx 18rpx 18rpx;
+				// border: 1rpx solid #999999;
+				margin-right: 17rpx;
+				
+			}
+			.upload{
+				.flex-center;
+				border: 1rpx solid #999999;
+				image{
+					width: 30rpx;
 				}
 			}
+			.active{
+				border: 1px solid #9DFE00;
+			}
 		}
-
+		.submit{
+			width: 526rpx;
+			height: 88rpx;
+			background: linear-gradient( 146deg, #9DFE00 0%, #14D9E5 100%);
+			border-radius: 44rpx 44rpx 44rpx 44rpx;
+			margin: 0 auto;
+			color: #000000;
+			font-size: 31rpx;
+			.flex-center;
+		}
 		
 	}
 </style>

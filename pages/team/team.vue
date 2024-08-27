@@ -1,0 +1,699 @@
+<template>
+	<view class="page-container">
+		<DefaultHeader />
+
+		<view class="team">
+			<view class="top-page">
+				<view class="page-name">
+					<text class="tit">Gifts collections to friends</text>
+					<text class="img">
+						<image class="pic" src="../../static/gift.png" mode="widthFix"></image>
+					</text>
+				</view>
+				<view class="info-box">
+					<view class="num-box">
+						<view class="icon-num">
+							<view class="icon">
+								<image class="pic" src="../../static/me_icon.png" mode="widthFix"></image>
+							</view>
+							<view class="num">
+								<text>20000.00 <view class="wen">?</view></text>
+							</view>
+						</view>
+						<view class="copy-icon">
+							<!-- TODO: 暂用图片 -->
+							<image class="pic" src="../../static/order.png" mode="widthFix"></image>
+						</view>
+					</view>
+					<view class="desc">Received a reward of 300 USDT today</view>
+					<view class="btn-box">Transfer</view>
+				</view>
+				<view class="storage-total">
+					<view class="img">
+						<image src="../../static/piggy_bank.png" mode="widthFix" class="pic"></image>
+					</view>
+					<div class="total-list">
+						<view class="total-num">
+							<view class="num-box">
+								<view class="icon">
+									<image src="../../static/preson.png" mode="widthFix" class="pic"></image>
+								</view>
+								<view class="num">1800</view>
+							</view>
+							<view class="desc">
+								<view class="desc-1">Received a reward of</view>
+								<view class="desc-2">100 USDT</view>
+							</view>
+						</view>
+						<view class="total-num">
+							<view class="num-box">
+								<view class="icon">
+									<image src="../../static/preson.png" mode="widthFix" class="pic"></image>
+								</view>
+								<view class="num">1800</view>
+							</view>
+							<view class="desc">
+								<view class="desc-1">Received a reward of</view>
+								<view class="desc-2">100 USDT</view>
+							</view>
+						</view>
+						<view class="total-num">
+							<view class="num-box">
+								<view class="icon">
+									<image src="../../static/preson.png" mode="widthFix" class="pic"></image>
+								</view>
+								<view class="num">1800</view>
+							</view>
+							<view class="desc">
+								<view class="desc-1">Received a reward of</view>
+								<view class="desc-2">100 USDT</view>
+							</view>
+						</view>
+					</div>
+				</view>
+				<view class="record">
+					<view class="header">
+						<view class="name">
+							<image src="../../static/gift1.png" mode="widthFix"></image>
+							<text>Invitation record</text>
+						</view>
+						<view class="wen">
+							<image src="../../static/wen.png" mode="widthFix"></image>
+						</view>
+					</view>
+					<view class="record-list">
+						<view class="record-list-header">
+							<view class="time">Time</view>
+							<view class="user-name">UserName</view>
+							<view class="status">Game status</view>
+							<view class="reward">reward</view>
+						</view>
+						<view class="item" v-for="(item,index) in list1" :key="index">
+							<view class="time">{{item.time}}</view>
+							<view class="user-name">{{item.userName}}</view>
+							<view class="status">{{item.status}}</view>
+							<view class="reward">{{item.reward}}</view>
+						</view>
+					</view>
+					<view class="record-btn">
+						<view class="btn">
+							<text>Invite friends</text>
+						</view>
+					</view>
+				</view>
+			</view>
+		    <view class="hr"></view>
+			<view class="count">
+				<view class="tab">
+					<view class="item" :class="index==0?'active':''">
+						<text>Today's team game count</text>
+					</view>
+					<view class="item" :class="index==1?'active':''">
+						<text>Number of team game bureaus</text>
+					</view>
+				</view>
+				<view class="me">
+					<view class="left">
+						<view class="num">
+							<text>101</text>
+						</view>
+						<view class="logo">
+							<image src="../../static/logo.png" mode="widthFix"></image>
+						</view>
+						<view class="name">
+							<text>Me</text>
+						</view>
+					</view>
+					<view class="num1">
+						<text>990</text>
+					</view>
+				</view>
+			</view>
+			<view class="pai">
+				<view class="header">
+					<view class="item two">
+						<view class="logo">
+							<image src="../../static/logo.png" mode="widthFix"></image>
+							<view class="text">
+								<view class="name">
+									<text>sdsdsd</text>
+								</view>
+								<view class="num">
+									<text>22</text>
+								</view>
+							</view>
+						</view>
+						<view class="fixed">
+							<image class="two-logo"  src="../../static/two.png" mode="widthFix"></image>
+						</view>
+					</view>
+					<view class="item one">
+						<view class="logo">
+							<image src="../../static/logo.png" mode="widthFix"></image>
+							<view class="text">
+								<view class="name">
+									<text>sdsdsd</text>
+								</view>
+								<view class="num">
+									<text>22</text>
+								</view>
+							</view>
+						</view>
+						<view class="fixed">
+						<image class="one-logo"  src="../../static/one.png" mode="widthFix"></image>
+					</view>
+					</view>
+					<view class="item three">
+						<view class="logo">
+							<image src="../../static/logo.png" mode="widthFix"></image>
+							<view class="text">
+								<view class="name">
+									<text>sdsdsd</text>
+								</view>
+								<view class="num">
+									<text>22</text>
+								</view>
+							</view>
+						</view>
+						<view class="fixed">
+						<image class="three-logo"  src="../../static/three.png" mode="widthFix"></image>
+					</view>
+					</view>
+				</view>
+				<view class="pai-list">
+					<view class="item" v-for="(item,index) in paiList" :key="index">
+						<view class="left">
+							<view class="index">
+								<text>{{item.index}}</text>
+							</view>
+							<view class="logo">
+								<image src="../../static/logo.png" mode="widthFix"></image>
+							</view>
+							<view class="name">
+								<text>{{item.name}}</text>
+							</view>
+						</view>
+						<view class="num">
+							<text>{{item.num}}</text>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+		<DefaultFooter />
+	</view>
+</template>
+
+<script>
+	import DefaultHeader from '../../components/defaultHeader.vue';
+	import DefaultFooter from '../../components/defaultFooter.vue';
+	export default {
+		components: {
+			DefaultHeader,DefaultFooter
+		},
+		data() {
+			return {
+				list: [],
+				list1:[
+					{time:'7-8',userName:'UserName',status:'20',reward:'reward'},
+					{time:'7-8',userName:'UserName',status:'20',reward:'reward'},
+				],
+				index:0,
+				paiList:[
+					{index:4,logo:'',name:'eeeeee',num:'99999'},
+					{index:4,logo:'',name:'eeeeee',num:'99999'},
+				]
+			};
+		}
+	}
+</script>
+
+<style lang="less" scoped>
+	@import url("../../static/default.less");
+
+	page {
+		height: 100%;
+		background: #201f29 url('../../static/team_bk.png') no-repeat 100% 100% /cover;
+	}
+
+	.team {
+		.top-page {
+			padding: 42rpx;
+
+			.page-name {
+				display: flex;
+				align-items: flex-start;
+				justify-content: space-between;
+
+				.tit {
+					margin-top: 8rpx;
+					flex-grow: 1;
+					font-weight: 600;
+					font-size: 35rpx;
+					color: #BBBBBB;
+					line-height: 1.4;
+				}
+
+				.img {
+					flex-shrink: 0;
+					width: 115rpx;
+
+					.pic {
+						width: 100%;
+					}
+				}
+			}
+
+			.info-box {
+				margin-top: -20rpx;
+				border-radius: 35rpx;
+				padding: 35rpx 38rpx;
+				background-color: rgba(0, 0, 0, 0.4);
+
+				.num-box {
+					display: flex;
+					align-items: center;
+
+					.icon-num {
+						flex-grow: 1;
+						display: flex;
+						align-items: center;
+
+						.icon {
+							width: 70rpx;
+							flex-shrink: 0;
+
+							.pic {
+								width: 100%;
+							}
+						}
+
+						.num {
+							padding-left: 20rpx;
+							flex-grow: 1;
+
+							text {
+								font-weight: 500;
+								font-size: 54rpx;
+								color: #EEEEEE;
+								line-height: 1.4;
+								position: relative;
+								max-width: 100%;
+
+								.wen {
+									position: absolute;
+									right: -10rpx;
+									top: 0;
+									transform: translateX(100%);
+
+									border-radius: 50%;
+									color: #000;
+									background-color: #999999;
+									width: 24rpx;
+									height: 24rpx;
+									font-size: 14rpx;
+
+									display: flex;
+									align-items: center;
+									justify-content: center;
+								}
+							}
+						}
+					}
+
+					.copy-icon {
+						flex-shrink: 0;
+						width: 26rpx;
+
+						.pic {
+							width: 100%;
+						}
+					}
+				}
+
+				.desc {
+					margin-top: 14rpx;
+					font-weight: 350;
+					font-size: 21rpx;
+					color: #FFFFFF;
+					line-height: 1.4;
+					text-decoration-line: underline;
+				}
+
+				.btn-box {
+					margin-top: 28rpx;
+					border-radius: 44rpx;
+					border: 2rpx solid #333333;
+					padding: 14rpx;
+					background-color: #222;
+					text-align: center;
+					font-weight: 500;
+					font-size: 32rpx;
+					color: #CCCCCC;
+					line-height: 1.28;
+				}
+			}
+
+			.storage-total {
+				padding: 300rpx 0 68rpx;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				position: relative;
+				margin-bottom: 45rpx;
+				.img {
+					width: 60vw;
+
+					.pic {
+						width: 100%;
+					}
+				}
+
+				.total-list {
+					position: absolute;
+					top: 128rpx;
+					left: 0;
+					right: 0;
+					bottom: 0;
+				
+					.total-num {
+						position: absolute;
+						left: 0;
+						bottom: 0;
+						
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						flex-direction: column;
+						
+						&:first-child {
+							top: 0;
+							left: 50%;
+							bottom: auto;
+							transform: translateX(-50%);
+						}
+						
+						&:last-child {
+							right: 0;
+							left: auto;
+						}
+
+						.num-box {
+							display: flex;
+							align-items: flex-end;
+
+							.icon {
+								width: 28rpx;
+
+								.pic {
+									width: 100%;
+								}
+							}
+
+							.num {
+								font-weight: 500;
+								font-size: 56rpx;
+								color: #EEEEEE;
+								line-height: 1.4;
+							}
+						}
+
+						.desc {
+							color: #BBBBBB;
+							text-align: center;
+
+							.desc-1 {
+								font-size: 21rpx;
+							}
+
+							.desc-2 {
+								font-size: 28rpx;
+							}
+						}
+					}
+				}
+			}
+		    .record{
+				width: 100%;
+				.header{
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					.name{
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						color: #EEEEEE;
+						font-size: 38rpx;
+						image{
+							width: 82rpx;
+						}
+					}
+					.wen{
+						width: 26rpx;
+						image{
+							width: 100%;
+						}
+					}
+				}
+				.record-list{
+					width: 666rpx;
+					// height: 368rpx;
+					background: linear-gradient( 146deg, rgba(68,68,68,0.3) 0%, rgba(0,0,0,0.3) 100%);
+					box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84,84,84,0.2118);
+					border-radius: 28rpx 28rpx 28rpx 28rpx;
+					border: 2rpx solid rgba(102,102,102,0.5);
+					box-sizing: border-box;
+					padding: 17rpx 38rpx;
+					margin-bottom: 86rpx;
+					.record-list-header,.item{
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+						margin-bottom: 17rpx;
+						view{
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							color: #666666;
+							font-size: 24rpx;
+						}
+						.time{
+							width: 15%;
+							// overflow: hidden;
+						}
+						.user-name{
+							width: 40%;
+						}
+						.status{
+							width: 30%;
+						}
+						.reward{
+							width: 15%;
+						}
+					}
+					.item{
+						
+					}
+				}
+				.record-btn{
+					width: 100%;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					margin-bottom: 31rpx;
+					view{
+						width: 526rpx;
+						height: 88rpx;
+						background: linear-gradient( 146deg, #9DFE00 0%, #14D9E5 100%);
+						border-radius: 44rpx 44rpx 44rpx 44rpx;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						color: #000000;
+						font-size: 31rpx;
+					}
+				}
+			}
+		}
+		.hr{
+			width: 100%;
+			height: 1px;
+			// background: red;
+			border-bottom: 1ps dashed #000000 ;
+			margin-bottom: 98rpx;
+		}
+		.count{
+			width: 757rpx;
+			// height: 193rpx;
+			background: linear-gradient( 228deg, #000000 0%, #292734 100%);
+			border-radius: 53rpx;
+			border: 1rpx solid #454545;
+			padding-bottom: 17rpx;
+			margin-bottom: 45rpx;
+			.tab{
+				
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 24rpx 31rpx 24rpx 31rpx;
+				margin-bottom: 33rpx;
+				.item{
+					width: 50%;
+					color: #FFFFFF;
+					font-size: 31rpx;
+				}
+				.active{
+					font-weight: 600;
+				}
+			}
+			.me{
+				margin: 0 auto;
+				width: 666rpx;
+				height: 70rpx;
+				background: #282828;
+				border-radius: 25rpx; 
+				border: 2rpx solid rgba(68,68,68,0.5);
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				box-sizing: border-box;
+				padding: 0 38rpx;
+				.left{
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					 .num{
+						 color: #86909C;
+						 font-size: 30rpx;
+						 margin-right: 17rpx;
+					 }
+					 .logo{
+						 width: 52rpx;
+						 height: 52rpx;
+						 border-radius: 50%;
+						 margin-right: 17rpx;
+						 image{
+							 width: 52rpx;
+							 height: 52rpx;
+							 border-radius: 50%;
+							 margin-right: 17rpx;
+						 }
+					 }
+					 .name{
+						 color: #D8D8D8;
+						 font-size: 28rpx;
+					 }
+				}
+				.num1{
+					color: #D8D8D8;
+					font-size: 28rpx;
+					font-weight: 600;
+				}
+			}
+		}
+		.pai{
+			width: 100%;
+			padding-bottom: 150rpx;
+			.header{
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				margin-bottom: 160rpx;
+				.item{
+					position: relative;
+					width: 100rpx;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					margin: 0 45rpx;
+					.logo{
+						width: 98rpx;
+						height: 98rpx;
+						image{
+							width: 100%;
+							height: 100%;
+							border-radius: 50%;
+							margin-bottom: 21rpx;
+						}
+						.text{
+							display: flex;
+							flex-direction: column;
+							align-items: center;
+							.name{
+								color: white;
+								font-size: 31rpx;
+								margin-bottom: 7rpx;
+							}
+							.num{
+								color: #FFFFFF;
+								font-size: 26rpx;
+							}
+						}
+					}
+					.fixed{
+						width: 100%;
+						position: absolute;
+						top: -44rpx;
+						left: 0;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+					}
+					.two-logo,.one-logo,.three-logo{
+						width: 78rpx;
+					}
+				}
+				.two{
+					margin-top: 78rpx;
+				}
+				.three{
+					margin-top: 78rpx;
+				}
+			}
+			.pai-list{
+				box-sizing: border-box;
+				padding: 0 42rpx;
+				.item{
+					width: 666rpx;
+					// height: 70rpx;
+					background: linear-gradient( 146deg, rgba(68,68,68,0.3) 0%, rgba(0,0,0,0.3) 100%);
+					box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84,84,84,0.2118);
+					border-radius: 25rpx 25rpx 25rpx 25rpx;
+					box-sizing: border-box;
+					padding: 8rpx 38rpx;
+					margin-bottom: 35rpx;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					.left{
+						display: flex;
+						flex-direction: row;
+						align-items: center;
+						.index{
+							color: #86909C;
+							font-size: 30rpx;
+							margin-right: 17rpx;
+						}
+						.logo{
+							width: 52rpx;
+							height: 52rpx;
+							margin-right: 17rpx;
+							image{
+								width: 100%;
+							}
+						}
+						.name{
+							color: #D8D8D8;
+							font-size: 28rpx;
+						}
+					}
+					.num{
+						color: #D8D8D8;
+						font-size: 28rpx;
+					}
+				}
+			}
+		}
+	}
+</style>

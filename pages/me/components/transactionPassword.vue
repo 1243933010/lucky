@@ -6,17 +6,17 @@
 					<image src="../../../static/close.png" mode="widthFix"></image>
 				</view>
 				<view class="title">
-					<text>user name</text>
+					<text>Transaction password</text>
 				</view>
 				<view class="form">
-					<view class="form-item">
-						<input type="text" placeholder="Username">
-					</view>
 					<!-- <view class="form-item">
-						<input type="text" placeholder="名字">
+						<input type="text" placeholder="输入登录密码">
+					</view> -->
+					<view class="form-item">
+						<input type="text" placeholder="更换交易密码">
 					</view>
 					<view class="form-item">
-						<input type="text" placeholder="用户名">
+						<input type="text" placeholder="确认交易密码">
 					</view>
 					<view class="send">
 						<input type="text" placeholder="邮箱验证码">
@@ -25,7 +25,7 @@
 								<text>send out</text>
 							</view>
 						</view>
-					</view> -->
+					</view>
 					<view class="submit">
 						<text>complete</text>
 					</view>
@@ -104,7 +104,6 @@
 			padding-left: 52rpx;
 			padding-right: 52rpx;
 			padding-bottom: 52rpx;
-			
 			.form-item{
 				width: 596rpx;
 				height: 70rpx;
@@ -176,7 +175,6 @@
 				margin: 0 auto;
 				color: #000000;
 				font-size: 31rpx;
-				margin-top: 262rpx;
 				.flex-center;
 			}
 		}
