@@ -9,7 +9,7 @@
 					<text>Username or email</text>
 				</view>
 				<view class="input">
-					<input type="text" v-model="formData.form1" />
+					<input type="text" v-model="formData.email" />
 				</view>
 			</view>
 			<view class="form-item">
@@ -17,12 +17,12 @@
 					<text>Password</text>
 				</view>
 				<view class="input">
-					<input type="password" v-model="formData.form2" />
+					<input type="password" v-model="formData.password" />
 				</view>
 			</view>
 		</view>
 		<view class="submit-btn">
-			<view class="">
+			<view class="" @click="submitBtn">
 				<text>Login In</text>
 			</view>
 		</view>
@@ -30,14 +30,33 @@
 </template>
 
 <script>
+	import {
+		$request,$totast
+	} from "@/utils/request";
 	export default {
 		data() {
 			return {
 				formData:{
-					form1:'',
-					form2:""
+					email:'',
+					password:""
 				}
 			};
+		},
+		methods:{
+			async submitBtn(){
+				let res = await $request('login',this.formData);
+				console.log(res)
+				$totast(res.data.message)
+				if(res.data.code==200){
+					let {token} = res.data.data;
+					uni.setStorageSync("token", `Bearer ${token}`); // 存储token
+					setTimeout(()=>{
+						uni.reLaunch({
+							url: "/pages/index/index",
+						});
+					},1500)
+				}
+			}
 		}
 	}
 </script>

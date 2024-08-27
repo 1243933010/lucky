@@ -1,44 +1,44 @@
 import requestObj from '@/utils/requestObj.js'
 export let filesUrl = 'https://maojian886.oss-ap-northeast-1.aliyuncs.com/';
-export let url = 'http://2405.devnft.top'
+export let url = 'http://coingames.top'
 export let urlPath = 'http://2405.devnft.top'
 
 export const $request = (requestName,params,headerType=0)=>{
 	let reqObj = requestObj[requestName];
 	let token = uni.getStorageSync('token');
-	let language = uni.getLocale();
-	console.log(language)
-	// let languageObj = {'en':'en'}
+	// let language = uni.getLocale();
+	// console.log(language)
+	// // let languageObj = {'en':'en'}
 	
-	let languageObj = {"zh-Hans":"zh_CN","en":"en","fr": "fr","es": "es","pt":"pt","ru":"ru","ara":"ara","mn":"mn"}
-	let shareInfo = {
-		'invitation_code':'',
-		'scene':'',
-		'associated_id':'',
-	}
-	if(params.invite_code&&params.type&&params.associated_id){
-		shareInfo.invitation_code = params.invite_code;
-		shareInfo.scene = params.type;
-		shareInfo.associated_id = params.id;
-	}
+	// let languageObj = {"zh-Hans":"zh_CN","en":"en","fr": "fr","es": "es","pt":"pt","ru":"ru","ara":"ara","mn":"mn"}
+	// let shareInfo = {
+	// 	'invitation_code':'',
+	// 	'scene':'',
+	// 	'associated_id':'',
+	// }
+	// if(params.invite_code&&params.type&&params.associated_id){
+	// 	shareInfo.invitation_code = params.invite_code;
+	// 	shareInfo.scene = params.type;
+	// 	shareInfo.associated_id = params.id;
+	// }
 	let headerObj = [
 		{
 			"Content-Type":"application/json",
 			"Authorization":token?`${token}`:'',
 			"Accept":"application/json",
-			"Accept-Language":languageObj[language],
-			'Invitation-Code':shareInfo.invitation_code,
-			'Scene':shareInfo.scene,
-			'Associated-Id':shareInfo.associated_id
+			// "Accept-Language":languageObj[language],
+			//  'Invitation-Code':shareInfo.invitation_code,
+			// 'Scene':shareInfo.scene,
+			// 'Associated-Id':shareInfo.associated_id
 		},
 		{
 			"Content-Type": "application/x-www-form-urlencoded",
 			"Authorization":token?`${token}`:'',
 			"Accept":"application/json",
-			"Accept-Language":languageObj[language],
-			'Invitation-Code':shareInfo.invitation_code,
-			'Scene':shareInfo.scene,
-			'Associated-Id':shareInfo.associated_id
+			// "Accept-Language":languageObj[language],
+			// 'Invitation-Code':shareInfo.invitation_code,
+			// 'Scene':shareInfo.scene,
+			// 'Associated-Id':shareInfo.associated_id
 		}
 	]
 	
@@ -76,5 +76,12 @@ export const $request = (requestName,params,headerType=0)=>{
 			}
 		});
 
+	})
+}
+
+export const $totast = (title,icon=false)=>{
+	uni.showToast({
+		icon:icon?'success':'none',
+		title
 	})
 }

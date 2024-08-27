@@ -5,7 +5,7 @@
 				<image src="../../static/logo.png" mode="widthFix"></image>
 			</view>
 			<view class="form">
-				<view class="form-item">
+				<!-- <view class="form-item">
 					<view class="label">
 						<text>Surname</text>
 					</view>
@@ -20,13 +20,13 @@
 					<view class="input">
 						<input type="password" v-model="formData.form2" />
 					</view>
-				</view>
+				</view> -->
 				<view class="form-item">
 					<view class="label">
 						<text>Email</text>
 					</view>
 					<view class="input">
-						<input type="password" v-model="formData.form2" />
+						<input type="text" v-model="formData.email" />
 					</view>
 				</view>
 				<view class="form-item">
@@ -34,7 +34,7 @@
 						<text>Login password</text>
 					</view>
 					<view class="input">
-						<input type="password" v-model="formData.form2" />
+						<input type="password" v-model="formData.password" />
 					</view>
 				</view>
 				<view class="form-item">
@@ -42,11 +42,19 @@
 						<text>Confirm password</text>
 					</view>
 					<view class="input">
-						<input type="password" v-model="formData.form2" />
+						<input type="password" v-model="formData.password_confirmation" />
+					</view>
+				</view>
+				<view class="form-item">
+					<view class="label">
+						<text>Invite code</text>
+					</view>
+					<view class="input">
+						<input type="password" v-model="formData.invite_code" />
 					</view>
 				</view>
 			</view>
-			<view class="submit-btn">
+			<view class="submit-btn" @click="submitBtn">
 				<view class="">
 					<text>Login In</text>
 				</view>
@@ -56,14 +64,39 @@
 </template>
 
 <script>
+	import {
+		$request,$totast
+	} from "@/utils/request";
 	export default {
 		data() {
 			return {
 				formData:{
-					form1:'',
-					form2:""
+					email:'',
+					password:"",
+					password_confirmation:'',
+					invite_code:''
 				}
 			};
+		},
+		onLoad(e) {
+			this.onLoadParams = e;
+			let {
+				invite_code,
+				type,
+				id
+			} = this.onLoadParams;
+			console.log(this.onLoadParams)
+			this.formData.invite_code = invite_code;
+		},
+		methods:{
+			async submitBtn(){
+				let res = await $request('region',this.formData);
+				console.log(res)
+				$totast(res.data.message)
+				// if(res.data.code==200){
+					
+				// }
+			}
 		}
 	}
 </script>
