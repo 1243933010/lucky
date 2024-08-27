@@ -10,9 +10,9 @@
 				</view>
 				<view class="form">
 					<view class="form-item">
-						<input type="text" placeholder="姓氏">
+						<input type="text" placeholder="Username">
 					</view>
-					<view class="form-item">
+					<!-- <view class="form-item">
 						<input type="text" placeholder="名字">
 					</view>
 					<view class="form-item">
@@ -25,7 +25,7 @@
 								<text>send out</text>
 							</view>
 						</view>
-					</view>
+					</view> -->
 					<view class="submit">
 						<text>complete</text>
 					</view>
@@ -104,6 +104,7 @@
 			padding-left: 52rpx;
 			padding-right: 52rpx;
 			padding-bottom: 52rpx;
+			
 			.form-item{
 				width: 596rpx;
 				height: 70rpx;
@@ -175,6 +176,7 @@
 				margin: 0 auto;
 				color: #000000;
 				font-size: 31rpx;
+				margin-top: 262rpx;
 				.flex-center;
 			}
 		}

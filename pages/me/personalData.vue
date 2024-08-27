@@ -62,6 +62,15 @@
 				<view class="label">
 					<text>Withdrawal address{{sysInfo.screenHeight}}1</text>
 				</view>
+				<view class="input" style="margin-bottom: 20rpx;">
+					<view class="box">
+						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
+						<input type="text" v-model="formData.form1"  :disabled="true" />
+					</view>
+					<view class="arrow">
+						<image src="../../static/right_arrow.png" mode="widthFix"></image>
+					</view>
+				</view>
 				<view class="input">
 					<view class="box">
 						<image class="img1" src="../../static/logo.png" mode="widthFix"></image>
@@ -214,7 +223,7 @@
 					justify-content: center;
 					align-items: center;
 					padding-left: 43.81rpx;
-
+					
 					.box {
 						width: 100%;
 						.flex-direction;

@@ -20,17 +20,27 @@
 					<input type="password" v-model="formData.form2" />
 				</view>
 			</view>
+			<view class="forget">
+				<view class="" @click="$refs.forgetPopop.open()">
+					<text>Forget password</text>
+				</view>
+			</view>
 		</view>
 		<view class="submit-btn">
 			<view class="" @click="loginSubmit">
 				<text>Login In</text>
 			</view>
 		</view>
+		<ForgetPopop ref="forgetPopop" />
 	</view>
 </template>
 
 <script>
+	import ForgetPopop from './components/forgetPopop.vue';
 	export default {
+		components:{
+			ForgetPopop
+		},
 		data() {
 			return {
 				formData:{
@@ -107,6 +117,24 @@
 					font-size: 31.54rpx;
 					color: white;
 				}
+			}
+		}
+		.forget{
+			width: 100%;
+			display: flex;
+			justify-content: flex-end;
+			view{
+				// width: 191rpx;
+				height: 35rpx;
+				font-family: Source Han Sans, Source Han Sans;
+				font-weight: 400;
+				font-size: 25rpx;
+				color: #38D1DC;
+				line-height: 35rpx;
+				text-align: center;
+				font-style: normal;
+				text-decoration-line: underline;
+				text-transform: none;
 			}
 		}
 	}
