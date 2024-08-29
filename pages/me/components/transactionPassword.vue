@@ -13,20 +13,20 @@
 						<input type="text" placeholder="输入登录密码">
 					</view> -->
 					<view class="form-item">
-						<input type="text" placeholder="更换交易密码">
+						<input type="text" v-model="formData.pay_password" placeholder="更换交易密码">
 					</view>
 					<view class="form-item">
-						<input type="text" placeholder="确认交易密码">
+						<input type="text" v-model="formData.pay_password_confirmation"  placeholder="确认交易密码">
 					</view>
 					<view class="send">
-						<input type="text" placeholder="邮箱验证码">
+						<input  v-model="formData.email_code"  type="text" placeholder="邮箱验证码">
 						<view class="btn">
-							<view class="">
-								<text>send out</text>
+							<view class="" @click="handleTime">
+								<text>{{codeText}}</text>
 							</view>
 						</view>
 					</view>
-					<view class="submit">
+					<view class="submit" @click="submitBtn">
 						<text>complete</text>
 					</view>
 				</view>
@@ -36,6 +36,9 @@
 </template>
 
 <script>
+	import {
+		$request,$totast
+	} from "@/utils/request";
 	export default {
 		name: "defaultPopup",
 		data() {
@@ -43,8 +46,12 @@
 				type: 'center',
 				list:[],
 				formData:{
-					
-				}
+					pay_password:'',
+					pay_password_confirmation:'',
+					email_code:''
+				},
+				codeText:'send out',
+				timeFnc: null,
 				
 			};
 		},
@@ -53,6 +60,38 @@
 				this.type = options.type;
 				this.$refs.popup.open()
 			},
+			handleTime() {
+				if (!this.formData.pay_password) {
+					return
+				}
+				if (typeof this.codeText == "number") {
+					return false
+				}
+				this.codeText = 60;
+				this.sendEmail();
+				this.timeFnc = setInterval(() => {
+					this.codeText--;
+					if (this.codeText == 0) {
+						this.codeText = 'send out';
+						clearInterval(this.timeFnc);
+						this.timeFnc = null
+					}
+				}, 1000)
+			},
+			async sendEmail() {
+				let res = await $request("loginByCode", {scene:'change_pay_password'})
+				// console.log(res)
+				$totast(res.data.message)
+			},
+			async submitBtn(){
+				let res = await $request("changePayPassword", this.formData)
+				// console.log(res)
+				$totast(res.data.message)
+				if(res.data.code==200){
+					this.$refs.popup.close()
+					this.$emit('updateData')
+				}
+			}
 		}
 	}
 </script>

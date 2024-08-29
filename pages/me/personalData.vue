@@ -87,10 +87,10 @@
 			<DefaultFooter />
 		</view> -->
 		<DefaultFooter />
-		<UserPopup ref="userPopup" />
-		<ImgPopup ref="imgPopup" />
-		<LoginPopup ref="loginPopup" />
-		<TransactionPassword ref="transactionPassword" />
+		<UserPopup ref="userPopup"  @updateData="updateData"  />
+		<ImgPopup ref="imgPopup" @updateData="updateData"  />
+		<LoginPopup ref="loginPopup" @updateData="updateData" />
+		<TransactionPassword ref="transactionPassword"  @updateData="updateData" />
 	</view>
 </template>
 
@@ -149,6 +149,9 @@
 			},
 			setTransactionPassword(){
 				this.$refs.transactionPassword.open();
+			},
+			updateData(){
+				this.getUser()
 			},
 			async getUser(){
 				let res = await $request('userInfo',{});

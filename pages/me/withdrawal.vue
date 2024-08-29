@@ -31,7 +31,7 @@
 						<view class="all">
 							<view class="input-con">
 								<input type="number" placeholder="Minimum withdrawal amount 50"
-									v-model="formData.num" />
+									v-model="formData.amount" />
 
 							</view>
 							<text class="label">Withdrawable: 1000.33 USDT</text>
@@ -42,23 +42,13 @@
 							<text>Choose Payment Method</text>
 						</view>
 						<view class="radio-con">
-							<view class="radio-item">
+							<view class="radio-item" v-for="(item,index) in rechargeConfig" :key="index">
 								<view class="label">
-									<text>USDT-TRC20</text>
+									<text>{{item.account_name}}</text>
 								</view>
-								<view class="btn" @click="chooseRadio(0)">
+								<view class="btn" @click="chooseRadio(index)">
 									<view class="border">
-										<view class="active" v-if="radioIndex==0"></view>
-									</view>
-								</view>
-							</view>
-							<view class="radio-item">
-								<view class="label">
-									<text>USDT-BNB Smart Chain/BEP20</text>
-								</view>
-								<view class="btn" @click="chooseRadio(1)">
-									<view class="border">
-										<view class="active" v-if="radioIndex==1"></view>
+										<view class="active" v-if="radioIndex==index"></view>
 									</view>
 								</view>
 							</view>
@@ -92,12 +82,15 @@
 				</view>
 			</view>
 		</view>
-		<defaultPopup ref="popup"></defaultPopup>
+		<defaultPopup ref="popup" @listenData="listenData"></defaultPopup>
 		<OrderPopup ref="orderPopup"></OrderPopup>
 	</view>
 </template>
 
 <script>
+	import {
+		$request,$totast
+	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import defaultPopup from '../../components/defaultPopup.vue';
 	import OrderPopup from '../../components/orderPopup.vue';
@@ -111,9 +104,17 @@
 			return {
 				radioIndex: 0,
 				formData: {
-					num: ''
-				}
+					amount: '',
+					channel:'',
+					pay_password:''
+				},
+				rechargeConfig:[],
+				withdrawConfig:{}
 			};
+		},
+		mounted(){
+			this.getWithdrawalConfig()
+			this.getRechargeConfig()
 		},
 		methods: {
 			orderPopupClick(){
@@ -125,7 +126,34 @@
 			},
 			openPopUpHandle() {
 				this.$refs.popup.open()
+			},
+			async getWithdrawalConfig(){
+				let res = await $request('withdrawConfig',{});
+				console.log(res)
+				if(res.data.code==200){
+					this.withdrawConfig = res.data.data;
+				}
+			},
+			async getRechargeConfig(){
+				let res = await $request('rechargeConfig',{});
+				console.log(res)
+				if(res.data.code==200){
+					this.rechargeConfig = res.data.data;
+				}
+			},
+			async withdrawCreate(){
+				let res = await $request('withdrawCreate',this.formData);
+				console.log(res)
+				if(res.data.code==200){
+					this.rechargeConfig = res.data.data;
+				}
+			},
+			listenData(data){
+				
+				this.formData.pay_password = data.join('')
+				console.log(this.formData)
 			}
+			
 		}
 	}
 </script>

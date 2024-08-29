@@ -19,6 +19,9 @@
 </template>
 
 <script>
+	import {
+		$request,$totast
+	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	export default {
 		components: {
@@ -52,6 +55,18 @@
 					}
 				]
 			};
+		},
+		mounted(){
+			this.getFaqs();
+		},
+		methods:{
+			async getFaqs(){
+				let res = await $request('faq',{});
+				console.log(res)
+				if(res.data.code==200){
+					// this.userInfo = res.data.data;
+				}
+			}
 		}
 	}
 </script>

@@ -19,12 +19,12 @@ let requestObj = {
 		url: '/api/email/send_code',
 		type: 'POST'
 	},
-	loginCaptcha: {
+	changePayPassword: {
 		name: "修改/设置 支付密码",
 		url: '/api/auth/change_pay_password',
 		type: 'POST'
 	},
-	loginCaptcha: {
+	changePssword: {
 		name: "修改登录密码",
 		url: '/api/auth/change_password',
 		type: 'POST'
@@ -49,6 +49,11 @@ let requestObj = {
 		url: '/api/user/update',
 		type: 'POST'
 	},
+	accountLogs:{
+		name: "账单列表",
+		url: '/api/user/account_logs',
+		type: 'POST'
+	},
 	rechargeConfig:{
 		name: "通道列表",
 		url: '/api/recharge/config',
@@ -62,6 +67,26 @@ let requestObj = {
 	rechargeDetail:{
 		name: "充值详情",
 		url: '/api/recharge/detail',
+		type: 'POST'
+	},
+	upload:{
+		name: "上传图片",
+		url: '/api/upload',
+		type: 'POST'
+	},
+	faq:{
+		name: "faq列表",
+		url: '/api/faq/index',
+		type: 'POST'
+	},
+	withdrawConfig:{
+		name: "提现配置",
+		url: '/api/withdraw/config',
+		type: 'POST'
+	},
+	withdrawCreate:{
+		name: "提现申请",
+		url: '/api/withdraw/create',
 		type: 'POST'
 	},
 }

@@ -37,23 +37,13 @@
 							<text>Choose Payment Method</text>
 						</view>
 						<view class="radio-con">
-							<view class="radio-item">
+							<view class="radio-item" v-for="(item,index) in rechargeConfig" :key="index">
 								<view class="label">
-									<text>USDT-TRC20</text>
+									<text>{{item.account_name}}</text>
 								</view>
-								<view class="btn" @click="chooseRadio(0)">
+								<view class="btn" @click="chooseRadio(index)">
 									<view class="border">
-										<view class="active" v-if="radioIndex==0"></view>
-									</view>
-								</view>
-							</view>
-							<view class="radio-item">
-								<view class="label">
-									<text>USDT-BNB Smart Chain/BEP20</text>
-								</view>
-								<view class="btn" @click="chooseRadio(1)">
-									<view class="border">
-										<view class="active" v-if="radioIndex==1"></view>
+										<view class="active" v-if="radioIndex==index"></view>
 									</view>
 								</view>
 							</view>
@@ -72,6 +62,9 @@
 </template>
 
 <script>
+	import {
+		$request,$totast
+	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import OrderPopup from '../../components/orderPopup.vue';
 	// import DefaultFooter from '../../components/defaultFooter.vue';
@@ -85,8 +78,12 @@
 				radioIndex: 0,
 				formData:{
 					num:''
-				}
+				},
+				rechargeConfig:[],
 			};
+		},
+		mounted(){
+			this.getRechargeConfig()
 		},
 		methods:{
 			orderPopupClick(){
@@ -95,7 +92,14 @@
 			},
 			chooseRadio(index){
 				this.radioIndex = index;
-			}
+			},
+			async getRechargeConfig(){
+				let res = await $request('rechargeConfig',{});
+				console.log(res)
+				if(res.data.code==200){
+					this.rechargeConfig = res.data.data;
+				}
+			},
 		}
 	}
 </script>

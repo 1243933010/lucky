@@ -2,7 +2,7 @@
 	<view>
 		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="bottom">
 			<view class="popup-content">
-				<view class="close">
+				<view class="close" @click="$refs.popup.close()">
 					<image src="../static/close.png" mode="widthFix"></image>
 				</view>
 				<view class="title">
@@ -92,6 +92,7 @@
 					this.passwordList.push(item)
 				}
 				if(this.passwordList.length==6){
+					this.$emit('listenData',this.passwordList)
 					this.$refs.popup.close()
 				}
 			}

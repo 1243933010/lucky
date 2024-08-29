@@ -63,7 +63,7 @@ export const $request = (requestName,params,headerType=0)=>{
 					})
 					setTimeout(()=>{
 						uni.reLaunch({
-							url:'/pages/login/index'
+							url:'/pages/login/login'
 						})
 					},1000)
 					return
