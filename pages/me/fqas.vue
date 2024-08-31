@@ -4,13 +4,12 @@
 
 		<view class="fqas">
 			<view class="page-name">FQAS</view>
-			<view class="desc">Rolade is the fastest blockchain in the world and the fastest growing ecosystem in
-				crypto,with over 800 projects spanning DeFi, NFTs, Web3 and more.</view>
+			<view class="desc">{{faqInfo.text}}</view>
 
 			<uni-collapse accordion>
-				<uni-collapse-item :title="item.title" :thumb="item.thumb" v-for="item in list" :key="item.id">
+				<uni-collapse-item :title="item.question" :thumb="item.thumb" v-for="item in faqInfo.list" :key="item.id">
 					<view class="collapse-con">
-						<text>{{item.content}}</text>
+						<text>{{item.answer}}</text>
 					</view>
 				</uni-collapse-item>
 			</uni-collapse>
@@ -29,31 +28,10 @@
 		},
 		data() {
 			return {
-				list: [{
-						id: 0,
-						thumb: "https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png",
-						title: "FQAFQAFQAFQ1",
-						content: "Rolade is the fastest blockchain in the world and the fastest growing ecosystem in crypto,with over 800 projects spanning DeFi, NFTs, Web3 and more."
-					},
-					{
-						id: 1,
-						thumb: "https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png",
-						title: "FQAFQAFQAFQ2",
-						content: "Rolade is the fastest blockchain in the world and the fastest growing ecosystem in crypto,with over 800 projects spanning DeFi, NFTs, Web3 and more."
-					},
-					{
-						id: 2,
-						thumb: "https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png",
-						title: "FQAFQAFQAFQ3",
-						content: "Rolade is the fastest blockchain in the world and the fastest growing ecosystem in crypto,with over 800 projects spanning DeFi, NFTs, Web3 and more."
-					},
-					{
-						id: 3,
-						thumb: "https://qiniu-web-assets.dcloud.net.cn/unidoc/zh/unicloudlogo.png",
-						title: "FQAFQAFQAFQ4",
-						content: "Rolade is the fastest blockchain in the world and the fastest growing ecosystem in crypto,with over 800 projects spanning DeFi, NFTs, Web3 and more."
-					}
-				]
+				faqInfo:{
+					list:[],
+					text:''
+				}
 			};
 		},
 		mounted(){
@@ -64,7 +42,7 @@
 				let res = await $request('faq',{});
 				console.log(res)
 				if(res.data.code==200){
-					// this.userInfo = res.data.data;
+					this.faqInfo = res.data.data;
 				}
 			}
 		}

@@ -80,6 +80,7 @@
 					num:''
 				},
 				rechargeConfig:[],
+				list:[]
 			};
 		},
 		mounted(){
@@ -93,6 +94,7 @@
 			chooseRadio(index){
 				this.radioIndex = index;
 			},
+			
 			async getRechargeConfig(){
 				let res = await $request('rechargeConfig',{});
 				console.log(res)

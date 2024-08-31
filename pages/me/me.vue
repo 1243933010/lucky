@@ -41,7 +41,7 @@
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
 					</view>
 				</view>
-				<view class="item">
+				<view class="item" >
 					<view class="left">
 						<image src="../../static/logo.png" mode="widthFix"></image>
 						<text>Record</text>

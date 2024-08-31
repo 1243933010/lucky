@@ -97,13 +97,13 @@
 		<view class="tab">
 			<view class="container">
 				<view class="box">
-					<view class="item" :class="index==0?'item-active':''">
+					<view class="item" :class="index==0?'item-active':''" @click="changeTab(0)">
 						<view class="title">
 							<text>Junior table</text>
 						</view>
 						<view class="active" v-if="index==0"></view>
 					</view>
-					<view class="item" :class="index==1?'item-active':''">
+					<view class="item" :class="index==1?'item-active':''" @click="changeTab(1)">
 						<view class="title">
 							<text>Premium Table</text>
 						</view>
@@ -128,7 +128,7 @@
 				previous-margin="120rpx" next-margin="120rpx" @change="swipterChange" :current="swipterActive">
 				<block v-for="(item,index) in swiperData" :key="index">
 					<swiper-item class="banner-item">
-						<view class="banner-box"
+						<view class="banner-box" @click="openRoom(item,index)"
 							:class="swipterActive==index-1?'previous':swipterActive==index+1?'next':''">
 							<image mode="widthFix" class="banner-img" :src="item.imgUrl"></image>
 						</view>
@@ -215,11 +215,17 @@
 				</view>
 			</view>
 		</view>
+		<FastJoin ref="fastJoin" />
 	</view>
 </template>
 
 <script>
+	import {
+		$request,$totast
+	} from "@/utils/request";
+	import FastJoin from './components/fastJoin.vue';
 	export default {
+		components:{FastJoin},
 		data() {
 			return {
 				index: 0,
@@ -269,6 +275,12 @@
 			this.startToggle();
 		},
 		methods: {
+			openRoom(item,index){
+				this.$refs.fastJoin.open()
+			},
+			changeTab(ind){
+				this.index = ind;
+			},
 			swipterChange(e) {
 				this.swipterActive = e.detail.current;
 			},

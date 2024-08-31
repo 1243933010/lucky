@@ -88,12 +88,14 @@
 							<view class="status">Game status</view>
 							<view class="reward">reward</view>
 						</view>
+						<scroll-view scroll-y="true" style="max-height: 500rpx;">
 						<view class="item" v-for="(item,index) in list1" :key="index">
-							<view class="time">{{item.time}}</view>
-							<view class="user-name">{{item.userName}}</view>
+							<view class="time">{{item.create_time}}</view>
+							<view class="user-name">{{item.nickname}}</view>
 							<view class="status">{{item.status}}</view>
-							<view class="reward">{{item.reward}}</view>
+							<view class="reward">{{item.status_text}}</view>
 						</view>
+						</scroll-view>
 					</view>
 					<view class="record-btn">
 						<view class="btn">
@@ -131,15 +133,15 @@
 			</view>
 			<view class="pai">
 				<view class="header">
-					<view class="item two">
+					<view class="item two" v-if="paiList[1]">
 						<view class="logo">
-							<image src="../../static/logo.png" mode="widthFix"></image>
+							<image :src="paiList[1].avatar?paiList[1].avatar:'../../static/logo.png'"  mode="widthFix"></image>
 							<view class="text">
 								<view class="name">
-									<text>sdsdsd</text>
+									<text>{{paiList[1].nickname||''}}</text>
 								</view>
 								<view class="num">
-									<text>22</text>
+									<text>{{paiList[1].total_game||0}}</text>
 								</view>
 							</view>
 						</view>
@@ -147,15 +149,15 @@
 							<image class="two-logo"  src="../../static/two.png" mode="widthFix"></image>
 						</view>
 					</view>
-					<view class="item one">
+					<view class="item one" v-if="paiList[0]">
 						<view class="logo">
 							<image src="../../static/logo.png" mode="widthFix"></image>
 							<view class="text">
 								<view class="name">
-									<text>sdsdsd</text>
+									<text>{{paiList[0].nickname||''}}</text>
 								</view>
 								<view class="num">
-									<text>22</text>
+									<text>{{paiList[0].total_game||0}}</text>
 								</view>
 							</view>
 						</view>
@@ -163,15 +165,15 @@
 						<image class="one-logo"  src="../../static/one.png" mode="widthFix"></image>
 					</view>
 					</view>
-					<view class="item three">
+					<view class="item three" v-if="paiList[2]">
 						<view class="logo">
 							<image src="../../static/logo.png" mode="widthFix"></image>
 							<view class="text">
 								<view class="name">
-									<text>sdsdsd</text>
+									<text>{{paiList[2].nickname||''}}</text>
 								</view>
 								<view class="num">
-									<text>22</text>
+									<text>{{paiList[2].total_game||0}}</text>
 								</view>
 							</view>
 						</view>
@@ -180,24 +182,26 @@
 					</view>
 					</view>
 				</view>
-				<view class="pai-list">
-					<view class="item" v-for="(item,index) in paiList" :key="index">
-						<view class="left">
-							<view class="index">
-								<text>{{item.index}}</text>
+				
+					<view class="pai-list">
+						<view class="item" v-for="(item,index) in handlePaiList" :key="index">
+							<view class="left">
+								<view class="index">
+									<text>{{item.rank||""}}</text>
+								</view>
+								<view class="logo">
+									<image :src="item.avatar?item.avatar:'../../static/logo.png'" mode="widthFix"></image>
+								</view>
+								<view class="name">
+									<text>{{item.nickname||''}}</text>
+								</view>
 							</view>
-							<view class="logo">
-								<image src="../../static/logo.png" mode="widthFix"></image>
+							<view class="num">
+								<text>{{item.total_game||''}}</text>
 							</view>
-							<view class="name">
-								<text>{{item.name}}</text>
-							</view>
-						</view>
-						<view class="num">
-							<text>{{item.num}}</text>
 						</view>
 					</view>
-				</view>
+				
 			</view>
 		</view>
 		<DefaultFooter />
@@ -205,6 +209,9 @@
 </template>
 
 <script>
+	import {
+		$request,$totast
+	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import DefaultFooter from '../../components/defaultFooter.vue';
 	export default {
@@ -214,16 +221,40 @@
 		data() {
 			return {
 				list: [],
-				list1:[
-					{time:'7-8',userName:'UserName',status:'20',reward:'reward'},
-					{time:'7-8',userName:'UserName',status:'20',reward:'reward'},
-				],
+				list1:[],
 				index:0,
-				paiList:[
-					{index:4,logo:'',name:'eeeeee',num:'99999'},
-					{index:4,logo:'',name:'eeeeee',num:'99999'},
-				]
+				paiList:[]
 			};
+		},
+		onLoad(){
+			this.getRecord();
+			this.getTodayGameRank()
+		},
+		computed:{
+			handlePaiList(){
+				return this.paiList.slice(3)
+			}
+		},
+		methods:{
+			goUrl(url){
+				uni.navigateTo({
+					url
+				})
+			},
+			async getRecord(){
+				let res = await $request('inviteRecords',{});
+				console.log(res)
+				if(res.data.code==200){
+					this.list1 = res.data.data.data;
+				}
+			},
+			async getTodayGameRank(){
+				let res = await $request('todayGameRank',{});
+				console.log(res)
+				if(res.data.code==200){
+					this.paiList = res.data.data.data;
+				}
+			}
 		}
 	}
 </script>

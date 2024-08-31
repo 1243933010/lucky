@@ -89,5 +89,20 @@ let requestObj = {
 		url: '/api/withdraw/create',
 		type: 'POST'
 	},
+	teamAccountLogs:{
+		name: "团队账单",
+		url: '/api/user/team_account_logs',
+		type: 'POST'
+	},
+	inviteRecords:{
+		name: "邀请记录",
+		url: '/api/user/invite_records',
+		type: 'POST'
+	},
+	todayGameRank:{
+		name: "团队游戏排名",
+		url: '/api/user/today_game_rank',
+		type: 'POST'
+	},
 }
 export default requestObj;

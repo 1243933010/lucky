@@ -13,14 +13,14 @@
 						<view class="item" v-for="(item,index) in list" :key="index">
 							<view class="left">
 								<view class="title">
-									<text>{{item.type}}</text>
+									<text>{{item.status_text}}</text>
 								</view>
 								<view class="time">
-									<text>{{item.time}}</text>
+									<text>{{item.create_time}}</text>
 								</view>
 							</view>
 							<view class="right">
-								<text>{{item.num}}</text>
+								<text>{{item.amount}}</text>
 							</view>
 							<view class="status">
 								<text>success</text>
@@ -34,22 +34,16 @@
 </template>
 
 <script>
+	import {
+		$request,$totast
+	} from "@/utils/request";
 	export default {
 		name: "defaultPopup",
 		data() {
 			return {
 				type: 'center',
 				list:[
-					{time:'2022-15-66',num:'-100',type:'Withdraw'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
-					{time:'2022-15-66',num:'100',type:'Recharge'},
+					{time:'2022-15-66',amount:'-100',status_text:'Withdraw'},
 				]
 				
 			};
@@ -57,7 +51,15 @@
 		methods: {
 			open(options = {type: 'center'}) {
 				this.type = options.type;
+				this.getRechargesAndWithdraws()
 				this.$refs.popup.open()
+			},
+			async getRechargesAndWithdraws(){
+				let res = await $request('recharges_and_withdraws',{});
+				console.log(res)
+				if(res.data.code==200){
+					this.list = res.data.data.data;
+				}
 			},
 		}
 	}
