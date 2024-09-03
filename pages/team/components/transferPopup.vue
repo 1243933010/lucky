@@ -6,11 +6,11 @@
 					<image src="../../../static/close.png" mode="widthFix"></image>
 				</view>
 				<view class="title">
-					<text>user name</text>
+					<text>Transfer to trading account</text>
 				</view>
 				<view class="form">
 					<view class="form-item">
-						<input v-model="formData.nickname" type="text" placeholder="Username">
+						<input v-model="formData.nickname" type="text" placeholder="输入划转金额">
 					</view>
 					<!-- <view class="form-item">
 						<input type="text" placeholder="名字">

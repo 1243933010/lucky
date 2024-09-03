@@ -205,6 +205,7 @@
 			</view>
 		</view>
 		<DefaultFooter />
+		<TransferPopup ref="transferPopup" />
 	</view>
 </template>
 
@@ -214,9 +215,10 @@
 	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import DefaultFooter from '../../components/defaultFooter.vue';
+	import TransferPopup from './components/transferPopup.vue';
 	export default {
 		components: {
-			DefaultHeader,DefaultFooter
+			DefaultHeader,DefaultFooter,TransferPopup
 		},
 		data() {
 			return {
@@ -256,7 +258,7 @@
 				}
 			},
 			async Transfer(){
-				
+				this.$refs.transferPopup.open()
 			}
 		}
 	}
