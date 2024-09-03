@@ -26,7 +26,7 @@
 						</view>
 					</view>
 					<view class="desc">Received a reward of 300 USDT today</view>
-					<view class="btn-box">Transfer</view>
+					<view class="btn-box" @click="Transfer">Transfer</view>
 				</view>
 				<view class="storage-total">
 					<view class="img">
@@ -254,6 +254,9 @@
 				if(res.data.code==200){
 					this.paiList = res.data.data.data;
 				}
+			},
+			async Transfer(){
+				
 			}
 		}
 	}

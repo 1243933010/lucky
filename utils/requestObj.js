@@ -104,5 +104,10 @@ let requestObj = {
 		url: '/api/user/today_game_rank',
 		type: 'POST'
 	},
+	gameRecords:{
+		name: "游戏记录",
+		url: '/api/user/game_records',
+		type: 'POST'
+	},
 }
 export default requestObj;
