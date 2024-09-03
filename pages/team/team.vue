@@ -17,7 +17,7 @@
 								<image class="pic" src="../../static/me_icon.png" mode="widthFix"></image>
 							</view>
 							<view class="num">
-								<text>20000.00 <view class="wen">?</view></text>
+								<text>{{commissionInfo.commission}}<view class="wen">?</view></text>
 							</view>
 						</view>
 						<view class="copy-icon">
@@ -25,7 +25,7 @@
 							<image @click="openOrder" class="pic" src="../../static/order.png" mode="widthFix"></image>
 						</view>
 					</view>
-					<view class="desc">Received a reward of 300 USDT today</view>
+					<view class="desc">Received a reward of {{commissionInfo.today_commission}} USDT today</view>
 					<view class="btn-box" @click="Transfer">Transfer</view>
 				</view>
 				<view class="storage-total">
@@ -98,7 +98,7 @@
 						</scroll-view>
 					</view>
 					<view class="record-btn">
-						<view class="btn">
+						<view class="btn" @click="Invite">
 							<text>Invite friends</text>
 						</view>
 					</view>
@@ -133,7 +133,7 @@
 			</view>
 			<view class="pai">
 				<view class="header">
-					<view class="item two" v-if="paiList[1]">
+					<view class="item two" v-if="paiList.length&&paiList[1]">
 						<view class="logo">
 							<image :src="paiList[1].avatar?paiList[1].avatar:'../../static/logo.png'"  mode="widthFix"></image>
 							<view class="text">
@@ -207,7 +207,8 @@
 		<DefaultFooter />
 		<OrderPopup ref="orderPopup" />
 		<Transfer ref="transfer" @updateData="updateData" />
-		<TransferPopup ref="transferPopup" />
+		<InvitePopup ref="invitePopup" />
+		<!-- <TransferPopup ref="transferPopup" /> -->
 	</view>
 </template>
 
@@ -219,22 +220,25 @@
 	import DefaultFooter from '../../components/defaultFooter.vue';
 	import OrderPopup from './components/orderPopup.vue';
 	import Transfer from './components/transfer.vue';
-	import TransferPopup from './components/transferPopup.vue';
+	import InvitePopup from './components/InvitePopup.vue';
+	// import TransferPopup from './components/transferPopup.vue';
 	export default {
 		components: {
-			DefaultHeader,DefaultFooter,TransferPopup,Transfer
+			DefaultHeader,DefaultFooter,Transfer,InvitePopup,OrderPopup
 		},
 		data() {
 			return {
 				list: [],
 				list1:[],
 				index:0,
-				paiList:[]
+				paiList:[],
+				commissionInfo:{}
 			};
 		},
 		onLoad(){
 			this.getRecord();
 			this.getTodayGameRank()
+			this.getCommissionInfo()
 		},
 		computed:{
 			handlePaiList(){
@@ -242,10 +246,13 @@
 			}
 		},
 		methods:{
+			Invite(){
+				this.$refs.invitePopup.open()
+			},
 			updateData(){
 				
 			},
-			transfer(){
+			Transfer(){
 				this.$refs.transfer.open()
 			},
 			openOrder(){
@@ -258,23 +265,28 @@
 			},
 			async getRecord(){
 				let res = await $request('inviteRecords',{});
-				console.log(res)
+				// console.log(res)
 				if(res.data.code==200){
 					this.list1 = res.data.data.data;
 				
 				}
 			},
+			async getCommissionInfo(){
+				let res = await $request('commissionInfo',{});
+				
+				if(res.data.code==200){
+					this.commissionInfo = res.data.data;
+				console.log(res,this.commissionInfo ,'---')
+				}
+			},
 			async getTodayGameRank(){
 				let res = await $request('todayGameRank',{});
-				console.log(res)
+				console.log(res,'1111111111111111111')
 				if(res.data.code==200){
-					this.paiList = res.data.data.data;
+					this.paiList = res.data.data.list;
 					
 				}
 			},
-			async Transfer(){
-				this.$refs.transferPopup.open()
-			}
 		}
 	}
 </script>

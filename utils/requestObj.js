@@ -99,6 +99,11 @@ let requestObj = {
 		url: '/api/user/invite_records',
 		type: 'POST'
 	},
+	inviteLink:{
+		name: "邀请好友",
+		url: '/api/user/create_invite_link',
+		type: 'POST'
+	},
 	todayGameRank:{
 		name: "团队游戏排名",
 		url: '/api/user/today_game_rank',
@@ -107,6 +112,11 @@ let requestObj = {
 	transfer:{
 		name: "划转佣金",
 		url: '/api/user/transfer',
+		type: 'POST'
+	},
+	commissionInfo:{
+		name: "佣金信息",
+		url: '/api/user/commission_info',
 		type: 'POST'
 	},
 	gameRecords:{
