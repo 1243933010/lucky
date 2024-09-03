@@ -25,7 +25,7 @@
 								<text>Payment Method:</text>
 							</view>
 							<view class="label">
-								<text>USDT-TRC20</text>
+								<text>{{rechargeConfig.channel_name}}</text>
 							</view>
 						</view>
 						<view class="item">
@@ -34,7 +34,7 @@
 							</view>
 							<view class="num">
 								<image src="../../static/me_icon.png" mode="widthFix"></image>
-								<text>1000</text>
+								<text>{{rechargeConfig.amount*1}}</text>
 							</view>
 						</view>
 					</view>
@@ -52,9 +52,9 @@
 						</view>
 						<view class="input">
 							<view class="left">
-								<input type="text" />
+								<input type="text" v-model="rechargeConfig.address" />
 							</view>
-							<view class="right">
+							<view class="right" @click="copy(rechargeConfig.address)">
 								<text>Copy</text>
 							</view>
 						</view>
@@ -71,11 +71,14 @@
 			</view>
 		</view>
 		
-		<DefaultPopup ref="defaultPopup" />
+		<!-- <DefaultPopup ref="defaultPopup" :rechargeConfig="rechargeConfig" /> -->
 	</view>
 </template>
 
 <script>
+	import {
+		$request,$totast
+	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import DefaultPopup from '../../components/defaultPopup.vue';
 	import logo from '../../static/logo.png'
@@ -96,22 +99,43 @@
 				},
 				options: {
 					value: 'https://uqrcode.cn/doc',
-					// width:160,
-					// height:160,
-					// margin: 10,
 					foregroundImageSrc: logo
-				}
+				},
+				rechargeConfig:{}
 			};
 		},
 		mounted() {
 			let that = this;
 			that.showQrcode(); //一加载生成二维码
 		},
+		onLoad(e) {
+			// e.id = 1;
+			if(!e.id){
+				e.id = '1'
+			}
+			this.getOrderDetail(e.id);
+		},
 		methods: {
-			payment(){
-				this.$refs.defaultPopup.open({
-					type:'bottom'
+			copy(str){
+				uni.setClipboardData({
+					data:str,
+					success:()=>{
+						$totast('success');
+					}
 				})
+			},
+			async getOrderDetail(id){
+				let res = await $request('rechargeDetail',{id});
+				console.log(res)
+				if(res.data.code==200){
+					this.rechargeConfig = res.data.data;
+					this.options.value = res.data.data.channel_qr_code;
+				}
+			},
+			payment(){
+				// this.$refs.defaultPopup.open({
+				// 	type:'bottom'
+				// })
 			},
 			chooseRadio(index) {
 				this.radioIndex = index;

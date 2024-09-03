@@ -22,11 +22,11 @@
 						</view>
 						<view class="copy-icon">
 							<!-- TODO: 暂用图片 -->
-							<image class="pic" src="../../static/order.png" mode="widthFix"></image>
+							<image @click="openOrder" class="pic" src="../../static/order.png" mode="widthFix"></image>
 						</view>
 					</view>
 					<view class="desc">Received a reward of 300 USDT today</view>
-					<view class="btn-box">Transfer</view>
+					<view class="btn-box" @click="transfer">Transfer</view>
 				</view>
 				<view class="storage-total">
 					<view class="img">
@@ -205,6 +205,8 @@
 			</view>
 		</view>
 		<DefaultFooter />
+		<OrderPopup ref="orderPopup" />
+		<Transfer ref="transfer" @updateData="updateData" />
 	</view>
 </template>
 
@@ -214,9 +216,11 @@
 	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import DefaultFooter from '../../components/defaultFooter.vue';
+	import OrderPopup from './components/orderPopup.vue';
+	import Transfer from './components/transfer.vue';
 	export default {
 		components: {
-			DefaultHeader,DefaultFooter
+			DefaultHeader,DefaultFooter,OrderPopup,Transfer
 		},
 		data() {
 			return {
@@ -236,6 +240,15 @@
 			}
 		},
 		methods:{
+			updateData(){
+				
+			},
+			transfer(){
+				this.$refs.transfer.open()
+			},
+			openOrder(){
+				this.$refs.orderPopup.open()
+			},
 			goUrl(url){
 				uni.navigateTo({
 					url
@@ -246,6 +259,7 @@
 				console.log(res)
 				if(res.data.code==200){
 					this.list1 = res.data.data.data;
+				
 				}
 			},
 			async getTodayGameRank(){
@@ -253,6 +267,7 @@
 				console.log(res)
 				if(res.data.code==200){
 					this.paiList = res.data.data.data;
+					
 				}
 			}
 		}

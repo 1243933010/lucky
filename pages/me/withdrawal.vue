@@ -30,7 +30,7 @@
 						<image src="../../static/me_icon.png" mode="widthFix"></image>
 						<view class="all">
 							<view class="input-con">
-								<input type="number" placeholder="Minimum withdrawal amount 50"
+								<input type="number" :placeholder="`Minimum withdrawal amount ${withdrawConfig.withdraw_min}`"
 									v-model="formData.amount" />
 
 							</view>
@@ -82,8 +82,8 @@
 				</view>
 			</view>
 		</view>
-		<defaultPopup ref="popup" @listenData="listenData"></defaultPopup>
-		<OrderPopup ref="orderPopup"></OrderPopup>
+		<defaultPopup ref="popup" @listenData="listenData" :withdrawConfig="withdrawConfig"></defaultPopup>
+		<OrderPopup ref="orderPopup" ></OrderPopup>
 	</view>
 </template>
 
@@ -142,15 +142,17 @@
 				}
 			},
 			async withdrawCreate(){
+				this.formData.channel = this.rechargeConfig[this.radioIndex].id
 				let res = await $request('withdrawCreate',this.formData);
 				console.log(res)
+				$totast(res.data.message);
 				if(res.data.code==200){
 					this.rechargeConfig = res.data.data;
 				}
 			},
 			listenData(data){
-				
 				this.formData.pay_password = data.join('')
+				this.withdrawCreate()
 				console.log(this.formData)
 			}
 			

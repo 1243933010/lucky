@@ -15,7 +15,7 @@
 						</view>
 						<view class="con">
 							<image src="../static/me_icon.png" mode="widthFix"></image>
-							<text>1111</text>
+							<text>{{withdrawConfig.balance}}</text>
 						</view>
 					</view>
 					<view class="form-item">
@@ -24,7 +24,7 @@
 						</view>
 						<view class="con">
 							<!-- <image src="../static/me_icon.png" mode="widthFix"></image> -->
-							<text>1111</text>
+							<text>{{withdrawConfig.withdraw_fee}}</text>
 						</view>
 					</view>
 					<view class="form-item">
@@ -33,7 +33,7 @@
 						</view>
 						<view class="con">
 							<!-- <image src="../static/me_icon.png" mode="widthFix"></image> -->
-							<text>1111</text>
+							<text>{{withdrawConfig.withdraw_fee}}</text>
 						</view>
 					</view>
 					<view class="form-item">
@@ -42,7 +42,7 @@
 						</view>
 						<view class="con">
 							<!-- <image src="../static/me_icon.png" mode="widthFix"></image> -->
-							<text>1111</text>
+							<text>{{withdrawConfig.trc20_address}}</text>
 						</view>
 					</view>
 				</view>
@@ -69,6 +69,14 @@
 <script>
 	export default {
 		name: "defaultPopup",
+		props:{
+			// rechargeConfig:{
+			// 	default:{}
+			// },
+			withdrawConfig:{
+				default:{}
+			},
+		},
 		data() {
 			return {
 				type: 'center',
@@ -81,6 +89,7 @@
 		methods: {
 			open(options = {type: 'center'}) {
 				this.type = options.type;
+				this.passwordList = []
 				this.$refs.popup.open()
 			},
 			changeNum(item){

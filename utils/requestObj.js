@@ -104,5 +104,10 @@ let requestObj = {
 		url: '/api/user/today_game_rank',
 		type: 'POST'
 	},
+	transfer:{
+		name: "划转佣金",
+		url: '/api/user/transfer',
+		type: 'POST'
+	},
 }
 export default requestObj;

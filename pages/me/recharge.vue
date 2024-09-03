@@ -29,7 +29,7 @@
 					<view class="input">
 						<image src="../../static/me_icon.png" mode="widthFix"></image>
 						<view class="input-con">
-							<input type="number" v-model="formData.num" />
+							<input type="number" v-model="formData.amount" />
 						</view>
 					</view>
 					<view class="radio">
@@ -50,7 +50,7 @@
 						</view>
 					</view>
 					<view class="recharge-submit">
-						<view class="con">
+						<view class="con" @click="rechargeSubmit">
 							<text>recharge</text>
 						</view>
 					</view>
@@ -77,7 +77,8 @@
 			return {
 				radioIndex: 0,
 				formData:{
-					num:''
+					amount:'',
+					channel_id:''
 				},
 				rechargeConfig:[],
 				list:[]
@@ -102,6 +103,18 @@
 					this.rechargeConfig = res.data.data;
 				}
 			},
+			async rechargeSubmit(){
+				this.formData.channel_id = this.rechargeConfig[this.radioIndex].id;
+				let res = await $request('rechargeCreate',this.formData);
+				// console.log(res)
+				$totast(res.data.message);
+				if(res.data.code==200){
+					uni.navigateTo({
+						url:`./rechargeConfirm?id=${res.data.data.id}`
+					})
+					// this.rechargeConfig = res.data.data;
+				}
+			}
 		}
 	}
 </script>

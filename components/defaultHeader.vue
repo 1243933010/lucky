@@ -4,21 +4,29 @@
 			<view class="logo1">
 				<image src="../static/logo.png" mode="widthFix"></image>
 			</view>
-			<view class="setting">
+			<view class="setting" @click="openDialog">
 				<view class=""></view>
 				<view class=""></view>
 			</view>
 		</view>
+		<TabPopup ref="tabPopup" />
 	</view>
 </template>
 
 <script>
+	import TabPopup from './tabPopup.vue';
 	export default {
 		name: "defaultHeader",
+		components:{TabPopup},
 		data() {
 			return {
 
 			};
+		},
+		methods:{
+			openDialog(){
+				this.$refs.tabPopup.open()
+			}
 		}
 	}
 </script>

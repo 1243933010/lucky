@@ -6,14 +6,14 @@
 				<text>10000</text>
 				<image class="img" src="../../static/logo.png" mode="widthFix"></image>
 			</view>
-			<view class="setting">
+			<view class="setting" @click="openDialog">
 				<view class=""></view>
 				<view class=""></view>
 			</view>
 		</view>
-		<view class="" style="color: white;" @click="goUrl">
+		<!-- <view class="" style="color: white;" @click="goUrl">
 			跳转个人中心临时地址
-		</view>
+		</view> -->
 		<view class="invite">
 			<view class="container">
 				<view class="people">
@@ -178,7 +178,7 @@
 				<view class="join">
 					<image src="../../static/u6.png" mode="widthFix"></image>
 				</view>
-				<view class="btn">
+				<view class="btn" @click="friendJoin">
 					<view class="">
 						<text>+</text>
 					</view>
@@ -193,8 +193,8 @@
 			</view>
 			<view class="faq-box">
 				<view class="list">
-					<view class="item" :class="item.show?'show':'hide'" v-for="(item,index) in faqList" :key="index">
-						<text style="color: white;">{{item.text}}</text>
+					<view class="item" :class="item.show?'show':'hide'" v-for="(item,index) in faqList" :key="index" @click="goFaq(item)">
+						<text style="color: white;">{{item.question}}</text>
 					</view>
 				</view>
 			</view>
@@ -216,6 +216,8 @@
 			</view>
 		</view>
 		<FastJoin ref="fastJoin" />
+		<TabPopup ref="tabPopup" />
+		<!-- <FriendJoin ref="friendJoin" /> -->
 	</view>
 </template>
 
@@ -224,8 +226,10 @@
 		$request,$totast
 	} from "@/utils/request";
 	import FastJoin from './components/fastJoin.vue';
+	import FriendJoin from './components/friendJoin.vue';
+	import TabPopup from '../../components/tabPopup.vue';
 	export default {
-		components:{FastJoin},
+		components:{FastJoin,FriendJoin,TabPopup},
 		data() {
 			return {
 				index: 0,
@@ -240,27 +244,7 @@
 					},
 				],
 				swipterActive: 0,
-				faqList: [{
-						text: '11111',
-						id: 1,
-						show: true
-					},
-					{
-						text: '2222',
-						id: 2,
-						show: true
-					},
-					{
-						text: '3333',
-						id: 3,
-						show: true
-					},
-					{
-						text: '4444',
-						id: 4,
-						show: true
-					},
-				],
+				faqList: [],
 				colorList: ["#3e92cc", "#f2a91f", "#a612ee", "#07c34d", "#56d894", "#ffa4bb", "#e8cd22", "#4f32cc",
 					"#ffcc11", "#0e9c5a"
 				]
@@ -273,9 +257,17 @@
 			})
 			// console.log(Math.min(10, this.getRandomInt(1, 10)))
 			this.startToggle();
+			this.getFaqs();
 		},
 		methods: {
+			openDialog(){
+				this.$refs.tabPopup.open()
+			},
 			openRoom(item,index){
+				this.$refs.fastJoin.open()
+			},
+			friendJoin(){
+				// this.$refs.friendJoin.open()
 				this.$refs.fastJoin.open()
 			},
 			changeTab(ind){
@@ -320,9 +312,24 @@
 
 				return result;
 			},
-			goUrl(){
+			// goUrl(){
+			// 	uni.navigateTo({
+			// 		url:'/pages/me/me'
+			// 	})
+			// },
+			async getFaqs(){
+				let res = await $request('faq',{});
+				console.log(res)
+				if(res.data.code==200){
+					 res.data.data.list.forEach((val)=>{
+						 val.show = true;
+					 })
+					this.faqList = res.data.data.list;
+				}
+			},
+			goFaq(){
 				uni.navigateTo({
-					url:'/pages/me/me'
+					url:'/pages/me/fqas'
 				})
 			}
 		}
