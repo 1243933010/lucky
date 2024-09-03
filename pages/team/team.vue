@@ -26,7 +26,7 @@
 						</view>
 					</view>
 					<view class="desc">Received a reward of 300 USDT today</view>
-					<view class="btn-box" @click="transfer">Transfer</view>
+					<view class="btn-box" @click="Transfer">Transfer</view>
 				</view>
 				<view class="storage-total">
 					<view class="img">
@@ -207,6 +207,7 @@
 		<DefaultFooter />
 		<OrderPopup ref="orderPopup" />
 		<Transfer ref="transfer" @updateData="updateData" />
+		<TransferPopup ref="transferPopup" />
 	</view>
 </template>
 
@@ -218,9 +219,10 @@
 	import DefaultFooter from '../../components/defaultFooter.vue';
 	import OrderPopup from './components/orderPopup.vue';
 	import Transfer from './components/transfer.vue';
+	import TransferPopup from './components/transferPopup.vue';
 	export default {
 		components: {
-			DefaultHeader,DefaultFooter,OrderPopup,Transfer
+			DefaultHeader,DefaultFooter,TransferPopup,Transfer
 		},
 		data() {
 			return {
@@ -269,6 +271,9 @@
 					this.paiList = res.data.data.data;
 					
 				}
+			},
+			async Transfer(){
+				this.$refs.transferPopup.open()
 			}
 		}
 	}

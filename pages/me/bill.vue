@@ -37,6 +37,9 @@
 </template>
 
 <script>
+	import {
+		$request,$totast
+	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import DefaultFooter from '../../components/defaultFooter.vue';
 	export default {
@@ -56,6 +59,18 @@
 					{img:'',title:'rECHARGE',time:'',num:10},
 				]
 			};
+		},
+		mounted(){
+			this.gameRecords();
+		},
+		methods:{
+			async gameRecords(){
+				let res = await $request('gameRecords',{});
+				console.log(res)
+				if(res.data.code==200){
+					this.vz = res.data.data;
+				}
+			}
 		}
 	}
 </script>
