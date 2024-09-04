@@ -41,10 +41,11 @@
 								</view>
 								<view class="usdt">
 									<view class="">
-										<text>{{item.num}}USDT</text>
+										<text class="num">{{item.num}}</text>
+										<text>USDT</text>
 									</view>
 								</view>
-								<view class="bottom">
+								<!-- <view class="bottom">
 									<view class="img-list">
 										<image src="../../../static/logo.png" mode="widthFix"></image>
 										<image src="../../../static/logo.png" mode="widthFix"></image>
@@ -52,7 +53,7 @@
 									<view class="text">
 										<text>(08)</text>
 									</view>
-								</view>
+								</view> -->
 								<!-- <image src="../../../static/u1.png" mode="widthFix"></image>
 								<text>10.00</text> -->
 							</view>
@@ -66,7 +67,7 @@
 								<view class="text">
 									<text>Create a table, invite friends, and dominate the game</text>
 								</view>
-								<view class="bk">
+								<view class="bk"  @click="friendJoin">
 									<view class="tit">
 										<text>Create</text>
 									</view>
@@ -132,6 +133,12 @@
 			changeTab(ind) {
 				this.index = ind;
 			},
+			friendJoin(){
+				this.$refs.popup.close()
+				uni.navigateTo({
+					url:'/pages/index/room/room'
+				})
+			}
 		}
 	}
 </script>
@@ -274,9 +281,13 @@
 						margin-right: 17rpx;
 						font-weight: 600;
 						position: relative;
-						padding-bottom: 64rpx;
-						.flex-center;
-
+						padding-bottom: 24rpx;
+						padding-top: 64rpx;
+						// .flex-center;
+						display: flex;
+						flex-direction: column;
+						align-items: flex-end;
+						justify-content: flex-end;
 						.fixed {
 							position: absolute;
 							top: 0;
@@ -303,6 +314,16 @@
 							background-clip: text;
 							color: transparent;
 							font-size: 28rpx;
+							// position: relative;
+							.num{
+								position: absolute;
+								top: 0;
+								left: 30rpx;
+								font-size: 90rpx;
+								color: white;
+								font-weight: 600;
+								
+							}
 						}
 
 						.bottom {
