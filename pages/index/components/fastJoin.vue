@@ -2,8 +2,8 @@
 	<view>
 		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="bottom">
 			<view class="popup-content">
-				<view class="close" @click="$refs.popup.close()">
-					<image src="../../../static/close.png" mode="widthFix"></image>
+				<view class="close"  @click.stop="close">
+					<image  @click="close" src="../../../static/close.png" mode="widthFix"></image>
 				</view>
 				<view class="title1">
 					<image src="../../../static/popup_icon.png" mode="widthFix"></image>
@@ -132,6 +132,9 @@
 			},
 			changeTab(ind) {
 				this.index = ind;
+			},
+			close(){
+				this.$refs.popup.close()
 			},
 			friendJoin(){
 				this.$refs.popup.close()

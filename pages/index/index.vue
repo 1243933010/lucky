@@ -3,7 +3,7 @@
 		<view class="page-header">
 			<view class="logo1">
 				<image src="../../static/me_icon.png" mode="widthFix"></image>
-				<text>10000</text>
+				<text>{{teamInfoData.balance*1}}</text>
 				<image class="img" src="../../static/logo.png" mode="widthFix"></image>
 			</view>
 			<view class="setting" @click="openDialog">
@@ -19,7 +19,7 @@
 				<view class="people">
 					<view class="left">
 						<image src="../../static/people.png" mode="widthFix"></image>
-						<text>0</text>
+						<text>{{teamInfoData.team_count}}</text>
 					</view>
 					<view class="right">
 						<view class="btn">
@@ -32,16 +32,21 @@
 					<view class="posi">
 						<view class="box">
 							<view class="add">
-								<image src="../../static/add.png" mode="widthFix"></image>
+								 <image v-if="teamInfoData.today_invite_list[0]" :src="teamInfoData.today_invite_list[0].avatar" mode="widthFix"></image>
+								<image  v-if="!teamInfoData.today_invite_list[0]" src="../../static/add.png" mode="widthFix"></image>
+								
 							</view>
 							<view class="add">
-								<image src="../../static/add.png" mode="widthFix"></image>
+								 <image v-if="teamInfoData.today_invite_list[1]" :src="teamInfoData.today_invite_list[1].avatar" mode="widthFix"></image>
+								<image  v-if="!teamInfoData.today_invite_list[1]"  src="../../static/add.png" mode="widthFix"></image>
 							</view>
 							<view class="add">
-								<image src="../../static/add.png" mode="widthFix"></image>
+								 <image v-if="teamInfoData.today_invite_list[2]" :src="teamInfoData.today_invite_list[2].avatar" mode="widthFix"></image>
+								<image   v-if="!teamInfoData.today_invite_list[2]" src="../../static/add.png" mode="widthFix"></image>
 							</view>
 							<view class="add">
-								<image src="../../static/add.png" mode="widthFix"></image>
+								 <image v-if="teamInfoData.today_invite_list[3]" :src="teamInfoData.today_invite_list[3].avatar" mode="widthFix"></image>
+								<image  v-if="!teamInfoData.today_invite_list[3]"  src="../../static/add.png" mode="widthFix"></image>
 							</view>
 							<view class="num">
 								<view class="add1">
@@ -64,7 +69,7 @@
 								</view>
 							</view>
 							<view class="right">
-								<text>1000</text>
+								<text>{{teamInfoData.today_invite_count}}</text>
 								<image src="../../static/right_arrow.png" mode="widthFix"></image>
 							</view>
 
@@ -85,8 +90,7 @@
 					</view>
 				</view>
 				<view class="rich">
-					<text>Global real-person U battle, joint betting creates a bonus pool, and wealth is randomly
-						distributed! Lucky airdrop up to 100 times!</text>
+					<text>{{indexInfo.system_index_text_1}}</text>
 				</view>
 			</view>
 			<view class="bk">
@@ -111,14 +115,19 @@
 					</view>
 				</view>
 				<view class="content">
-					<view class="con-item">
+					<view class="" @click="amountClick(item,index)" :class="amountIndex==index?'con-item':'con-item1'"  v-for="(item,index) in amountList" :key="index">
+						<image v-if="amountIndex==index" src="../../static/u1.png" mode="widthFix"></image>
+						<image v-if="amountIndex!==index" src="../../static/u2.png" mode="widthFix"></image>
+						<text>{{item}}</text>
+					</view>
+					<!-- <view class="con-item">
 						<image src="../../static/u1.png" mode="widthFix"></image>
 						<text>10.00</text>
 					</view>
 					<view class="con-item1">
 						<image src="../../static/u2.png" mode="widthFix"></image>
 						<text>10.00</text>
-					</view>
+					</view> -->
 				</view>
 			</view>
 		</view>
@@ -130,7 +139,28 @@
 					<swiper-item class="banner-item">
 						<view class="banner-box" @click="openRoom(item,index)"
 							:class="swipterActive==index-1?'previous':swipterActive==index+1?'next':''">
-							<image mode="widthFix" class="banner-img" :src="item.imgUrl"></image>
+							<image mode="widthFix" class="banner-img" :src="filesUrl1+item.logo"></image>
+						    <view class="posi-box">
+						    	<view class="posi-content">
+						    		<view class="content-left">
+						    			<view class="usdt">
+						    				<text class="num">{{item.bet_amount*1}}</text>
+						    			    <text class="label">USDT</text>
+										</view>
+										<view class="wen">
+											<text>Number of online users</text>
+										</view>
+						    		</view>
+									<view class="content-right">
+										<view class="image">
+											<image src="../../static/right_arrow.png" mode="widthFix"></image>
+										</view>
+									   <view class="peo">
+									   	<text >({{item.virtual_initial_online_count}})</text>
+									   </view>
+									</view>
+						    	</view>
+						    </view>
 						</view>
 					</swiper-item>
 				</block>
@@ -165,13 +195,11 @@
 				<text>friend'S</text>
 			</view>
 			<view class="label">
-				<text>Create a friend room, invite your friends to play together or join your friend room Create a
-					friend room, invite your friends to play together or join your friend room Create a friend room,
-					invite your friends to play together or join your friend room</text>
+				<text>{{indexInfo.system_index_text_2}}</text>
 			</view>
 		</view>
 		<view class="create">
-			<view class="left">
+			<view class="left"  @click="createRoom">
 				<image src="../../static/u5.png" mode="widthFix"></image>
 			</view>
 			<view class="right">
@@ -223,7 +251,7 @@
 
 <script>
 	import {
-		$request,$totast
+		$request,$totast,filesUrl
 	} from "@/utils/request";
 	import FastJoin from './components/fastJoin.vue';
 	import FriendJoin from './components/friendJoin.vue';
@@ -247,8 +275,18 @@
 				faqList: [],
 				colorList: ["#3e92cc", "#f2a91f", "#a612ee", "#07c34d", "#56d894", "#ffa4bb", "#e8cd22", "#4f32cc",
 					"#ffcc11", "#0e9c5a"
-				]
-
+				],
+				indexInfo:{},
+				teamInfoData:{},
+				userInfo:{},
+				amountList:[],
+				amountIndex:0,
+				// roomList:[]
+			}
+		},
+		computed:{
+			filesUrl1(){
+				return filesUrl
 			}
 		},
 		onLoad() {
@@ -258,20 +296,103 @@
 			// console.log(Math.min(10, this.getRandomInt(1, 10)))
 			this.startToggle();
 			this.getFaqs();
+			this.indexConfig();
+			this.teamInfo();
+			this.getAmountList('1');
 		},
 		methods: {
+			async getRoomList(info){
+				let res = await $request('roomList',{...info});
+				// console.log(res)
+				if(res.data.code==200){
+					this.swiperData = res.data.data;
+					this.swipterActive = 0;
+				}
+			},
+			async amountClick(item,index){
+				this.amountIndex=index;
+				let type = '';
+				if(this.index==0){
+					type = '1'
+				}else{
+					type = '5'
+				}
+				this.getRoomList({amount:this.amountList[this.amountIndex],type})
+			},
+			async getAmountList(type){
+				let res = await $request('amountList',{type});
+				// console.log(res)
+				if(res.data.code==200){
+					this.amountList = res.data.data.amount;
+					this.amountIndex = 0;
+					this.getRoomList({amount:this.amountList[0],type})
+				}
+			},
+			async getUser(){
+				let res = await $request('userInfo',{});
+				// console.log(res)
+				if(res.data.code==200){
+					this.userInfo = res.data.data;
+				}
+			},
+			async teamInfo(){
+				let res = await $request('teamInfo',{});
+				console.log(res)
+				if(res.data.code==200){
+					this.teamInfoData = res.data.data;
+				}
+			},
+			async indexConfig(){
+				let res = await $request('indexConfig',{});
+				// console.log(res)
+				if(res.data.code==200){
+					this.indexInfo = res.data.data;
+				}
+			},
 			openDialog(){
 				this.$refs.tabPopup.open()
 			},
-			openRoom(item,index){
-				this.$refs.fastJoin.open()
+			async openRoom(item,index){
+				// this.$refs.fastJoin.open()
+				// console.log(item)
+				// return
+				// this.index = ind;
+				let type = '';
+				if(this.index==0){
+					type = '1'
+				}else{
+					type = '5'
+				}
+				let res = await $request('joinSystem',{room_id:item.id});
+				// console.log(res)
+				if(res.data.code==200){
+					// this.indexInfo = res.data.data;
+					uni.navigateTo({
+						url:`/pages/index/hall/hall?id=${item.id}&type=${type}`
+					})
+					return
+				}
+				$totast(res.data.message)
 			},
 			friendJoin(){
 				// this.$refs.friendJoin.open()
 				this.$refs.fastJoin.open()
 			},
+			createRoom(){
+				uni.navigateTo({
+					url:'/pages/index/room/room'
+				})
+			},
 			changeTab(ind){
 				this.index = ind;
+				let type = '';
+				if(ind==0){
+					type = '1'
+				}else{
+					type = '5'
+				}
+				
+				this.getAmountList(type)
 			},
 			swipterChange(e) {
 				this.swipterActive = e.detail.current;
@@ -319,7 +440,7 @@
 			// },
 			async getFaqs(){
 				let res = await $request('faq',{});
-				console.log(res)
+				// console.log(res)
 				if(res.data.code==200){
 					 res.data.data.list.forEach((val)=>{
 						 val.show = true;
@@ -371,6 +492,83 @@
 		/* 控制两张图片的间距 */
 		height: 100%;
 		padding-left: 10%;
+		position: relative;
+		.posi-box{
+			position: absolute;
+			width: 100%;
+			bottom: 0;
+			left: 5%;
+			.posi-content{
+				width: 455rpx;
+				margin: 0 auto;
+				height: 159rpx;
+				background: rgba(255, 255, 255, 0.3);
+				border-radius: 28rpx 28rpx 28rpx 28rpx;
+				.flex-space-between;
+				box-sizing: border-box;
+				padding: 0rpx 22rpx;
+				.content-left{
+					width: 90%;
+					height: 100%;
+					padding-bottom: 22rpx;
+					// .flex-column;
+					display: flex;
+					flex-direction: column;
+					// font-size: 87rpx;
+					.usdt{
+						height: 100%;
+						font-size: 67rpx;
+						font-weight: 600;
+						background-image: linear-gradient(55.53466052546843deg, #9DFE00 0%, #14D9E5 100%);
+						-webkit-background-clip: text;
+						background-clip: text;
+						color: transparent;
+						.num{
+							line-height: 0;
+						}
+						.label{
+							font-size: 31rpx;
+						}
+					}
+					.wen{
+						color: #CCCCCC;
+						font-size: 21rpx;
+					}
+				}
+				.content-right{
+					height: 100%;
+					display: flex;
+					// flex-grow: 1;
+					flex-direction: column;
+					justify-content: space-between;
+					box-sizing: border-box;
+					align-self: flex-end;
+					// justify-content: flex-end;
+					padding: 22rpx 0;
+					.image{
+						width: 100%;
+						display: flex;
+						flex-direction: row-reverse;
+						image{
+							width: 15rpx;
+							
+						}
+					}
+					.peo{
+						width: 100%;
+						display: flex;
+						flex-direction: row-reverse;
+						text{
+							width: 100%;
+							color: #EEEEEE;
+							font-size: 28rpx;
+							
+						}
+					}
+					
+				}
+			}
+		}
 	}
 
 	.previous {

@@ -124,5 +124,85 @@ let requestObj = {
 		url: '/api/user/game_records',
 		type: 'POST'
 	},
+	indexConfig:{
+		name: "首页配置",
+		url: '/api/index/config',
+		type: 'POST'
+	},
+	teamInfo:{
+		name: "团队信息",
+		url: '/api/index/team_info',
+		type: 'POST'
+	},
+	amountList:{
+		name: "系统房金额列表",
+		url: '/api/room/amount_list',
+		type: 'POST'
+	},
+	roomList:{
+		name: "房间列表",
+		url: '/api/room/lists',
+		type: 'POST'
+	},
+	joinSystem:{
+		name: "加入系统房间",
+		url: '/api/room/join_system',
+		type: 'POST'
+	},
+	roomDetail:{
+		name: "房间详情",
+		url: '/api/room/detail',
+		type: 'POST'
+	},
+	roomInfo:{
+		name: "房间动态信息",
+		url: '/api/game/room_info',
+		type: 'POST'
+	},
+	gameStatus:{
+		name: "游戏状态",
+		url: '/api/game/status',
+		type: 'POST'
+	},
+	switchSystemRoom:{
+		name: "切换系统房间",
+		url: '/api/room/switch_system',
+		type: 'POST'
+	},
+	roomLeave:{
+		name: "退出房间",
+		url: '/api/room/leave',
+		type: 'POST'
+	},
+	roomCreate:{
+		name: "创建房间",
+		url: '/api/room/create',
+		type: 'POST'
+	},
+	roomJoin:{
+		name: "加入房间",
+		url: '/api/room/join',
+		type: 'POST'
+	},
+	roomHistory:{
+		name: "房间历史",
+		url: '/api/room/history',
+		type: 'POST'
+	},
+	amountListInRoom:{
+		name: "房间内金额列表",
+		url: '/api/room/amount_list_in_room',
+		type: 'POST'
+	},
+	gameJoin:{
+		name: "参与游戏",
+		url: '/api/game/join',
+		type: 'POST'
+	},
+	gameResult:{
+		name: "游戏结果",
+		url: '/api/game/result',
+		type: 'POST'
+	},
 }
 export default requestObj;

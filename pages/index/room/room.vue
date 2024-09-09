@@ -37,7 +37,7 @@
 									<text>Table Name</text>
 								</view>
 								<view class="input">
-									<input type="text" v-model="formData.input1" placeholder="Enter your table name" />
+									<input type="text" v-model="formData.name" placeholder="Enter your table name" />
 								</view>
 							</view>
 							<view class="form-input">
@@ -45,7 +45,7 @@
 									<text>amount of money</text>
 								</view>
 								<view class="input">
-									<input type="text" v-model="formData.input1" placeholder="Enter an integer between 2 $and 100 $" />
+									<input type="number" v-model="formData.amount" placeholder="Enter an integer between 2 $and 100 $" />
 								</view>
 							</view>
 							<view class="form-select" @click.stop="pickerBool=true">
@@ -53,7 +53,7 @@
 									<text>Maximum capacity</text>
 								</view>
 								<view class="select">
-									<input :disabled="true" type="text" v-model="formData.input1" placeholder="10 to 100 people" />
+									<input :disabled="true" type="text" v-model="formData.capacity" placeholder="10 to 100 people" />
 								    <image src="../../../static/bottom_arrow.png" mode="widthFix"></image>
 								</view>
 								<view class="posi" v-if="pickerBool">
@@ -70,16 +70,19 @@
 									<text>Automatic dissolution</text>
 								</view>
 								<view class="box2">
-									<view class="item" :class="formTabActive==0?'form-active':''">
+									<view class="item"  v-for="(item,index) in timeList" :key="index" @click="formTabActive=index" :class="formTabActive==index?'form-active':''">
+										<text>{{item}} hours</text>
+									</view>
+									<!-- <view class="item" @click="formTabActive=0" :class="formTabActive==0?'form-active':''">
 										<text>24 hours</text>
 									</view>
-									<view class="item" :class="formTabActive==1?'form-active':''">
+									<view class="item"  @click="formTabActive=1" :class="formTabActive==1?'form-active':''">
 										<text>48 hours</text>
-									</view>
+									</view> -->
 								</view>
 							</view>
 							<view class="form-submit">
-								<view class="btn">
+								<view class="btn" @click="createRoom">
 									<text>Create</text>
 								</view>
 							</view>
@@ -88,14 +91,23 @@
 					<view class="join" v-if="index==1">
 						<view class="form">
 							<view class="form-number">
-								<view class="title">
+								<view class="title"  @click.stop="pickerBool1=true">
 									<text>Table number</text>
+									<image src="../../../static/bottom_arrow.png" mode="widthFix"></image>
 								</view>
 								<view class="password">
 									<view class="radio">
-										<view class="item" v-for="(item,index) in 6" :key="index">
-											<!-- <text>{{passwordList[index]||''}}</text> -->
+										<view class="item" @click="$refs.popup.open()" v-for="(item,index) in tableList" :key="index">
+											<text>{{item||''}}</text>
 										</view>
+									</view>
+								</view>
+								<view class="posi" v-if="pickerBool1">
+									<view class="box1">
+										<view class="item" @click.stop="choosePicker1(item)" v-for="(item,index) in roomHistory" :key="index">
+											<text>{{item.no}}</text>
+										</view>
+										
 									</view>
 								</view>
 							</view>
@@ -107,14 +119,14 @@
 									<text>Invitation link</text>
 								</view>
 								<view class="input">
-									<input type="text" v-model="formData.input1" placeholder="Paste invitation link" />
+									<input type="text" v-model="formData1.url" placeholder="Paste invitation link" />
 								</view>
 							</view>
 							<view class="form-text2">
 								<text>Choose any method to join a friend's table, and the table number/link is unique.</text>
 							</view>
 							<view class="form-submit">
-								<view class="btn">
+								<view class="btn" @click="join">
 									<text>Join in</text>
 								</view>
 							</view>
@@ -123,6 +135,7 @@
 				</view>
 			</view>
 		</view>
+		<DefaultPopup ref="popup" @listenData="listenData"></DefaultPopup>
 	</view>
 </template>
 
@@ -131,35 +144,110 @@
 		$request,$totast
 	} from "@/utils/request";
 	import DefaultHeader from '@/components/defaultHeader.vue';
+	import DefaultPopup from './components/defaultPopup.vue';
 	export default {
 		components: {
-			DefaultHeader,
+			DefaultHeader,DefaultPopup
 		},
 		data() {
 			return {
-				index:1,
+				index:0,
 				formData:{
-					input1:''
+					name:'',
+					amount:'',
+					capacity:'',
+					auto_dissolution:''
 				},
 				formTabActive:0,
-				array:[{label:'0-20',value:'1'},
-				{label:'50',value:'2'},
-				{label:'100',value:'3'},
-				{label:'200',value:'4'}],
-				pickerBool:false
+				array:[{label:'0-20',value:'20'},
+				{label:'50',value:'50'},
+				{label:'100',value:'100'},
+				{label:'200',value:'200'}],
+				pickerBool:false,
+				timeList:['24','48'],
+				tableList:['','','','','',''],
+				formData1:{
+					code:'',
+					url:''
+				},
+				roomHistory:[],
+				pickerBool1:false,
 			};
 		},
+		mounted(){
+			this.getRoomHistory();
+			console.log('12345'.split(''))
+		},
 		methods:{
+			choosePicker1(item){
+				this.tableList = item.no.split('')
+			},
+			listenData(data){
+				// this.formData.pay_password = data.join('')
+				// this.withdrawCreate()
+				// console.log(data)
+				this.tableList.forEach((val,index)=>{
+					if(data[index]){
+						this.tableList[index] = data[index]
+					}else{
+						this.tableList[index] = ''
+					}
+				})
+			},
+			async join(){
+				let obj = {};
+				this.formData1.code = this.tableList.join('')
+				if(this.formData1.code&&this.formData1.url&&this.formData1.code.length==6){
+					obj.code = this.formData1.code;
+				}else if(this.formData1.code&&!this.formData1.url&&this.formData1.code.length==6){
+					obj.code = this.formData1.code;
+				}else if(this.formData1.code&&this.formData1.url&&this.formData1.code.length!==6){
+					obj.url = this.formData1.url;
+				}else if(!this.formData1.code&&this.formData1.url){
+					obj.url = this.formData1.url;
+				}else {
+					return
+				}
+				let res = await $request('roomJoin',obj);
+				$totast(res.data.message)
+				if(res.data.code==200){
+					
+				}
+			},
 			changeTab(ind){
 				this.index = ind;
 			},
 			changePicker(e){
 				this.pickerBool = false;
+				this.pickerBool1 = false;
 			},
 			choosePicker(item){
-				console.log('111')
+				// let arr  = ['20','50','100','200']
+				// console.log('111',item)
+				this.formData.capacity = item.value
 				this.pickerBool = false;
-			}
+			},
+			async createRoom(){
+				let obj = {...this.formData}
+				obj.auto_dissolution = this.formTabActive+1;
+				let res = await $request('roomCreate',obj);
+				$totast(res.data.message)
+				if(res.data.code==200){
+					setTimeout(()=>{
+						uni.navigateTo({
+							url:`/pages/index/friend/friend?id=${res.data.data.id}`
+						})
+					},1000)
+				}
+			},
+			// roomHistory
+			async getRoomHistory(){
+				let res = await $request('roomHistory',{});
+				console.log(res)
+				if(res.data.code==200){
+					this.roomHistory = res.data.data;
+				}
+			},
 		}
 	}
 </script>
@@ -323,6 +411,8 @@
 									// bottom: 248rpx;
 									left: 0;
 									width: 100%;
+									max-height: 1000rpx;
+									overflow: hidden;
 									.box1{
 										width: 100%;
 										background-color: #444444;
@@ -434,11 +524,50 @@
 									}
 								}
 							}
+							.form-number{
+								position: relative;
+								.posi{
+									position: absolute;
+									z-index: 100;
+									// bottom: 248rpx;
+									left: 0;
+									top: 45rpx;
+									width: 100%;
+									max-height: 1000rpx;
+									overflow: hidden;
+									.box1{
+										width: 100%;
+										background-color: #444444;
+										border-bottom-left-radius: 18rpx;
+										border-bottom-right-radius: 18rpx;
+										// display: flex;
+										// flex-direction: column;
+										// align-items: center;
+										.item{
+											width: calc(100% - 27rpx);
+											margin: 0 auto;
+											height: 63rpx;
+											// margin-bottom: 63rpx;
+											color: #999999;
+											font-size: 28rpx;
+											display: flex;
+											justify-content: center;
+											align-items: center;
+											border-bottom: 1px solid #666666;
+										}
+									}
+								}
+							}
 							.form-input,.form-number{
 								.title{
 									color: #FFFFFF;
 									font-size: 28rpx;
 									margin-bottom: 17rpx;
+									width: 100%;
+									.flex-space-between;
+									image{
+										width: 28rpx;
+									}
 								}
 								.input{
 									background: #444444;

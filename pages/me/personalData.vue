@@ -2,7 +2,7 @@
 	<view class="page-container">
 		<DefaultHeader />
 		<view class="logo">
-			<image @click="changeImg" src="../../static/logo.png" mode="widthFix"></image>
+			<image @click="changeImg" :src="userInfo.avatar?filesUrl1+userInfo.avatar:'../../static/logo.png'" mode="widthFix"></image>
 		</view>
 		<view class="form">
 			<view class="form-item" @click="setUser">
@@ -96,7 +96,7 @@
 
 <script>
 	import {
-		$request,$totast
+		$request,$totast,filesUrl
 	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import DefaultFooter from '../../components/defaultFooter.vue';
@@ -123,6 +123,11 @@
 				sysInfo: {screenHeight:100},
 				userInfo:{}
 			};
+		},
+		computed:{
+			filesUrl1(){
+				return filesUrl
+			}
 		},
 		onLoad() {
 			let sysInfo = uni.getSystemInfo({

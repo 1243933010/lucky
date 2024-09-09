@@ -86,7 +86,7 @@
 			},
 			async getUser(){
 				let res = await $request('userInfo',{});
-				console.log(res)
+				// console.log(res)
 				if(res.data.code==200){
 					this.userInfo = res.data.data;
 				}
