@@ -1,5 +1,5 @@
 <template>
-	<view class="">
+	<view  class="" :class="bkUlr">
 		<swiper style="height: 100vh;" @change="switchSystemRoom" :indicator-dots="false" :autoplay="false" >
 			<swiper-item v-for="(item,index) in amountList" :key="index">
 				<view class="page-container">
@@ -84,7 +84,7 @@
 							<view class="box">
 								<view class="left"></view>
 								<view class="center" @click="submitClick">
-									<text>Preparation for betting</text>
+									<text>{{btnText}}</text>
 								</view>
 								<view class="right">
 									<image src="../../../static/hell_icon4.png" mode="widthFix"></image>
@@ -108,16 +108,19 @@
 				</view>
 			</swiper-item>
 		</swiper>
+		 <Popup ref="popup" />
 	</view>
 </template>
 
 <script>
+	import Popup from './components/dialog.vue';
 	import {
 		$request,
 		$totast,
 		filesUrl
 	} from "@/utils/request";
 	export default {
+		components:{Popup},
 		data() {
 			return {
 				roomType:'',
@@ -131,12 +134,25 @@
 				borderList: [],
 				borderActive: null,
 				roomInfo: {},
-				roomStatus:{}
+				roomStatus:{},
+				btnText:'Preparation for betting'
 			};
 		},
 		computed: {
 			filesUrl1() {
 				return filesUrl
+			},
+			bkUlr(){
+				if(this.amountList.length==0){
+					return 'bk0'
+				}
+				if(['10','20'].includes(this.amountList[this.amountIndex].bet_amount)){
+					return 'bk1'
+				}else if(['50','100'].includes(this.amountList[this.amountIndex].bet_amount)){
+					return 'bk2'
+				}else{
+					return 'bk0'
+				}
 			}
 		},
 		onLoad(e) {
@@ -164,10 +180,42 @@
 			
 		},
 		methods: {
+			startCountdown(time) {
+				// 每秒更新一次倒计时
+				this.intervalId = setInterval(() => {
+					time -= 1;
+			
+					// 更新倒计时显示
+					this.btnText = time;
+					// 当倒计时为零或小于零时，清除定时器
+					if (time <= 0) {
+						this.clearCountdown();
+						this.btnText = "";
+					}
+				}, 1000);
+			
+				// 初始化时马上更新一次倒计时显示
+				this.btnText = time;
+			},
+			clearCountdown() {
+				if (this.intervalId) {
+					clearInterval(this.intervalId);
+					this.intervalId = null;
+				}
+			},
+			async startPolling() {
+				// 启动轮询，每隔 1 秒调用一次
+				this.polling = true;
+				while (this.polling) {
+					await this.getRoomInfo(); // 等待请求返回
+					await this.sleep(2000); // 等待 1 秒后再继续轮询
+				}
+			},
 			async submitClick(){
-				if(this.roomStatus.status==0){
+				if(this.roomStatus.status==0||(this.roomStatus.is_join==0&&this.roomStatus.status==5)){
 					this.gameJoin()
 				}
+				
 			},
 			async gameJoin(){
 				let obj = {is_multiple: ''};
@@ -291,9 +339,52 @@
 				// console.log(res)
 				if (res.data.code == 200) {
 					this.roomStatus = res.data.data;
+					if(this.roomStatus.status==0){
+						uni.hideLoading()
+					}
+					if(this.roomStatus.status==15){
+						uni.showLoading()
+					}
+					if(this.roomStatus.status==20){
+						uni.hideLoading()
+						this.getGameResult();
+						
+					}
+					if(this.roomStatus.status==25){
+						uni.hideLoading()
+						this.$refs.popup.close()
+					}
+					if(this.roomStatus.status==15){
+						uni.showLoading()
+					}
+					if(this.roomStatus.status==5){
+						// this.startCountdown()
+						if(typeof this.btnText=='number'){
+							return
+						}
+						uni.hideLoading()
+						let end = new Date(this.roomStatus.lock_start_time).getTime();
+						let start = new Date(this.roomStatus.countdown_start_time).getTime();
+						let time =end/1000- start/1000;
+						console.log(end,start,time)
+						this.startCountdown(time)
+					}else{
+						this.clearCountdown()
+						this.btnText = 'Preparation for betting'
+					}
+					
 					return
 				}
 				$totast(res.data.message)
+			},
+			async getGameResult(){
+				let res = await $request('gameResult', {
+					room_id: this.roomId
+				});
+				if(res.data.code==200){
+					this.$refs.popup.open(res.data.data)
+				}
+				console.log(res)
 			}
 		}
 	}
@@ -304,9 +395,17 @@
 
 	page {
 		height: 100vh;
-		background: url('../../../static/hell_bk.png') no-repeat 100% 30%/cover;
+		
 	}
-
+	.bk0{
+		background: url('../../../static/hell_bk.png') no-repeat 100% 30% / cover;
+	}
+	.bk1{
+		background: url('../../../static/hall_bk_1.png') no-repeat 100% 30% / cover;
+	}
+	.bk2{
+		background: url('../../../static/hall_bk_2.png') no-repeat 100% 30% / cover;
+	}
 	.posi {
 		position: fixed;
 		bottom: 42rpx;

@@ -4,10 +4,10 @@
 			<view class="submit-btn">
 				<view class=""></view>
 				<view class="text">
-					<text>Create a room</text>
+					<text  @click="goUrl('/pages/index/room/room')">Create a room</text>
 					<!-- <text @click="goUrl('/pages/me/me')">Quick start</text> -->
-					<text @click="goUrl('/pages/me/me')">临时个人中心</text>
-					<text>Share link</text>
+					<!-- <text @click="goUrl('/pages/me/me')">临时个人中心</text> -->
+					<text >Share link</text>
 				</view>
 			</view>
 		</view>

@@ -25,8 +25,8 @@
 						<view class="item" @click="goUrl('/pages/index/index')">
 							<text>home page</text>
 						</view>
-						<view class="item" @click="goUrl('/pages/me/personalData')">
-							<text>Personal Center</text>
+						<view class="item" @click="goUrl('/pages/me/me')">
+							<text>User Center</text>
 						</view>
 						<view class="item" @click="goUrl('/pages/team/team')">
 							<text>My team</text>
