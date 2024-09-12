@@ -367,6 +367,10 @@
 				// console.log(res)
 				if(res.data.code==200){
 					// this.indexInfo = res.data.data;
+					//后面在跳转这个页面得按钮内调用
+					uni.removeStorageSync('loopNum');
+					uni.removeStorageSync('loopArr');
+					uni.removeStorageSync('newLoopBool');
 					uni.navigateTo({
 						url:`/pages/index/hall/hall?id=${item.id}&type=${type}`
 					})

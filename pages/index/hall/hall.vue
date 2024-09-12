@@ -25,7 +25,7 @@
 								</view>
 							</view>
 							<view class="user-right">
-								<image class="share" src="../../../static/share.png" mode="widthFix"></image>
+								<image @click="share" class="share" src="../../../static/share.png" mode="widthFix"></image>
 								<image @click="singOut" class="sing-out" src="../../../static/sign_out.png" mode="widthFix"></image>
 							</view>
 						</view>
@@ -109,18 +109,20 @@
 			</swiper-item>
 		</swiper>
 		 <Popup ref="popup" />
+		 <ShareCom ref="share" />
 	</view>
 </template>
 
 <script>
 	import Popup from './components/dialog.vue';
+	import ShareCom from './components/share.vue';
 	import {
 		$request,
 		$totast,
 		filesUrl
 	} from "@/utils/request";
 	export default {
-		components:{Popup},
+		components:{Popup,ShareCom},
 		data() {
 			return {
 				roomType:'',
@@ -135,7 +137,8 @@
 				borderActive: null,
 				roomInfo: {},
 				roomStatus:{},
-				btnText:'Preparation for betting'
+				btnText:'Preparation for betting',
+				testNum:0
 			};
 		},
 		computed: {
@@ -169,10 +172,15 @@
 			this.getRoomDetail(this.roomId)
 		},
 		mounted() {
+			//后面在跳转这个页面得按钮内调用
+			// uni.removeStorageSync('loopNum');
+			// uni.removeStorageSync('loopArr');
+			// uni.removeStorageSync('newLoopBool');
 			this.startPolling();
 			this.startPolling1();
 			// this.getAmountList()
 			this.getAmountListInRoom()
+			
 		},
 		beforeDestroy() {
 			this.stopPolling();
@@ -180,6 +188,46 @@
 			
 		},
 		methods: {
+			listenNum(info){
+				console.log(info)
+				let loopNum = uni.getStorageSync('loopNum')
+				let loopArr= uni.getStorageSync('loopArr')
+				if(loopNum===3){
+					console.log('要被踢走了')
+					// return
+				}
+				if(!loopArr){
+					loopArr = [];
+				}
+				if(!loopNum&&loopNum!==0){
+					loopNum = 0;
+				}
+				if(info.status!==25){
+					// uni.setStorageSync('newLoopBool',true);
+					if(!loopArr.includes(info.status)){
+						loopArr.push(info.status)
+						uni.setStorageSync('loopArr',loopArr);
+					}else{
+						
+					}
+					
+				}else{
+					if(loopArr.length>0){
+						loopNum++;
+						uni.setStorageSync('loopNum',loopNum);
+						uni.setStorageSync('loopArr',[]);
+					}
+					
+				}
+				// console.log(loopNum)
+			},
+			share(){
+				let info = {
+					detail:this.roomDetail,
+					info:this.roomInfo
+				}
+				this.$refs.share.open(info)
+			},
 			startCountdown(time) {
 				// 每秒更新一次倒计时
 				this.intervalId = setInterval(() => {
@@ -248,14 +296,7 @@
 					},1500) 
 				}
 			},
-			// async getAmountList(type){
-			// 	let res = await $request('amountList',{type});
-			// 	// console.log(res)
-			// 	if(res.data.code==200){
-			// 		this.amountList = res.data.data.amount;
-			// 		this.amountIndex = 0;
-			// 	}
-			// },
+			
 			async getAmountListInRoom(type){
 				let res = await $request('amountListInRoom',{type:this.roomType});
 				console.log(res)
@@ -338,7 +379,12 @@
 				});
 				// console.log(res)
 				if (res.data.code == 200) {
+					// if(this.testNum===25){
+					// 	this.testNum = -5;
+					// }
+					// res.data.data.status = this.testNum+=5
 					this.roomStatus = res.data.data;
+					this.listenNum(res.data.data)
 					if(this.roomStatus.status==0){
 						uni.hideLoading()
 					}
@@ -366,7 +412,7 @@
 						let end = new Date(this.roomStatus.lock_start_time).getTime();
 						let start = new Date(this.roomStatus.countdown_start_time).getTime();
 						let time =end/1000- start/1000;
-						console.log(end,start,time)
+						// console.log(end,start,time)
 						this.startCountdown(time)
 					}else{
 						this.clearCountdown()

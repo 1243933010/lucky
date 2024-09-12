@@ -6,7 +6,7 @@
 					<view class="close" @click="$refs.popup.close()">
 						<image src="@/static/close.png" mode="widthFix"></image>
 					</view>
-					<view class="title">
+					<view class="title" v-if="options.game_player">
 						<text>{{options.game_player.win_amount}}</text>
 					</view>
 					<view class="form">
@@ -15,7 +15,7 @@
 								<text>{{item.nickname}}</text>
 							</view>
 							<view class="right">
-								<text>{{item.win_amount}}</text>
+								<text>{{item.win_amount?item.win_amount:''}}</text>
 							</view>
 						</view>
 					</view>
@@ -44,7 +44,10 @@
 				this.options = data;
 				this.$refs.popup.open()
 			},
-			
+			close(){
+				this.options = {};
+				this.$refs.popup.close()
+			},
 			async submitBtn(){
 				// let res = await $request("userUpdate", this.formData)
 				// // console.log(res)
