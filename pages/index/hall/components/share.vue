@@ -66,13 +66,23 @@
 			open(data) {
 				this.options = data;
 				console.log(data)
+				if(!data){
+					this.dataList=[
+						{title:'Table name',value:'NameNameName'},
+						{title:'Amount of money',value:'5USD'},
+						{title:'Maximum capacity',value:'150people'},
+						{title:'Automatic dissolution',value:'24h'},
+					]
+				}
 				this.dataList = [
 					{title:'Table name',value:data.detail.title},
 					{title:'Amount of money',value:data.detail.bet_amount*1+'USDT'},
 					{title:'Maximum capacity',value:data.detail.max_people+'people'},
 					{title:'Automatic dissolution',value:'11111'},
 				]
-				this.$refs.popup.open()
+				this.$nextTick(()=>{
+					this.$refs.popup.open()
+				})
 			},
 			
 			async submitBtn(){
@@ -116,8 +126,8 @@
 
 		.close {
 			position: absolute;
-			right: 43rpx;
-			top: 43rpx;
+			left:50%;
+			bottom: -130rpx;
 
 			image {
 				width: 43rpx;

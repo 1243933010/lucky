@@ -87,7 +87,7 @@
 									<text>{{btnText}}</text>
 								</view>
 								<view class="right">
-									<image src="../../../static/hell_icon4.png" mode="widthFix"></image>
+									<image @click="$refs.textCom.open()" src="../../../static/hell_icon4.png" mode="widthFix"></image>
 								</view>
 							</view>
 						</view>
@@ -109,20 +109,22 @@
 			</swiper-item>
 		</swiper>
 		 <Popup ref="popup" />
-		 <ShareCom ref="share" />
+		 <ShareCom ref="shareCom" />
+		 <TextCom ref="textCom" />
 	</view>
 </template>
 
 <script>
 	import Popup from './components/dialog.vue';
 	import ShareCom from './components/share.vue';
+	import TextCom from './components/text.vue';
 	import {
 		$request,
 		$totast,
 		filesUrl
 	} from "@/utils/request";
 	export default {
-		components:{Popup,ShareCom},
+		components:{Popup,ShareCom,TextCom},
 		data() {
 			return {
 				roomType:'',
@@ -172,6 +174,11 @@
 			this.getRoomDetail(this.roomId)
 		},
 		mounted() {
+			// try{
+			// 	this.$refs.shareCom.open(null)
+			// }catch(e){
+			// 	//TODO handle the exception
+			// }
 			//后面在跳转这个页面得按钮内调用
 			// uni.removeStorageSync('loopNum');
 			// uni.removeStorageSync('loopArr');
@@ -226,7 +233,8 @@
 					detail:this.roomDetail,
 					info:this.roomInfo
 				}
-				this.$refs.share.open(info)
+				this.$refs.shareCom.open(info)
+				
 			},
 			startCountdown(time) {
 				// 每秒更新一次倒计时
