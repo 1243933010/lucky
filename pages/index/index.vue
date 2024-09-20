@@ -1,10 +1,13 @@
 <template>
-	<view class="page-container">
+	<view class="page-container" id="pageId">
 		<view class="page-header">
-			<view class="logo1">
+			<view class="logo1" @click="goUrl('/pages/me/recharge')">
 				<image src="../../static/me_icon.png" mode="widthFix"></image>
 				<text>{{teamInfoData.balance*1}}</text>
-				<image class="img" src="../../static/logo.png" mode="widthFix"></image>
+				<view class="image">
+					<text>+</text>
+				</view>
+				<!-- <image class="img" src="../../static/logo.png" mode="widthFix"></image> -->
 			</view>
 			<view class="setting" @click="openDialog">
 				<view class=""></view>
@@ -22,7 +25,7 @@
 						<text>{{teamInfoData.team_count}}</text>
 					</view>
 					<view class="right">
-						<view class="btn">
+						<view class="btn" @click="$refs.invitePopup.open()">
 							<image src="../../static/invite.png" mode="widthFix"></image>
 							<text>invitation</text>
 						</view>
@@ -31,22 +34,54 @@
 				<view class="team">
 					<view class="posi">
 						<view class="box">
-							<view class="add">
-								 <image v-if="teamInfoData.today_invite_list[0]" :src="teamInfoData.today_invite_list[0].avatar" mode="widthFix"></image>
-								<image  v-if="!teamInfoData.today_invite_list[0]" src="../../static/add.png" mode="widthFix"></image>
+							<view class="item">
+								<view class="add">
+									<image v-if="teamInfoData.today_invite_list[0]"
+										:src="teamInfoData.today_invite_list[0].avatar" mode="widthFix"></image>
+									<image v-if="!teamInfoData.today_invite_list[0]" src="../../static/add.png"
+										mode="widthFix"></image>
 								
+								</view>
+								<view class="name" >
+									<text v-if="teamInfoData.today_invite_list[0]">{{teamInfoData.today_invite_list[0].nickname}}</text>
+								    <!-- <text>11111112121212</text> -->
+								</view>
 							</view>
+							<view class="item">
 							<view class="add">
-								 <image v-if="teamInfoData.today_invite_list[1]" :src="teamInfoData.today_invite_list[1].avatar" mode="widthFix"></image>
-								<image  v-if="!teamInfoData.today_invite_list[1]"  src="../../static/add.png" mode="widthFix"></image>
+								<image v-if="teamInfoData.today_invite_list[1]"
+									:src="teamInfoData.today_invite_list[1].avatar" mode="widthFix"></image>
+								<image v-if="!teamInfoData.today_invite_list[1]" src="../../static/add.png"
+									mode="widthFix"></image>
 							</view>
-							<view class="add">
-								 <image v-if="teamInfoData.today_invite_list[2]" :src="teamInfoData.today_invite_list[2].avatar" mode="widthFix"></image>
-								<image   v-if="!teamInfoData.today_invite_list[2]" src="../../static/add.png" mode="widthFix"></image>
+							<view class="name" >
+								<text v-if="teamInfoData.today_invite_list[1]">{{teamInfoData.today_invite_list[0].nickname}}</text>
+							    <!-- <text>11111112121212</text> -->
 							</view>
+							</view>
+							<view class="item">
 							<view class="add">
-								 <image v-if="teamInfoData.today_invite_list[3]" :src="teamInfoData.today_invite_list[3].avatar" mode="widthFix"></image>
-								<image  v-if="!teamInfoData.today_invite_list[3]"  src="../../static/add.png" mode="widthFix"></image>
+								<image v-if="teamInfoData.today_invite_list[2]"
+									:src="teamInfoData.today_invite_list[2].avatar" mode="widthFix"></image>
+								<image v-if="!teamInfoData.today_invite_list[2]" src="../../static/add.png"
+									mode="widthFix"></image>
+							</view>
+							<view class="name" >
+								<text v-if="teamInfoData.today_invite_list[2]">{{teamInfoData.today_invite_list[0].nickname}}</text>
+							    <!-- <text>11111112121212</text> -->
+							</view>
+							</view>
+							<view class="item">
+							<view class="add">
+								<image v-if="teamInfoData.today_invite_list[3]"
+									:src="teamInfoData.today_invite_list[3].avatar" mode="widthFix"></image>
+								<image v-if="!teamInfoData.today_invite_list[3]" src="../../static/add.png"
+									mode="widthFix"></image>
+							</view>
+							<view class="name" >
+								<text v-if="teamInfoData.today_invite_list[3]">{{teamInfoData.today_invite_list[0].nickname}}</text>
+							    <!-- <text>11111112121212</text> -->
+							</view>
 							</view>
 							<view class="num">
 								<view class="add1">
@@ -68,7 +103,7 @@
 									<text>Team up to earn</text>
 								</view>
 							</view>
-							<view class="right">
+							<view class="right" @click="goUrl('/pages/team/team')">
 								<text>{{teamInfoData.today_invite_count}}</text>
 								<image src="../../static/right_arrow.png" mode="widthFix"></image>
 							</view>
@@ -115,7 +150,8 @@
 					</view>
 				</view>
 				<view class="content">
-					<view class="" @click="amountClick(item,index)" :class="amountIndex==index?'con-item':'con-item1'"  v-for="(item,index) in amountList" :key="index">
+					<view class="" @click="amountClick(item,index)" :class="amountIndex==index?'con-item':'con-item1'"
+						v-for="(item,index) in amountList" :key="index">
 						<image v-if="amountIndex==index" src="../../static/u1.png" mode="widthFix"></image>
 						<image v-if="amountIndex!==index" src="../../static/u2.png" mode="widthFix"></image>
 						<text>{{item}}</text>
@@ -140,27 +176,27 @@
 						<view class="banner-box" @click="openRoom(item,index)"
 							:class="swipterActive==index-1?'previous':swipterActive==index+1?'next':''">
 							<image mode="widthFix" class="banner-img" :src="filesUrl1+item.logo"></image>
-						    <view class="posi-box">
-						    	<view class="posi-content">
-						    		<view class="content-left">
-						    			<view class="usdt">
-						    				<text class="num">{{item.bet_amount*1}}</text>
-						    			    <text class="label">USDT</text>
+							<view class="posi-box">
+								<view class="posi-content">
+									<view class="content-left">
+										<view class="usdt">
+											<text class="num">{{item.bet_amount*1}}</text>
+											<text class="label">USDT</text>
 										</view>
 										<view class="wen">
 											<text>Number of online users</text>
 										</view>
-						    		</view>
+									</view>
 									<view class="content-right">
 										<view class="image">
 											<image src="../../static/right_arrow.png" mode="widthFix"></image>
 										</view>
-									   <view class="peo">
-									   	<text >({{item.virtual_initial_online_count}})</text>
-									   </view>
+										<view class="peo">
+											<text>({{item.virtual_initial_online_count}})</text>
+										</view>
 									</view>
-						    	</view>
-						    </view>
+								</view>
+							</view>
 						</view>
 					</swiper-item>
 				</block>
@@ -171,7 +207,7 @@
 				<view class="logo">
 					<image src="../../static/u3.png" mode="widthFix"></image>
 				</view>
-				<view class="right">
+				<view class="right" @click="defaultClick">
 					<view class="text">
 						<view class="title">
 							<text>Random lucky airdrop with a single drop of up to</text>
@@ -199,7 +235,7 @@
 			</view>
 		</view>
 		<view class="create">
-			<view class="left"  @click="createRoom">
+			<view class="left" @click="createRoom">
 				<image src="../../static/u5.png" mode="widthFix"></image>
 			</view>
 			<view class="right">
@@ -221,13 +257,14 @@
 			</view>
 			<view class="faq-box">
 				<view class="list">
-					<view class="item" :class="item.show?'show':'hide'" v-for="(item,index) in faqList" :key="index" @click="goFaq(item)">
+					<view class="item" :class="item.show?'show':'hide'" v-for="(item,index) in faqList" :key="index"
+						@click="goFaq(item)">
 						<text style="color: white;">{{item.question}}</text>
 					</view>
 				</view>
 			</view>
 		</view>
-		<view class="foot">
+		<!-- <view class="foot">
 			<view class="logo">
 				<text>LOGO</text>
 			</view>
@@ -242,22 +279,42 @@
 					<image src="../../static/u7.png" mode="widthFix"></image>
 				</view>
 			</view>
+		</view> -->
+		  <!-- v-if="pageScroll<pageScrollBottom" -->
+	<view style="position: fixed;width: 100%;bottom: 0;"  v-if="pageScrollBool">
+		<view style="padding: 9rpx 0 35rpx 0;">
+			<DefaultFooter :fiexed="false"  @share="$refs.invitePopup.open()"  />
 		</view>
+	</view>
+	<view style="padding: 9rpx 0 35rpx 0;">
+		<DefaultFooter :fiexed="false" @share="$refs.invitePopup.open()" />
+	</view>
 		<FastJoin ref="fastJoin" />
 		<TabPopup ref="tabPopup" />
+		<InvitePopup ref="invitePopup"/>
 		<!-- <FriendJoin ref="friendJoin" /> -->
 	</view>
 </template>
 
 <script>
 	import {
-		$request,$totast,filesUrl
+		$request,
+		$totast,
+		filesUrl
 	} from "@/utils/request";
 	import FastJoin from './components/fastJoin.vue';
 	import FriendJoin from './components/friendJoin.vue';
 	import TabPopup from '../../components/tabPopup.vue';
+	import DefaultFooter from '../../components/defaultFooter.vue';
+	import InvitePopup from '@/pages/team/components/InvitePopup.vue';
 	export default {
-		components:{FastJoin,FriendJoin,TabPopup},
+		components: {
+			FastJoin,
+			FriendJoin,
+			TabPopup,
+			DefaultFooter,
+			InvitePopup
+		},
 		data() {
 			return {
 				index: 0,
@@ -276,16 +333,19 @@
 				colorList: ["#3e92cc", "#f2a91f", "#a612ee", "#07c34d", "#56d894", "#ffa4bb", "#e8cd22", "#4f32cc",
 					"#ffcc11", "#0e9c5a"
 				],
-				indexInfo:{},
-				teamInfoData:{},
-				userInfo:{},
-				amountList:[],
-				amountIndex:0,
+				indexInfo: {},
+				teamInfoData: {},
+				userInfo: {},
+				amountList: [],
+				amountIndex: 0,
+				pageScroll: 0,
+				pageScrollBool:true
+
 				// roomList:[]
 			}
 		},
-		computed:{
-			filesUrl1(){
+		computed: {
+			filesUrl1() {
 				return filesUrl
 			}
 		},
@@ -299,103 +359,141 @@
 			this.indexConfig();
 			this.teamInfo();
 			this.getAmountList('1');
+
+		},
+		onReachBottom(){
+			this.pageScrollBool = false;
+		},
+		onPageScroll(e) {
+			// console.log(e)
+			if(this.pageScroll> e.scrollTop){
+				this.pageScrollBool = true;
+			}else{
+				this.pageScrollBool = false;
+			}
+			this.pageScroll = e.scrollTop;
 		},
 		methods: {
-			async getRoomList(info){
-				let res = await $request('roomList',{...info});
+			defaultClick(){
+				uni.removeStorageSync('loopNum');
+				uni.removeStorageSync('loopArr');
+				uni.removeStorageSync('newLoopBool');
+				uni.navigateTo({
+					url: `/pages/index/hall/hall?id=${this.indexInfo.room_id_10u}&type=${1}&bet_amount=${10}`
+				})
+			},
+			goUrl(url){
+				uni.navigateTo({
+					url
+				})
+			},
+			async getRoomList(info) {
+				let res = await $request('roomList', {
+					...info
+				});
 				// console.log(res)
-				if(res.data.code==200){
+				if (res.data.code == 200) {
 					this.swiperData = res.data.data;
 					this.swipterActive = 0;
 				}
 			},
-			async amountClick(item,index){
-				this.amountIndex=index;
+			async amountClick(item, index) {
+				this.amountIndex = index;
 				let type = '';
-				if(this.index==0){
+				if (this.index == 0) {
 					type = '1'
-				}else{
+				} else {
 					type = '5'
 				}
-				this.getRoomList({amount:this.amountList[this.amountIndex],type})
+				this.getRoomList({
+					amount: this.amountList[this.amountIndex],
+					type
+				})
 			},
-			async getAmountList(type){
-				let res = await $request('amountList',{type});
+			async getAmountList(type) {
+				let res = await $request('amountList', {
+					type
+				});
 				// console.log(res)
-				if(res.data.code==200){
+				if (res.data.code == 200) {
 					this.amountList = res.data.data.amount;
 					this.amountIndex = 0;
-					this.getRoomList({amount:this.amountList[0],type})
+					this.getRoomList({
+						amount: this.amountList[0],
+						type
+					})
 				}
 			},
-			async getUser(){
-				let res = await $request('userInfo',{});
+			async getUser() {
+				let res = await $request('userInfo', {});
 				// console.log(res)
-				if(res.data.code==200){
+				if (res.data.code == 200) {
 					this.userInfo = res.data.data;
 				}
 			},
-			async teamInfo(){
-				let res = await $request('teamInfo',{});
+			async teamInfo() {
+				let res = await $request('teamInfo', {});
 				console.log(res)
-				if(res.data.code==200){
+				if (res.data.code == 200) {
 					this.teamInfoData = res.data.data;
 				}
 			},
-			async indexConfig(){
-				let res = await $request('indexConfig',{});
+			async indexConfig() {
+				let res = await $request('indexConfig', {});
 				// console.log(res)
-				if(res.data.code==200){
+				if (res.data.code == 200) {
 					this.indexInfo = res.data.data;
 				}
 			},
-			openDialog(){
+			openDialog() {
 				this.$refs.tabPopup.open()
 			},
-			async openRoom(item,index){
+			async openRoom(item, index) {
 				// this.$refs.fastJoin.open()
 				// console.log(item)
 				// return
 				// this.index = ind;
 				let type = '';
-				if(this.index==0){
+				if (this.index == 0) {
 					type = '1'
-				}else{
+				} else {
 					type = '5'
 				}
-				let res = await $request('joinSystem',{room_id:item.id});
+				let res = await $request('joinSystem', {
+					room_id: item.id
+				});
 				// console.log(res)
-				if(res.data.code==200){
+				if (res.data.code == 200) {
 					// this.indexInfo = res.data.data;
 					//后面在跳转这个页面得按钮内调用
 					uni.removeStorageSync('loopNum');
 					uni.removeStorageSync('loopArr');
 					uni.removeStorageSync('newLoopBool');
 					uni.navigateTo({
-						url:`/pages/index/hall/hall?id=${item.id}&type=${type}`
+						url: `/pages/index/hall/hall?id=${item.id}&type=${type}&bet_amount=${item.bet_amount}`
 					})
 					return
 				}
 				$totast(res.data.message)
 			},
-			friendJoin(){
+			friendJoin() {
 				// this.$refs.friendJoin.open()
 				this.$refs.fastJoin.open()
 			},
-			createRoom(){
+			createRoom() {
 				uni.navigateTo({
-					url:'/pages/index/room/room'
+					url: '/pages/index/room/room'
 				})
 			},
-			changeTab(ind){
+			changeTab(ind) {
 				this.index = ind;
 				let type = '';
-				if(ind==0){
+				if (ind == 0) {
 					type = '1'
-				}else{
+				} else {
 					type = '5'
 				}
-				
+
 				this.getAmountList(type)
 			},
 			swipterChange(e) {
@@ -442,19 +540,19 @@
 			// 		url:'/pages/me/me'
 			// 	})
 			// },
-			async getFaqs(){
-				let res = await $request('faq',{});
+			async getFaqs() {
+				let res = await $request('faq', {});
 				// console.log(res)
-				if(res.data.code==200){
-					 res.data.data.list.forEach((val)=>{
-						 val.show = true;
-					 })
+				if (res.data.code == 200) {
+					res.data.data.list.forEach((val) => {
+						val.show = true;
+					})
 					this.faqList = res.data.data.list;
 				}
 			},
-			goFaq(){
+			goFaq() {
 				uni.navigateTo({
-					url:'/pages/me/fqas'
+					url: '/pages/me/fqas'
 				})
 			}
 		}
@@ -497,12 +595,14 @@
 		height: 100%;
 		padding-left: 10%;
 		position: relative;
-		.posi-box{
+
+		.posi-box {
 			position: absolute;
 			width: 100%;
 			bottom: 0;
 			left: 5%;
-			.posi-content{
+
+			.posi-content {
 				width: 455rpx;
 				margin: 0 auto;
 				height: 159rpx;
@@ -511,15 +611,17 @@
 				.flex-space-between;
 				box-sizing: border-box;
 				padding: 0rpx 22rpx;
-				.content-left{
+
+				.content-left {
 					width: 90%;
 					height: 100%;
 					padding-bottom: 22rpx;
 					// .flex-column;
 					display: flex;
 					flex-direction: column;
+
 					// font-size: 87rpx;
-					.usdt{
+					.usdt {
 						height: 100%;
 						font-size: 67rpx;
 						font-weight: 600;
@@ -527,19 +629,23 @@
 						-webkit-background-clip: text;
 						background-clip: text;
 						color: transparent;
-						.num{
+
+						.num {
 							line-height: 0;
 						}
-						.label{
+
+						.label {
 							font-size: 31rpx;
 						}
 					}
-					.wen{
+
+					.wen {
 						color: #CCCCCC;
 						font-size: 21rpx;
 					}
 				}
-				.content-right{
+
+				.content-right {
 					height: 100%;
 					display: flex;
 					// flex-grow: 1;
@@ -549,27 +655,31 @@
 					align-self: flex-end;
 					// justify-content: flex-end;
 					padding: 22rpx 0;
-					.image{
+
+					.image {
 						width: 100%;
 						display: flex;
 						flex-direction: row-reverse;
-						image{
+
+						image {
 							width: 15rpx;
-							
+
 						}
 					}
-					.peo{
+
+					.peo {
 						width: 100%;
 						display: flex;
 						flex-direction: row-reverse;
-						text{
+
+						text {
 							width: 100%;
 							color: #EEEEEE;
 							font-size: 28rpx;
-							
+
 						}
 					}
-					
+
 				}
 			}
 		}
@@ -614,6 +724,27 @@
 
 			image {
 				width: 40rpx;
+			}
+			.image{
+				width: 32rpx;
+				height: 32rpx;
+				background: linear-gradient( 146deg, #9DFE00 0%, #14D9E5 100%);
+				box-sizing: border-box;
+				// border: 1rpx solid #DDDDDD;
+				// .flex-center;
+				border-radius: 28rpx;
+				text-align: center;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding-left: 13rpx;
+				padding-bottom: 7rpx;
+				text{
+					// width: 100%;
+					color: #222222;
+					font-size: 36rpx;
+					font-weight: 600;
+				}
 			}
 
 			text {
@@ -740,6 +871,15 @@
 							image {
 								width: 26rpx;
 							}
+						}
+						.name{
+							width: 69rpx;
+							color: white;
+							font-size: 24rpx;
+							text-overflow:ellipsis; 
+							white-space: nowrap;
+							overflow: hidden;
+							// .vertical(1)
 						}
 
 						.num {
@@ -1133,7 +1273,8 @@
 
 	.faq {
 		box-sizing: border-box;
-		padding: 0 38rpx;
+		// padding: 0 38rpx;
+		padding: 0 38rpx 120rpx 38rpx;
 		margin-bottom: 118rpx;
 
 		.title {
@@ -1163,20 +1304,20 @@
 				.flex-center;
 				height: 71rpx;
 				padding: 0rpx 75rpx;
-				 position: relative;
-				    transition: opacity 0.7s ease, visibility 0.7s ease;
+				position: relative;
+				transition: opacity 0.7s ease, visibility 0.7s ease;
 			}
 
 			.show {
 				opacity: 1;
-				    visibility: visible;
-				    position: relative;
+				visibility: visible;
+				position: relative;
 			}
 
 			.hide {
 				opacity: 0;
-				    visibility: hidden;
-				    position: absolute;
+				visibility: hidden;
+				position: absolute;
 			}
 		}
 	}

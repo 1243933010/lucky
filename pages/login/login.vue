@@ -31,6 +31,12 @@
 				<text>Login In</text>
 			</view>
 		</view>
+		<view class="other">
+			<view class="label">
+				<text class="one">I don't have an account yet, go</text>
+				<text class="two" @click="goUrl">sign up</text>
+			</view>
+		</view>
 		<ForgetPopop ref="forgetPopop" />
 	</view>
 </template>
@@ -66,6 +72,11 @@
 						});
 					},1500)
 				}
+			},
+			goUrl(){
+				uni.reLaunch({
+					url:'/pages/login/register'
+				})
 			}
 		}
 	}
@@ -166,6 +177,22 @@
 			color: #000000;
 			font-size: 31.54rpx;
 			font-weight: 500;
+		}
+	}
+	.other{
+		position: fixed;
+		bottom: 138rpx;
+		width: 100%;
+		// padding-top: 20rpx;
+		.flex-center;
+		color: #9E9E9E;
+		font-size: 24rpx;
+		.label{
+			.flex-direction;
+			.two{
+				color: #38D1DC;
+				text-decoration: underline;
+			}
 		}
 	}
 }

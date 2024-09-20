@@ -1,6 +1,11 @@
 <template>
 	<view class="page-container">
-		<DefaultHeader />
+		<view class="" style="position: fixed;top: 0;width: 100%;">
+			<DefaultHeader />
+		</view>
+		<view class="" style="opacity: 0;">
+			<DefaultHeader />
+		</view>
 		<view class="me">
 			<view class="content">
 				<view class="label">
@@ -34,16 +39,16 @@
 			<view class="menu">
 				<view class="item" @click="goUrl('/pages/me/personalData')">
 					<view class="left">
-						<image src="../../static/logo.png" mode="widthFix"></image>
+						<image src="../../static/me_icon2.png" mode="widthFix"></image>
 						<text>Personal data</text>
 					</view>
 					<view class="right">
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
 					</view>
 				</view>
-				<view class="item" >
+				<view class="item"  @click="goUrl('/pages/index/record')">
 					<view class="left">
-						<image src="../../static/logo.png" mode="widthFix"></image>
+						<image src="../../static/me_icon3.png" mode="widthFix"></image>
 						<text>Record</text>
 					</view>
 					<view class="right">
@@ -52,7 +57,7 @@
 				</view>
 				<view class="item" @click="goUrl('/pages/team/team')">
 					<view class="left">
-						<image src="../../static/logo.png" mode="widthFix"></image>
+						<image src="../../static/me_icon4.png" mode="widthFix"></image>
 						<text>Team</text>
 					</view>
 					<view class="right">
@@ -61,16 +66,16 @@
 				</view>
 				<view class="item" @click="goUrl('/pages/me/fqas')">
 					<view class="left">
-						<image src="../../static/logo.png" mode="widthFix"></image>
+						<image src="../../static/me_icon5.png" mode="widthFix"></image>
 						<text>FQA</text>
 					</view>
 					<view class="right">
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
 					</view>
 				</view>
-				<view class="item">
+				<view class="item" @click="goUrl('')">
 					<view class="left">
-						<image src="../../static/logo.png" mode="widthFix"></image>
+						<image src="../../static/me_icon6.png" mode="widthFix"></image>
 						<text>Log out</text>
 					</view>
 					<view class="right">
@@ -79,13 +84,19 @@
 				</view>
 			</view>
 			<view class="hr1">
-				<image src="../../static/logo.png" mode="widthFix"></image>
+				<image src="../../static/me_icon1.png" mode="widthFix"></image>
 				<text>Notice：NoticeNoticeNoticeNoticeNoticeNoticeNoticsdsdsdsdsdssdsdsdd</text>
 			</view>
 		</view>
+		<!-- <view style="position: fixed;width: 100%;bottom: 0;"  v-if="pageScrollBool">
+			<view style="padding: 9rpx 0 35rpx 0;">
+				<DefaultFooter :fiexed="false" />
+			</view>
+		</view> -->
 		<view style="padding: 9rpx 0 35rpx 0;">
-			<DefaultFooter :fiexed="false" /> 
+			<DefaultFooter :fiexed="false"  @share="$refs.invitePopup.open()"   /> 
 		</view>
+		<InvitePopup ref="invitePopup"/>
 	</view>
 </template>
 
@@ -95,21 +106,50 @@
 	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import DefaultFooter from '../../components/defaultFooter.vue';
+	import InvitePopup from '@/pages/team/components/InvitePopup.vue';
 	export default {
 		components: {
 			DefaultHeader,
-			DefaultFooter
+			DefaultFooter,
+			InvitePopup
 		},
 		data() {
 			return {
-				userInfo:{}
+				userInfo:{},
+				pageScroll: 0,
+				pageScrollBool:true
 			};
 		},
 		onLoad(){
 			this.getUser();
 		},
+		onReachBottom(){
+			this.pageScrollBool = false;
+		},
+		onPageScroll(e) {
+			console.log(e)
+			if(this.pageScroll> e.scrollTop){
+				this.pageScrollBool = true;
+			}else{
+				this.pageScrollBool = false;
+			}
+			this.pageScroll = e.scrollTop;
+		},
 		methods:{
 			goUrl(url){
+				if(!url){
+					// uni.clearStorage();
+					uni.showToast({
+						icon:'none',
+						title:'success'
+					})
+					setTimeout(()=>{
+						uni.reLaunch({
+							url:'/pages/login/login'
+						})
+					},1000)
+					return
+				}
 				uni.navigateTo({
 					url
 				})
@@ -244,7 +284,7 @@
 			.flex-direction;
 			
 			image{
-				width: 16rpx;
+				width: 22rpx;
 				margin-right: 15rpx;
 			}
 			text{

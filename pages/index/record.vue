@@ -183,7 +183,7 @@
 						val.open = false;
 					})
 					
-					// this.gameRecordsList = res.data.data.data;
+					this.gameRecordsList = res.data.data.data;
 				}
 			}
 		}

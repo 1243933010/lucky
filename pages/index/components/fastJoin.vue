@@ -83,7 +83,7 @@
 											<text>+</text>
 										</view>
 									</view>
-									<view class="join">
+									<view class="join"  @click="friendJoin1">
 										<image src="../../../static/u6.png" mode="widthFix"></image>
 									</view>
 								</view>
@@ -140,6 +140,12 @@
 				this.$refs.popup.close()
 				uni.navigateTo({
 					url:'/pages/index/room/room'
+				})
+			},
+			friendJoin1(){
+				this.$refs.popup.close()
+				uni.navigateTo({
+					url:'/pages/index/room/room?type=1'
 				})
 			}
 		}

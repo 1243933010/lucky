@@ -1,116 +1,137 @@
 <template>
-	<view  class="" :class="bkUlr">
-		<swiper style="height: 100vh;" @change="switchSystemRoom" :indicator-dots="false" :autoplay="false" >
-			<swiper-item v-for="(item,index) in amountList" :key="index">
-				<view class="page-container">
-					<view class="hell">
-						<view class="user">
-							<view class="user-left">
-								<view class="logo">
-									<image @click="changeImg"
-										:src="userInfo.avatar?filesUrl1+userInfo.avatar:'../../../static/logo.png'" mode="widthFix">
-									</image>
-								</view>
-								<view class="msg">
-									<view class="name">
-										<text>{{userInfo.nickname}}</text>
-									</view>
-									<view class="price">
-										<image src="../../../static/me_icon.png" mode="widthFix"></image>
-										<text>{{userInfo.balance}}</text>
-										<view class="add">
-											<text>+</text>
-										</view>
-									</view>
-								</view>
-							</view>
-							<view class="user-right">
-								<image @click="share" class="share" src="../../../static/share.png" mode="widthFix"></image>
-								<image @click="singOut" class="sing-out" src="../../../static/sign_out.png" mode="widthFix"></image>
-							</view>
+	<view class="" :class="bkUlr">
+		<!-- 		<swiper style="height: 100vh;" @change="switchSystemRoom" :indicator-dots="false" :autoplay="false" >
+			<swiper-item v-for="(item,index) in amountList" :key="index"> -->
+		<view class="page-container">
+			<view class="hell">
+				<view class="user">
+					<view class="user-left">
+						<view class="logo">
+							<image @click="changeImg"
+								:src="userInfo.avatar?filesUrl1+userInfo.avatar:'../../../static/logo.png'"
+								mode="widthFix">
+							</image>
 						</view>
-						<view class="notice">
-							<view class="box">
-								<text>{{roomDetail.game_help}}</text>
+						<view class="msg">
+							<view class="name">
+								<text>{{userInfo.nickname}}</text>
 							</view>
-				
-						</view>
-						<view class="people">
-							<view class="box">
-								<view class="left">
-									<image src="../../../static/hell_icon1.png" mode="widthFix"></image>
-									<text>{{roomInfo.online}}</text>
-								</view>
-								<view class="right">
-									<view class=""></view>
-									<text>{{roomInfo.online}}people are ready</text>
+							<view class="price" @click="goUrl">
+								<image src="../../../static/me_icon.png" mode="widthFix"></image>
+								<text>{{userInfo.balance}}</text>
+								<view class="add">
+									<text>+</text>
 								</view>
 							</view>
 						</view>
 					</view>
-					<view class="usdt">
-						<view class="radio">
-							<view class="box" :style="{'left':(377-amountIndex*128)+'rpx'}">
+					<view class="user-right">
+						<image @click="share" class="share" src="../../../static/share.png" mode="widthFix"></image>
+						<image @click="singOut" class="sing-out" src="../../../static/sign_out.png" mode="widthFix">
+						</image>
+					</view>
+				</view>
+				<view class="notice">
+					<view class="box">
+						<text>{{roomDetail.game_help}}</text>
+					</view>
+
+				</view>
+				<view class="people">
+					<view class="box">
+						<view class="left">
+							<image src="../../../static/hell_icon1.png" mode="widthFix"></image>
+							<text>{{roomInfo.online}}</text>
+						</view>
+						<view class="right">
+							<view class=""></view>
+							<text>{{roomInfo.online}}people are ready</text>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view class="usdt">
+				<view class="radio">
+					<swiper style="height: 150rpx;width: 100%;z-index: 100;" :current="amountIndex1"  @change="switchSystemRoom1" :indicator-dots="false" :autoplay="false">
+						<swiper-item v-for="(item,index) in amountList" :key="index">
+							<view class="box" v-if="amountIndex1===index" :style="{'left':(377-amountIndex1*135)+'rpx'}">
 								<!-- :class="index==uActive?'uActive':''" -->
-								<view class="item"  v-for="(item,index) in amountList" :key="index">
-									<view class="no-active" v-if="index!==amountIndex">
+								<view class="item" @click="radioChoose(item,index)" v-for="(item,index) in amountList"
+									:key="index">
+									<view class="no-active" v-if="index!==amountIndex1">
 										<view class="">
 											<text>{{item.bet_amount*1}}</text>
 										</view>
 									</view>
-									<view class="active" v-if="index==amountIndex">
+									<view class="active" v-if="index==amountIndex1">
 										<text>{{item.bet_amount*1}}</text>
 									</view>
 								</view>
 							</view>
-						</view>
-						<view class="border">
-							<view class="box">
-								<view class="item" @click="borderActive=index" v-for="(item,index) in uList" :key="index">
-									<view class="no-active" v-if="index!==borderActive">
-										<view class="">
-											<text>{{item}}X</text>
-										</view>
-									</view>
-									<view class="active" v-if="index==borderActive">
-										<view class="">
-											<text>{{item}}X</text>
-										</view>
-									</view>
+						</swiper-item>
+					</swiper>
+					
+				</view>
+				<view class="border">
+					<view class="box">
+						<view class="item" @click="borderActive===index?borderActive=undefined:borderActive=index" v-for="(item,index) in uList" :key="index">
+							<view class="no-active" v-if="index!==borderActive">
+								<view class="">
+									<text>{{item}}X</text>
 								</view>
 							</view>
-						</view>
-						<view class="submit">
-							<view class="box">
-								<view class="left"></view>
-								<view class="center" @click="submitClick">
-									<text>{{btnText}}</text>
+							<view class="active" v-if="index==borderActive">
+								<view class="">
+									<text>{{item}}X</text>
 								</view>
-								<view class="right">
-									<image @click="$refs.textCom.open()" src="../../../static/hell_icon4.png" mode="widthFix"></image>
-								</view>
-							</view>
-						</view>
-						<view class="hr">
-							<view class="box">
-								<text>Automatic betting</text>
-							</view>
-						</view>
-					</view>
-				
-					<view class="posi">
-						<view class="box2">
-							<view class="item" v-for="(item,index) in roomInfo.messages">
-								<text>{{item}}</text>
 							</view>
 						</view>
 					</view>
 				</view>
-			</swiper-item>
-		</swiper>
-		 <Popup ref="popup" />
-		 <ShareCom ref="shareCom" />
-		 <TextCom ref="textCom" />
+				<view class="submit">
+					<view class="box">
+						<view class="left"></view>
+						<view class="center" @click="submitClick">
+							<text>{{btnText}}</text>
+						</view>
+						<view class="right">
+							<image @click="$refs.textCom.open()" src="../../../static/hell_icon4.png" mode="widthFix">
+							</image>
+						</view>
+					</view>
+				</view>
+				<view class="hr">
+					<view class="box" @click="autoClick">
+						<text>Automatic betting</text>
+					</view>
+				</view>
+			</view>
+
+			<view class="posi">
+				<view class="box2">
+					<view class="item" v-for="(item,index) in roomInfo.messages">
+						<text>{{item}}</text>
+					</view>
+				</view>
+			</view>
+		</view>
+		<!-- 	</swiper-item>
+		</swiper> -->
+		<Popup ref="popup" />
+		<ShareCom ref="shareCom" />
+		<TextCom ref="textCom" />
+
+		<view class="fixed-1">
+			<view class="content">
+				<swiper style="height: 500rpx;" @change="switchSystemRoom" :indicator-dots="false" :autoplay="false">
+					<swiper-item v-for="(item,index) in amountList" :key="index">
+						<view class="">
+							
+						</view>
+					</swiper-item>
+				</swiper>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -124,12 +145,18 @@
 		filesUrl
 	} from "@/utils/request";
 	export default {
-		components:{Popup,ShareCom,TextCom},
+		components: {
+			Popup,
+			ShareCom,
+			TextCom
+		},
 		data() {
 			return {
-				roomType:'',
-				amountIndex:0,
-				amountList:[],
+				bet_amount:'',
+				roomType: '',
+				amountIndex: 0,
+				amountIndex1: 0,
+				amountList: [],
 				roomId: '',
 				roomDetail: {},
 				userInfo: {},
@@ -138,24 +165,25 @@
 				borderList: [],
 				borderActive: null,
 				roomInfo: {},
-				roomStatus:{},
-				btnText:'Preparation for betting',
-				testNum:0
+				roomStatus: {},
+				btnText: 'Preparation for betting',
+				testNum: 0,
+				autoBool:false
 			};
 		},
 		computed: {
 			filesUrl1() {
 				return filesUrl
 			},
-			bkUlr(){
-				if(this.amountList.length==0){
+			bkUlr() {
+				if (this.amountList.length == 0) {
 					return 'bk0'
 				}
-				if(['10','20'].includes(this.amountList[this.amountIndex].bet_amount)){
+				if (['10', '20'].includes(this.amountList[this.amountIndex].bet_amount)) {
 					return 'bk1'
-				}else if(['50','100'].includes(this.amountList[this.amountIndex].bet_amount)){
+				} else if (['50', '100'].includes(this.amountList[this.amountIndex].bet_amount)) {
 					return 'bk2'
-				}else{
+				} else {
 					return 'bk0'
 				}
 			}
@@ -165,9 +193,13 @@
 			if (e.id) {
 				this.roomId = e.id
 			}
-			if(e.type){
+			if (e.type) {
 				this.roomType = e.type
 			}
+			if (e.bet_amount) {
+				this.bet_amount = e.bet_amount
+			}
+			
 			// else {
 			// 	this.roomId = '1'
 			// }
@@ -187,60 +219,91 @@
 			this.startPolling1();
 			// this.getAmountList()
 			this.getAmountListInRoom()
-			
+
 		},
 		beforeDestroy() {
 			this.stopPolling();
 			this.stopPolling1();
-			
+
 		},
 		methods: {
-			listenNum(info){
+			autoClick(){
+				this.autoBool = !this.autoBool;
+				let str = 'Successful automatic betting'
+				if(!this.autoBool){
+					str = 'Automatic betting has been canceled'
+				}
+				uni.showToast({
+					icon:'none',
+					title:str
+				})
+			},
+			goUrl(){
+				this.stopPolling();
+				this.stopPolling1();
+				uni.navigateTo({
+					url:'/pages/me/recharge'
+				})
+			},
+			async radioChoose(item, index) {
+				console.log(this.amountIndex,index,'11')
+				this.amountIndex = index;
+				this.amountIndex1 = index;
+				// let res = await $request('switchSystemRoom', {
+				// 	amount: this.amountList[this.amountIndex]
+				// });
+				// // console.log(res)
+				// if (res.data.code == 200) {
+				// 	// this.amountList = res.data.data.amount;
+				// 	// this.amountIndex = 0;
+				// }
+			},
+			listenNum(info) {
 				console.log(info)
 				let loopNum = uni.getStorageSync('loopNum')
-				let loopArr= uni.getStorageSync('loopArr')
-				if(loopNum===3){
+				let loopArr = uni.getStorageSync('loopArr')
+				if (loopNum === 3) {
 					console.log('要被踢走了')
 					// return
 				}
-				if(!loopArr){
+				if (!loopArr) {
 					loopArr = [];
 				}
-				if(!loopNum&&loopNum!==0){
+				if (!loopNum && loopNum !== 0) {
 					loopNum = 0;
 				}
-				if(info.status!==25){
+				if (info.status !== 25) {
 					// uni.setStorageSync('newLoopBool',true);
-					if(!loopArr.includes(info.status)){
+					if (!loopArr.includes(info.status)) {
 						loopArr.push(info.status)
-						uni.setStorageSync('loopArr',loopArr);
-					}else{
-						
+						uni.setStorageSync('loopArr', loopArr);
+					} else {
+
 					}
-					
-				}else{
-					if(loopArr.length>0){
+
+				} else {
+					if (loopArr.length > 0) {
 						loopNum++;
-						uni.setStorageSync('loopNum',loopNum);
-						uni.setStorageSync('loopArr',[]);
+						uni.setStorageSync('loopNum', loopNum);
+						uni.setStorageSync('loopArr', []);
 					}
-					
+
 				}
 				// console.log(loopNum)
 			},
-			share(){
+			share() {
 				let info = {
-					detail:this.roomDetail,
-					info:this.roomInfo
+					detail: this.roomDetail,
+					info: this.roomInfo
 				}
 				this.$refs.shareCom.open(info)
-				
+
 			},
 			startCountdown(time) {
 				// 每秒更新一次倒计时
 				this.intervalId = setInterval(() => {
 					time -= 1;
-			
+
 					// 更新倒计时显示
 					this.btnText = time;
 					// 当倒计时为零或小于零时，清除定时器
@@ -249,7 +312,7 @@
 						this.btnText = "";
 					}
 				}, 1000);
-			
+
 				// 初始化时马上更新一次倒计时显示
 				this.btnText = time;
 			},
@@ -267,13 +330,13 @@
 					await this.sleep(2000); // 等待 1 秒后再继续轮询
 				}
 			},
-			async submitClick(){
-				if(this.roomStatus.status==0||(this.roomStatus.is_join==0&&this.roomStatus.status==5)){
+			async submitClick() {
+				if (this.roomStatus.status == 0 || (this.roomStatus.is_join == 0 && this.roomStatus.status == 5)) {
 					this.gameJoin()
 				}
-				
+
 			},
-			async gameJoin(){
+			async gameJoin() {
 				let obj = {is_multiple: ''};
 				
 				if(this.borderActive==null){
@@ -289,40 +352,70 @@
 					this.getRoomDetail(this.roomId)
 				}
 			},
-			async singOut(){
-				let res = await $request('roomLeave',{room_id: this.roomId});
+			
+			async singOut() {
+				let res = await $request('roomLeave', {
+					room_id: this.roomId
+				});
 				// console.log(res)
 				$totast(res.data.message)
-				if(res.data.code==200){
-					setTimeout(()=>{
+				if (res.data.code == 200) {
+					setTimeout(() => {
 						let canNavBack = getCurrentPages()
-						if( canNavBack && canNavBack.length>1) {  
-						    uni.navigateBack() 
-						} else {  
-						    history.back();  
+						if (canNavBack && canNavBack.length > 1) {
+							uni.navigateBack()
+						} else {
+							history.back();
 						}
-					},1500) 
+					}, 1500)
 				}
 			},
-			
-			async getAmountListInRoom(type){
-				let res = await $request('amountListInRoom',{type:this.roomType});
+
+			async getAmountListInRoom(type) {
+				let res = await $request('amountListInRoom', {
+					type: this.roomType
+				});
 				console.log(res)
-				if(res.data.code==200){
-							this.amountList = res.data.data;
-							this.amountIndex = 0;
+				if (res.data.code == 200) {
+					this.amountList = res.data.data;
+					res.data.data.forEach((val,index)=>{
+						if(+val.bet_amount==(+this.bet_amount)){
+							this.amountIndex = index;
+							this.amountIndex1 = index;
+						}
+					})
+					
 				}
 			},
-			
-			async switchSystemRoom(e){
-				console.log(e.detail.current)
+
+			async switchSystemRoom(e) {
+				console.log(e.detail.current,'222')
 				this.amountIndex = e.detail.current;
-				let res = await $request('switchSystemRoom',{amount: this.amountList[this.amountIndex]});
+				// this.amountIndex1 = e.detail.current;
+				let res = await $request('switchSystemRoom', {
+					amount: this.amountList[this.amountIndex].bet_amount
+				});
 				// console.log(res)
-				if(res.data.code==200){
+				if (res.data.code == 200) {
 					// this.amountList = res.data.data.amount;
 					// this.amountIndex = 0;
+					uni.showToast({
+						icon:'none',
+						title:'The basic betting amount has been switched'
+					})
 				}
+			},
+			async switchSystemRoom1(e) {
+				console.log(e.detail.current,'222')
+				this.amountIndex1 = e.detail.current;
+				// let res = await $request('switchSystemRoom', {
+				// 	amount: this.amountList[this.amountIndex]
+				// });
+				// // console.log(res)
+				// if (res.data.code == 200) {
+				// 	// this.amountList = res.data.data.amount;
+				// 	// this.amountIndex = 0;
+				// }
 			},
 			async getRoomDetail(id) {
 				let res = await $request('roomDetail', {
@@ -393,49 +486,52 @@
 					// res.data.data.status = this.testNum+=5
 					this.roomStatus = res.data.data;
 					this.listenNum(res.data.data)
-					if(this.roomStatus.status==0){
+					if (this.roomStatus.status == 0) {
+						if(this.autoBool){
+							this.gameJoin()
+						}
 						uni.hideLoading()
 					}
-					if(this.roomStatus.status==15){
+					if (this.roomStatus.status == 15) {
 						uni.showLoading()
 					}
-					if(this.roomStatus.status==20){
+					if (this.roomStatus.status == 20) {
 						uni.hideLoading()
 						this.getGameResult();
-						
+
 					}
-					if(this.roomStatus.status==25){
+					if (this.roomStatus.status == 25) {
 						uni.hideLoading()
 						this.$refs.popup.close()
 					}
-					if(this.roomStatus.status==15){
+					if (this.roomStatus.status == 15) {
 						uni.showLoading()
 					}
-					if(this.roomStatus.status==5){
+					if (this.roomStatus.status == 5) {
 						// this.startCountdown()
-						if(typeof this.btnText=='number'){
+						if (typeof this.btnText == 'number') {
 							return
 						}
 						uni.hideLoading()
 						let end = new Date(this.roomStatus.lock_start_time).getTime();
 						let start = new Date(this.roomStatus.countdown_start_time).getTime();
-						let time =end/1000- start/1000;
+						let time = end / 1000 - start / 1000;
 						// console.log(end,start,time)
 						this.startCountdown(time)
-					}else{
+					} else {
 						this.clearCountdown()
 						this.btnText = 'Preparation for betting'
 					}
-					
+
 					return
 				}
 				$totast(res.data.message)
 			},
-			async getGameResult(){
+			async getGameResult() {
 				let res = await $request('gameResult', {
 					room_id: this.roomId
 				});
-				if(res.data.code==200){
+				if (res.data.code == 200) {
 					this.$refs.popup.open(res.data.data)
 				}
 				console.log(res)
@@ -449,17 +545,32 @@
 
 	page {
 		height: 100vh;
-		
+
 	}
-	.bk0{
+	.fixed-1{
+		position: fixed;
+		top: 350rpx;
+		left: 0;
+		width: 100%;
+		.content{
+			width: 100%;
+			height: 100%;
+			// background: red;
+		}
+	}
+
+	.bk0 {
 		background: url('../../../static/hell_bk.png') no-repeat 100% 30% / cover;
 	}
-	.bk1{
+
+	.bk1 {
 		background: url('../../../static/hall_bk_1.png') no-repeat 100% 30% / cover;
 	}
-	.bk2{
+
+	.bk2 {
 		background: url('../../../static/hall_bk_2.png') no-repeat 100% 30% / cover;
 	}
+
 	.posi {
 		position: fixed;
 		bottom: 42rpx;
@@ -467,12 +578,14 @@
 		max-height: 600rpx;
 		overflow-y: auto;
 		// overflow: hidden;
-		z-index: -10;
+		// z-index: -10;
+
 		.box2 {
 			// width: 150rpx;
 			// .flex-column;
 			display: flex;
 			flex-direction: column;
+
 			// align-items: center;
 			.item {
 				background: #0B0B0B;
@@ -634,18 +747,23 @@
 
 	.usdt {
 		width: 100%;
-
+		position: relative;
+		z-index: 10;
 		.radio {
+			position: relative;
+			z-index: 10;
 			.flex-center;
 			// margin-bottom: 99rpx;
-			position: relative;
+			
 			height: 149rpx;
+			
 			.box {
 				width: 100%;
 				.flex-center;
 				position: absolute;
 				left: 0;
 				top: 0;
+
 				.item {
 					margin: 0 32rpx;
 
@@ -693,16 +811,20 @@
 			.box {
 				width: 100%;
 				.flex-center;
-
+				
 				.item {
+					
 					margin: 0 32rpx;
-
+					box-sizing: border-box;
 					.no-active {
+						// width: 131rpx;
+						// height: 51rpx;
 						color: #FFFFFF;
 						font-size: 26rpx;
 					}
 
 					.active {
+						box-sizing: border-box;
 						width: 131rpx;
 						height: 51rpx;
 						box-sizing: border-box;

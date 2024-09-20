@@ -31,10 +31,10 @@
 						<view class="item" @click="goUrl('/pages/team/team')">
 							<text>My team</text>
 						</view>
-						<view class="item" @click="goUrl('')">
+						<view class="item" @click="goUrl('/pages/index/room/room')">
 							<text>Create a table</text>
 						</view>
-						<view class="item" @click="goUrl('')">
+						<view class="item" @click="goUrl('/pages/index/room/room?type=1')">
 							<text>Join the table</text>
 						</view>
 						<view class="item" @click="goUrl('/pages/me/fqas')">
@@ -43,16 +43,16 @@
 					</view>
 					<view class="icon">
 						<view class="box">
-							<view class="item">
+							<view class="item" @click="outLink('1')">
 								<image src="../static/icon_1.png" mode="widthFix"></image>
 							</view>
-							<view class="item">
+							<view class="item" @click="outLink('2')">
 								<image src="../static/icon_2.png" mode="widthFix"></image>
 							</view>
-							<view class="item">
+							<view class="item" @click="outLink('3')">
 								<image src="../static/icon_3.png" mode="widthFix"></image>
 							</view>
-							<view class="item">
+							<view class="item" @click="outLink('4')">
 								<image src="../static/icon_4.png" mode="widthFix"></image>
 							</view>
 						</view>
@@ -95,6 +95,9 @@
 				uni.navigateTo({
 					url
 				})
+			},
+			outLink(type){
+				
 			}
 		}
 	}

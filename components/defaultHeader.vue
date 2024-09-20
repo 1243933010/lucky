@@ -2,7 +2,7 @@
 	<view>
 		<view class="page-header">
 			<view class="logo1">
-				<image src="../static/logo.png" mode="widthFix"></image>
+				<image src="../static/logo.png" @click="goIndex" mode="widthFix"></image>
 			</view>
 			<view class="setting" @click="openDialog">
 				<view class=""></view>
@@ -26,6 +26,11 @@
 		methods:{
 			openDialog(){
 				this.$refs.tabPopup.open()
+			},
+			goIndex(){
+				uni.reLaunch({
+					url:'/pages/index/index'
+				})
 			}
 		}
 	}

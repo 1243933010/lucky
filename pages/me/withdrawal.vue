@@ -3,7 +3,7 @@
 		<DefaultHeader />
 		<view class="recharge">
 			<view class="click">
-				<view class="recharge-btn">
+				<view class="recharge-btn" @click="goUrl">
 					<text>Recharge</text>
 					<image src="../../static/recharge.png" mode="widthFix"></image>
 				</view>
@@ -54,13 +54,13 @@
 							</view>
 						</view>
 					</view>
-					<view class="urcode">
+					<!-- <view class="urcode">
 						<view class="bk">
 							<view class="white">
 								<image src="../../static/add.png" mode="widthFix"></image>
 							</view>
 						</view>
-					</view>
+					</view> -->
 					<view class="copy">
 						<view class="title">
 							<text>Address Link:</text>
@@ -117,6 +117,11 @@
 			this.getRechargeConfig()
 		},
 		methods: {
+			goUrl(){
+				uni.navigateTo({
+					url:'/pages/me/recharge'
+				})
+			},
 			orderPopupClick(){
 				this.$refs.orderPopup.open()
 				

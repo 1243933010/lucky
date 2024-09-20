@@ -1,6 +1,11 @@
 <template>
 	<view class="page-container">
-		<DefaultHeader />
+		<view class="" style="position: fixed;top: 0;width: 100%;">
+			<DefaultHeader />
+		</view>
+		<view class="" style="opacity: 0;">
+			<DefaultHeader />
+		</view>
 
 		<view class="team">
 			<view class="top-page">
@@ -17,7 +22,7 @@
 								<image class="pic" src="../../static/me_icon.png" mode="widthFix"></image>
 							</view>
 							<view class="num">
-								<text>{{commissionInfo.commission}}<view class="wen">?</view></text>
+								<text>{{commissionInfo.commission}}<view class="wen" @click="ask(1)">?</view></text>
 							</view>
 						</view>
 						<view class="copy-icon">
@@ -25,7 +30,7 @@
 							<image @click="openOrder" class="pic" src="../../static/order.png" mode="widthFix"></image>
 						</view>
 					</view>
-					<view class="desc">Received a reward of {{commissionInfo.today_commission}} USDT today</view>
+					<view class="desc" @click="openOrder">Received a reward of {{commissionInfo.today_commission}} USDT today</view>
 					<view class="btn-box" @click="Transfer">Transfer</view>
 				</view>
 				<view class="storage-total">
@@ -77,7 +82,7 @@
 							<image src="../../static/gift1.png" mode="widthFix"></image>
 							<text>Invitation record</text>
 						</view>
-						<view class="wen">
+						<view class="wen"  @click="ask(2)">
 							<image src="../../static/wen.png" mode="widthFix"></image>
 						</view>
 					</view>
@@ -107,10 +112,10 @@
 		    <view class="hr"></view>
 			<view class="count">
 				<view class="tab">
-					<view class="item" :class="index==0?'active':''">
+					<view class="item" :class="index==0?'active':''" @click="setIndex(0)">
 						<text>Today's team game count</text>
 					</view>
-					<view class="item" :class="index==1?'active':''">
+					<view class="item" :class="index==1?'active':''" @click="setIndex(1)">
 						<text>Number of team game bureaus</text>
 					</view>
 				</view>
@@ -204,7 +209,15 @@
 				
 			</view>
 		</view>
-		<DefaultFooter />
+		<view style="position: fixed;width: 100%;bottom: 0;"  v-if="pageScrollBool">
+			<view style="padding: 9rpx 0 35rpx 0;">
+				<DefaultFooter :fiexed="false"   @share="$refs.invitePopup.open()" />
+			</view>
+		</view>
+		<!-- <DefaultFooter /> -->
+		<view style="padding: 9rpx 0 35rpx 0;">
+			<DefaultFooter :fiexed="false"   @share="$refs.invitePopup.open()" />
+		</view>
 		<OrderPopup ref="orderPopup" />
 		<Transfer ref="transfer" @updateData="updateData" />
 		<InvitePopup ref="invitePopup" />
@@ -232,7 +245,9 @@
 				list1:[],
 				index:0,
 				paiList:[],
-				commissionInfo:{}
+				commissionInfo:{},
+				pageScroll: 0,
+				pageScrollBool:true
 			};
 		},
 		onLoad(){
@@ -245,7 +260,37 @@
 				return this.paiList.slice(3)
 			}
 		},
+		onReachBottom(){
+			this.pageScrollBool = false;
+		},
+		onPageScroll(e) {
+			console.log(e,this.pageScroll)
+			if(this.pageScroll< e.scrollTop){
+				this.pageScrollBool = false;
+			}else{
+				this.pageScrollBool = true;
+			}
+			this.pageScroll = e.scrollTop;
+		},
 		methods:{
+			ask(type){
+				if(type==1){
+					uni.showToast({
+						icon:'none',
+						title:'The commission wallet account is a real-time reward, and the balance can be transferred to the trading account to participate in betting or withdraw cash.',
+						duration:2000
+					})
+				}else{
+					uni.showToast({
+						icon:'none',
+						title:'Invite friends to register and bet for more than 20 minutes, and reward 10U/person',
+						duration:2000
+					})
+				}
+			},
+			setIndex(index){
+				this.index = index;
+			},
 			Invite(){
 				this.$refs.invitePopup.open()
 			},

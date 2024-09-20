@@ -204,5 +204,10 @@ let requestObj = {
 		url: '/api/game/result',
 		type: 'POST'
 	},
+	heartbeat:{
+		name: "全局心跳",
+		url: '/api/heartbeat',
+		type: 'GET'
+	},
 }
 export default requestObj;

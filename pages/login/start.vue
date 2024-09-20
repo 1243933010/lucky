@@ -41,7 +41,7 @@
 		height: 100%;
 		// background-color: #040405;
 		// background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
-		background: #201f29 url('../../static/start.png') no-repeat 100% 100%/cover;
+		background: #201f29 url('../../static/start.png') no-repeat 20% 100%/cover;
 	}
 	.start{
 		width: 100%;

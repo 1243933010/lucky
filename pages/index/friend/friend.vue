@@ -12,7 +12,7 @@
 						<view class="name">
 							<text>{{userInfo.nickname}}</text>
 						</view>
-						<view class="price">
+						<view class="price" @click="goUrl">
 							<image src="../../../static/me_icon.png" mode="widthFix"></image>
 							<text>{{userInfo.balance}}</text>
 							<view class="add">
@@ -22,7 +22,7 @@
 					</view>
 				</view>
 				<view class="user-right">
-					<image class="share" src="../../../static/share.png" mode="widthFix"></image>
+					<image @click="share" class="share" src="../../../static/share.png" mode="widthFix"></image>
 					<image @click="singOut" class="sing-out" src="../../../static/sign_out.png" mode="widthFix"></image>
 				</view>
 			</view>
@@ -111,7 +111,7 @@
 		<view class="usdt">
 			<view class="border">
 				<view class="box">
-					<view class="item"  @click="borderActive=index" v-for="(item,index) in uList" :key="index">
+					<view class="item"  @click="borderActive===index?borderActive=undefined:borderActive=index" v-for="(item,index) in uList" :key="index">
 						<view class="no-active" v-if="index!==borderActive">
 							<view class="">
 								<text>{{item}}X</text>
@@ -129,10 +129,10 @@
 				<view class="box">
 					<view class="left"></view>
 					<view class="center" @click="submitClick">
-						<text>Preparation for betting</text>
+						<text>{{btnText}}</text>
 					</view>
 					<view class="right">
-						<image src="../../../static/hell_icon4.png" mode="widthFix"></image>
+						<image  @click="$refs.textCom.open()" src="../../../static/hell_icon4.png" mode="widthFix"></image>
 					</view>
 				</view>
 			</view>
@@ -153,16 +153,29 @@
 				</view>
 			</view>
 		</view>
+		
+		
+		<Popup ref="popup" />
+		<ShareCom ref="shareCom" />
+		<TextCom ref="textCom" />
 	</view>
 </template>
 
 <script>
+	import Popup from './components/dialog.vue';
+	import ShareCom from './components/share.vue';
+	import TextCom from './components/text.vue';
 	import {
 		$request,
 		$totast,
 		filesUrl
 	} from "@/utils/request";
 	export default {
+		components: {
+			Popup,
+			ShareCom,
+			TextCom
+		},
 		data() {
 			return {
 				roomId: '',
@@ -175,7 +188,10 @@
 				roomInfo: {},
 				countdownText: '', // 用于显示格式化后的倒计时
 				intervalId: null, // 存储定时器ID
-				roomStatus:{}
+				roomStatus:{},
+				btnText: 'Preparation for betting',
+				testNum: 0,
+				// autoBool:false
 			};
 		},
 		computed: {
@@ -221,7 +237,10 @@
 			this.getUser();
 			if (e.id) {
 				this.roomId = e.id
-			} 
+			}
+			if(e.type==='create'){
+				this.share()
+			}
 			// else {
 			// 	this.roomId = '1'
 			// }
@@ -230,7 +249,7 @@
 		mounted() {
 			this.startPolling();
 			this.startPolling1();
-			this.startCountdown(3400001);
+			// this.startCountdown(3400001);
 			// this.getGameStatus()
 		},
 		beforeDestroy() {
@@ -239,8 +258,88 @@
 			this.clearCountdown();
 		},
 		methods: {
+			// autoClick(){
+			// 	this.autoBool = !this.autoBool;
+			// 	let str = 'Successful automatic betting'
+			// 	if(!this.autoBool){
+			// 		str = 'Automatic betting has been canceled'
+			// 	}
+			// 	uni.showToast({
+			// 		icon:'none',
+			// 		title:str
+			// 	})
+			// },
+			goUrl(){
+				this.stopPolling();
+				this.stopPolling1();
+				uni.navigateTo({
+					url:'/pages/me/recharge'
+				})
+			},
+			async radioChoose(item, index) {
+				console.log(this.amountIndex,index,'11')
+				this.amountIndex = index;
+				// let res = await $request('switchSystemRoom', {
+				// 	amount: this.amountList[this.amountIndex]
+				// });
+				// // console.log(res)
+				// if (res.data.code == 200) {
+				// 	// this.amountList = res.data.data.amount;
+				// 	// this.amountIndex = 0;
+				// }
+			},
+			listenNum(info) {
+				console.log(info)
+				let loopNum = uni.getStorageSync('loopNum')
+				let loopArr = uni.getStorageSync('loopArr')
+				if (loopNum === 3) {
+					console.log('要被踢走了')
+					// return
+				}
+				if (!loopArr) {
+					loopArr = [];
+				}
+				if (!loopNum && loopNum !== 0) {
+					loopNum = 0;
+				}
+				if (info.status !== 25) {
+					// uni.setStorageSync('newLoopBool',true);
+					if (!loopArr.includes(info.status)) {
+						loopArr.push(info.status)
+						uni.setStorageSync('loopArr', loopArr);
+					} else {
+			
+					}
+			
+				} else {
+					if (loopArr.length > 0) {
+						loopNum++;
+						uni.setStorageSync('loopNum', loopNum);
+						uni.setStorageSync('loopArr', []);
+					}
+			
+				}
+				// console.log(loopNum)
+			},
+			async singOut() {
+				let res = await $request('roomLeave', {
+					room_id: this.roomId
+				});
+				// console.log(res)
+				$totast(res.data.message)
+				if (res.data.code == 200) {
+					setTimeout(() => {
+						let canNavBack = getCurrentPages()
+						if (canNavBack && canNavBack.length > 1) {
+							uni.navigateBack()
+						} else {
+							history.back();
+						}
+					}, 1500)
+				}
+			},
 			async submitClick(){
-				if(this.roomStatus.status==0){
+				if (this.roomStatus.status == 0 || (this.roomStatus.is_join == 0 && this.roomStatus.status == 5)) {
 					this.gameJoin()
 				}
 			},
@@ -290,20 +389,35 @@
 			startCountdown(time) {
 				// 每秒更新一次倒计时
 				this.intervalId = setInterval(() => {
-					time -= 1000;
-
+					time -= 1;
+				
 					// 更新倒计时显示
-					this.countdownText = this.formatCountdown(time);
-
+					this.btnText = time;
 					// 当倒计时为零或小于零时，清除定时器
 					if (time <= 0) {
 						this.clearCountdown();
-						this.countdownText = "Time's up!";
+						this.btnText = "";
 					}
 				}, 1000);
-
+				
 				// 初始化时马上更新一次倒计时显示
-				this.countdownText = this.formatCountdown(time);
+				this.btnText = time;
+				// // 每秒更新一次倒计时
+				// this.intervalId = setInterval(() => {
+				// 	time -= 1000;
+
+				// 	// 更新倒计时显示
+				// 	this.countdownText = this.formatCountdown(time);
+
+				// 	// 当倒计时为零或小于零时，清除定时器
+				// 	if (time <= 0) {
+				// 		this.clearCountdown();
+				// 		this.countdownText = "Time's up!";
+				// 	}
+				// }, 1000);
+
+				// // 初始化时马上更新一次倒计时显示
+				// this.countdownText = this.formatCountdown(time);
 			},
 			clearCountdown() {
 				if (this.intervalId) {
@@ -374,11 +488,67 @@
 				});
 				// console.log(res)
 				if (res.data.code == 200) {
+					// if(this.testNum===25){
+					// 	this.testNum = -5;
+					// }
+					// res.data.data.status = this.testNum+=5
 					this.roomStatus = res.data.data;
+					this.listenNum(res.data.data)
+					if (this.roomStatus.status == 0) {
+						uni.hideLoading()
+					}
+					if (this.roomStatus.status == 15) {
+						uni.showLoading()
+					}
+					if (this.roomStatus.status == 20) {
+						uni.hideLoading()
+						this.getGameResult();
+				
+					}
+					if (this.roomStatus.status == 25) {
+						uni.hideLoading()
+						this.$refs.popup.close()
+					}
+					if (this.roomStatus.status == 15) {
+						uni.showLoading()
+					}
+					if (this.roomStatus.status == 5) {
+						// this.startCountdown()
+						if (typeof this.btnText == 'number') {
+							return
+						}
+						uni.hideLoading()
+						let end = new Date(this.roomStatus.lock_start_time).getTime();
+						let start = new Date(this.roomStatus.countdown_start_time).getTime();
+						let time = end / 1000 - start / 1000;
+						// console.log(end,start,time)
+						this.startCountdown(time)
+					} else {
+						this.clearCountdown()
+						this.btnText = 'Preparation for betting'
+					}
+				
 					return
 				}
 				$totast(res.data.message)
-			}
+			},
+			async getGameResult() {
+				let res = await $request('gameResult', {
+					room_id: this.roomId
+				});
+				if (res.data.code == 200) {
+					this.$refs.popup.open(res.data.data)
+				}
+				console.log(res)
+			},
+			share() {
+				let info = {
+					detail: this.roomDetail,
+					info: this.roomInfo
+				}
+				this.$refs.shareCom.open(info)
+			
+			},
 		}
 	}
 </script>
@@ -388,14 +558,14 @@
 
 	page {
 		// height: 100vh;
-		background: url('../../../static/friend_bk.png') no-repeat 100% 10%/cover;
+		background: url('../../../static/friend_bk.png') no-repeat 100% 100%/cover;
 	}
 
 	.posi {
 		position: fixed;
 		bottom: 42rpx;
 		left: 17rpx;
-
+		z-index: 0;
 		.box {
 			.flex-column;
 
@@ -422,8 +592,8 @@
 		.user {
 			.flex-space-between;
 			box-sizing: border-box;
-			padding: 64rpx 54rpx 0 54rpx;
-			margin-bottom: 80rpx;
+			padding: 59rpx 54rpx 0 54rpx;
+			margin-bottom: 20rpx;
 
 			.user-left {
 				.flex-direction;
@@ -699,7 +869,8 @@
 
 	.usdt {
 		width: 100%;
-
+		position: relative;
+		z-index:10;
 		.radio {
 			.flex-center;
 			// margin-bottom: 99rpx;

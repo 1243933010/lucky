@@ -10,7 +10,7 @@
 				<view class="logo">
 					<image src="../../static/logo.png" mode="widthFix"></image>
 				</view>
-				<view class="withdraw">
+				<view class="withdraw" @click="goUrl">
 
 					<image src="../../static/withdraw.png" mode="widthFix"></image>
 					<text>Withdraw</text>
@@ -88,6 +88,11 @@
 			this.getRechargeConfig()
 		},
 		methods:{
+			goUrl(){
+				uni.navigateTo({
+					url:'/pages/me/withdrawal'
+				})
+			},
 			orderPopupClick(){
 				this.$refs.orderPopup.open()
 				

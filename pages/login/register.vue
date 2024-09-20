@@ -59,6 +59,12 @@
 					<text>Login In</text>
 				</view>
 			</view>
+			<view class="other">
+				<view class="label">
+					<text class="one">I already have an account to</text>
+					<text class="two" @click="goUrl">log in</text>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -96,7 +102,13 @@
 				// if(res.data.code==200){
 					
 				// }
+			},
+			goUrl(){
+				uni.reLaunch({
+					url:'/pages/login/login'
+				})
 			}
+			
 		}
 	}
 </script>
@@ -174,7 +186,7 @@
 		justify-content: center;
 		align-items: center;
 		padding-top: 172rpx;
-		padding-bottom: 136rpx;
+		
 		view{
 			width: 526rpx;
 			height: 88rpx;
@@ -184,6 +196,21 @@
 			color: #000000;
 			font-size: 31.54rpx;
 			font-weight: 500;
+		}
+	}
+	.other{
+		width: 100%;
+		padding-bottom: 136rpx;
+		padding-top: 20rpx;
+		.flex-center;
+		color: #9E9E9E;
+		font-size: 24rpx;
+		.label{
+			.flex-direction;
+			.two{
+				color: #38D1DC;
+				text-decoration: underline;
+			}
 		}
 	}
 }

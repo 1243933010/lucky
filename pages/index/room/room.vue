@@ -178,6 +178,13 @@
 			this.getRoomHistory();
 			console.log('12345'.split(''))
 		},
+		onLoad(e){
+			if(e.type){
+				this.index = e.type;
+			}else{
+				this.index = 0;
+			}
+		},
 		methods:{
 			choosePicker1(item){
 				this.tableList = item.no.split('')
@@ -186,13 +193,13 @@
 				// this.formData.pay_password = data.join('')
 				// this.withdrawCreate()
 				// console.log(data)
-				this.tableList.forEach((val,index)=>{
-					if(data[index]){
+				if(data.length===6){
+					data.forEach((val,index)=>{
 						this.tableList[index] = data[index]
-					}else{
-						this.tableList[index] = ''
-					}
-				})
+						this.$forceUpdate();
+					})
+				}
+				
 			},
 			async join(){
 				let obj = {};
@@ -235,7 +242,7 @@
 				if(res.data.code==200){
 					setTimeout(()=>{
 						uni.navigateTo({
-							url:`/pages/index/friend/friend?id=${res.data.data.id}`
+							url:`/pages/index/friend/friend?id=${res.data.data.id}&type=create`
 						})
 					},1000)
 				}

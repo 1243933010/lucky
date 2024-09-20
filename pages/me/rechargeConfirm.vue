@@ -136,6 +136,9 @@
 				// this.$refs.defaultPopup.open({
 				// 	type:'bottom'
 				// })
+				uni.reLaunch({
+					url:'/pages/me/me'
+				})
 			},
 			chooseRadio(index) {
 				this.radioIndex = index;
