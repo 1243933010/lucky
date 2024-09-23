@@ -34,10 +34,10 @@
 					<view class="btn-box" @click="Transfer">Transfer</view>
 				</view>
 				<view class="storage-total">
-					<view class="img">
+					<view class="img"  @click="goMsg">
 						<image src="../../static/piggy_bank.png" mode="widthFix" class="pic"></image>
 					</view>
-					<div class="total-list">
+					<div class="total-list"   @click="goMsg">
 						<view class="total-num">
 							<view class="num-box">
 								<view class="icon">
@@ -221,6 +221,7 @@
 		<OrderPopup ref="orderPopup" />
 		<Transfer ref="transfer" @updateData="updateData" />
 		<InvitePopup ref="invitePopup" />
+		<FixedCom :bkColor="1111" />
 		<!-- <TransferPopup ref="transferPopup" /> -->
 	</view>
 </template>
@@ -234,10 +235,12 @@
 	import OrderPopup from './components/orderPopup.vue';
 	import Transfer from './components/transfer.vue';
 	import InvitePopup from './components/InvitePopup.vue';
+	import FixedCom from '@/components/fixed.vue';
 	// import TransferPopup from './components/transferPopup.vue';
 	export default {
 		components: {
-			DefaultHeader,DefaultFooter,Transfer,InvitePopup,OrderPopup
+			DefaultHeader,DefaultFooter,Transfer,InvitePopup,OrderPopup,
+			FixedCom
 		},
 		data() {
 			return {
@@ -273,6 +276,12 @@
 			this.pageScroll = e.scrollTop;
 		},
 		methods:{
+			goMsg(){
+				console.log('111')
+				uni.navigateTo({
+					url:'./msg'
+				})
+			},
 			ask(type){
 				if(type==1){
 					uni.showToast({

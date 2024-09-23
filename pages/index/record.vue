@@ -71,6 +71,7 @@
 			</view>
 		</view>
 		<!-- <DefaultFooter /> -->
+		<FixedCom />
 	</view>
 </template>
 
@@ -81,10 +82,12 @@
 	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import DefaultFooter from '../../components/defaultFooter.vue';
+	import FixedCom from '@/components/fixed.vue';
 	export default {
 		components: {
 			DefaultHeader,
-			DefaultFooter
+			DefaultFooter,
+			FixedCom
 		},
 		data() {
 			return {
@@ -197,7 +200,11 @@
 		height: 100%;
 		// background-color: #040405;
 		// background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
-		background: #201f29 url('../../static/login_bk.png') no-repeat 100% 100%;
+		// background: #201f29 url('../../static/ku2.png') no-repeat 100% 100%;
+		// background:#201f29 url('../../static/ku2.png') no-repeat bottom right / auto 40%;
+		background:#201f29 ;
+		position: relative;
+		z-index: 1000;
 	}
 
 	.page-container {

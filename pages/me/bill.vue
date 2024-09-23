@@ -33,6 +33,7 @@
 			</view>
 		</view>
 		<DefaultFooter />
+		<FixedCom  />
 	</view>
 </template>
 
@@ -42,8 +43,9 @@
 	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import DefaultFooter from '../../components/defaultFooter.vue';
+	import FixedCom from '@/components/fixed.vue';
 	export default {
-		components:{DefaultHeader,DefaultFooter},
+		components:{DefaultHeader,DefaultFooter,FixedCom},
 		data() {
 			return {
 				list:[
@@ -78,14 +80,25 @@
 <style lang="less" scoped>
 	@import url("../../static/default.less");
 	page {
-		height: 100%;
+		// height: 100%;
 		// background-color: #040405;
 		// background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
-		background: #201f29 url('../../static/login_bk.png') no-repeat 100% 100%;
+		// background: #201f29 url('../../static/login_bk.png') no-repeat 100% 100%;
+		// background:#201f29 url('../../static/ku2.png') no-repeat bottom right / auto 40%;
+		// background:#201f29 url('../../static/ku2.png') no-repeat bottom right / auto 40%;
+		 // background:#201f29 ;
+		 // position: relative;
+		 // z-index: 1000;
 	}
+	// .page-container{
+	// 	background:#201f29 url('../../static/ku2.png') no-repeat bottom right / auto 40%;
+	// 	z-index: 10;
+	// 	position: relative;
+	// }
 
 	.bill{
 		width: 100%;
+		
 		.header{
 			box-sizing: border-box;
 			padding: 86rpx 36rpx 0 54rpx;
@@ -110,7 +123,7 @@
 		.list{
 			width: 100%;
 			box-sizing: border-box;
-			background-color: #19181b;
+			// background-color: #19181b;
 			.item{
 				width: 100%;
 				box-sizing: border-box;

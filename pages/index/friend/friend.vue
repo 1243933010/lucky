@@ -94,7 +94,10 @@
 
 			<view class="big-icon">
 				<view class="box">
-					<image src="../../../static/friend_icon5.png" mode="widthFix"></image>
+					<image v-if="btnText==3" src="../../../static/friend_icon5.png" mode="widthFix"></image>
+					<image v-if="btnText==2" src="../../../static/friend_icon4.png" mode="widthFix"></image>
+					<image v-if="btnText==1" src="../../../static/friend_icon3.png" mode="widthFix"></image>
+					<image style="opacity: 0;" v-if="!['1','2','3'].includes(btnText)" src="../../../static/friend_icon3.png" mode="widthFix"></image>
 				</view>
 			</view>
 

@@ -26,7 +26,7 @@ export const $request = (requestName,params,headerType=0)=>{
 			"Content-Type":"application/json",
 			"Authorization":token?`${token}`:'',
 			"Accept":"application/json",
-			// "Accept-Language":languageObj[language],
+			"Accept-Language":'en',
 			//  'Invitation-Code':shareInfo.invitation_code,
 			// 'Scene':shareInfo.scene,
 			// 'Associated-Id':shareInfo.associated_id
@@ -35,7 +35,7 @@ export const $request = (requestName,params,headerType=0)=>{
 			"Content-Type": "application/x-www-form-urlencoded",
 			"Authorization":token?`${token}`:'',
 			"Accept":"application/json",
-			// "Accept-Language":languageObj[language],
+			"Accept-Language":'en',
 			// 'Invitation-Code':shareInfo.invitation_code,
 			// 'Scene':shareInfo.scene,
 			// 'Associated-Id':shareInfo.associated_id

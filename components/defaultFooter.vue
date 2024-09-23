@@ -6,15 +6,15 @@
 				<view class="text">
 					<view class="box">
 						<image src="../static/tab_icon1.png" mode="widthFix"></image>
-						<text  @click="goUrl('/pages/index/room/room')">Create a room</text>
+						<text  @click="goUrl('/pages/index/room/room')">Create Room</text>
 					</view>
 					<view class="box" @click="gogo">
 						<image src="../static/tab_icon2.png" mode="widthFix"></image>
-						<text >Quick start</text>
+						<text >Quick Start</text>
 					</view>
 					<view class="box" @click="$emit('share')">
 						<image src="../static/tab_icon3.png" mode="widthFix"></image>
-						<text  >Share link</text>
+						<text  >Share Link</text>
 					</view>
 					<!-- <text @click="goUrl('/pages/me/me')">Quick start</text> -->
 					<!-- <text @click="goUrl('/pages/me/me')">临时个人中心</text> -->
@@ -79,13 +79,32 @@
 					
 				}
 			},
-			gogo(){
-				uni.removeStorageSync('loopNum');
-				uni.removeStorageSync('loopArr');
-				uni.removeStorageSync('newLoopBool');
-				uni.navigateTo({
-					url: `/pages/index/hall/hall?id=${this.swiperData[0].id}&type=${1}&bet_amount=${this.swiperData[0].bet_amount}`
-				})
+			async gogo(){
+				let res = await $request('joinSystem', {
+					room_id: this.swiperData[0].id
+				});
+				// console.log(res)
+				if (res.data.code == 200) {
+					// this.indexInfo = res.data.data;
+					//后面在跳转这个页面得按钮内调用
+					uni.removeStorageSync('loopNum');
+					uni.removeStorageSync('loopArr');
+					uni.removeStorageSync('newLoopBool');
+					uni.navigateTo({
+						url: `/pages/index/hall/hall?id=${this.swiperData[0].id}&type=${1}&bet_amount=${this.swiperData[0].bet_amount}`
+					})
+					// uni.navigateTo({
+					// 	url: `/pages/index/hall/hall?id=${item.id}&type=${type}&bet_amount=${item.bet_amount}`
+					// })
+					return
+				}
+				$totast(res.data.message)
+				// uni.removeStorageSync('loopNum');
+				// uni.removeStorageSync('loopArr');
+				// uni.removeStorageSync('newLoopBool');
+				// uni.navigateTo({
+				// 	url: `/pages/index/hall/hall?id=${this.swiperData[0].id}&type=${1}&bet_amount=${this.swiperData[0].bet_amount}`
+				// })
 			}
 		}
 	}

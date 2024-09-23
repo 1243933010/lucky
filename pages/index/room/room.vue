@@ -42,7 +42,7 @@
 							</view>
 							<view class="form-input">
 								<view class="title">
-									<text>amount of money</text>
+									<text>Base Amount</text>
 								</view>
 								<view class="input">
 									<input type="number" v-model="formData.amount" placeholder="Enter an integer between 2 $and 100 $" />
@@ -83,7 +83,7 @@
 							</view>
 							<view class="form-submit">
 								<view class="btn" @click="createRoom">
-									<text>Create</text>
+									<text>Confirm Creation</text>
 								</view>
 							</view>
 						</view>
@@ -92,7 +92,7 @@
 						<view class="form">
 							<view class="form-number">
 								<view class="title"  @click.stop="pickerBool1=true">
-									<text>Table number</text>
+									<text>Table Number</text>
 									<image src="../../../static/bottom_arrow.png" mode="widthFix"></image>
 								</view>
 								<view class="password">
@@ -115,8 +115,8 @@
 								<text>or</text>
 							</view>
 							<view class="form-input">
-								<view class="title">
-									<text>Invitation link</text>
+								<view class="title" style="margin-bottom: 30rpx;">
+									<text>Invitation Link </text>
 								</view>
 								<view class="input">
 									<input type="text" v-model="formData1.url" placeholder="Paste invitation link" />
@@ -271,12 +271,12 @@
 		.head{
 			width: 100%;
 			height: 578rpx;
-			background: #292734;
+			background: #23212c;
 			box-sizing: border-box;
 			.bk{
 				width: 100%;
 				height: 100%;
-				background:url('../../../static/room_bk.png') no-repeat 100% 100%/cover;
+				background:url('../../../static/room_bk.png') no-repeat top right / auto 100%;
 			}
 			.txt{
 				color: white;
@@ -339,7 +339,7 @@
 						box-sizing: border-box;
 						border-top-right-radius: 25rpx;
 						border-top-left-radius: 15rpx;
-						border: 1px solid #333333;
+						border: 1px solid #444444;
 						border-bottom: none;
 						background-image: linear-gradient(55.53466052546843deg, #9DFE00 0%, #14D9E5 100%);
 						-webkit-background-clip: text;

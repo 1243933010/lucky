@@ -31,7 +31,7 @@
 				</view>
 				<view class="form-item">
 					<view class="label">
-						<text>Login password</text>
+						<text>Login Password </text>
 					</view>
 					<view class="input">
 						<input type="password" v-model="formData.password" />
@@ -39,7 +39,7 @@
 				</view>
 				<view class="form-item">
 					<view class="label">
-						<text>Confirm password</text>
+						<text>Confirm Password</text>
 					</view>
 					<view class="input">
 						<input type="password" v-model="formData.password_confirmation" />
@@ -47,7 +47,7 @@
 				</view>
 				<view class="form-item">
 					<view class="label">
-						<text>Invite code</text>
+						<text>Invitation Code</text>
 					</view>
 					<view class="input">
 						<input type="password" v-model="formData.invite_code" />
@@ -61,8 +61,8 @@
 			</view>
 			<view class="other">
 				<view class="label">
-					<text class="one">I already have an account to</text>
-					<text class="two" @click="goUrl">log in</text>
+					<text class="one">Already have an account? </text>
+					<text class="two" @click="goUrl"> Go to Login</text>
 				</view>
 			</view>
 		</view>
@@ -118,8 +118,7 @@
 		height: 100%;
 		background-color: #040405;
 		// background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
-		 
-	
+		
 	}
 	text{
 		line-height: 0;
@@ -129,8 +128,11 @@
 	height: 100%;
 	// background-color: red;
 	background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
+	padding-bottom: 140rpx;
 	.page-container-box{
-		background:  url('../../static/login_bk.png') no-repeat center center / 100% 100%;
+		// background:  url('../../static/login_bk.png') no-repeat center center / 100% 100%;
+		background:#000000 url('../../static/login_bk.png') no-repeat top left;
+		background-size: 100% auto;
 	}
 	.logo{
 		width: 175rpx;
@@ -200,7 +202,7 @@
 	}
 	.other{
 		width: 100%;
-		padding-bottom: 136rpx;
+		bottom: 122rpx;
 		padding-top: 20rpx;
 		.flex-center;
 		color: #9E9E9E;

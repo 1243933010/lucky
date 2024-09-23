@@ -17,13 +17,13 @@
 						<view class="box">
 							<view class="item" :class="index==0?'item-active':''" @click="changeTab(0)">
 								<view class="title">
-									<text>Junior table</text>
+									<text>Beginner Table</text>
 								</view>
 								<view class="active" v-if="index==0"></view>
 							</view>
 							<view class="item" :class="index==1?'item-active':''" @click="changeTab(1)">
 								<view class="title">
-									<text>Premium Table</text>
+									<text>Advanced Table</text>
 								</view>
 								<view class="active" v-if="index==1"></view>
 							</view>
@@ -41,7 +41,7 @@
 								</view>
 								<view class="usdt">
 									<view class="">
-										<text class="num">{{item.num}}</text>
+										<text class="num">{{item.bet_amount*1}}</text>
 										<text>USDT</text>
 									</view>
 								</view>
@@ -61,6 +61,19 @@
 								<image src="../../../static/u2.png" mode="widthFix"></image>
 								<text>10.00</text>
 							</view> -->
+						</view>
+						<view class="content" v-if="index==1">
+							<view class="con-item" v-for="(item,index) in list" :key="index">
+								<view class="fixed">
+									<text>{{item.id}}</text>
+								</view>
+								<view class="usdt">
+									<view class="">
+										<text class="num">{{item.bet_amount*1}}</text>
+										<text>USDT</text>
+									</view>
+								</view>
+							</view>
 						</view>
 						<view class="create" v-if="index==2">
 							<view class="left">
@@ -120,10 +133,29 @@
 						id: '030',
 						imgList: []
 					},
-				]
+				],
+				swiperData:[],
+				swipterActive:0
 			};
 		},
+		mounted(){
+			this.getRoomList();
+		},
 		methods: {
+			async getRoomList() {
+				let type = '';
+				if (this.index == 0) {
+					type = '1'
+				} else {
+					type = '5'
+				}
+				let res = await $request('roomList',{type});
+				// console.log(res)
+				if (res.data.code == 200) {
+					this.list = res.data.data;
+					// this.swipterActive = 0;
+				}
+			},
 			open(options = {
 				type: 'center'
 			}) {
@@ -132,6 +164,7 @@
 			},
 			changeTab(ind) {
 				this.index = ind;
+				this.getRoomList()
 			},
 			close(){
 				this.$refs.popup.close()
@@ -166,7 +199,7 @@
 		// overflow-y: auto;
 		background: #000000;
 		box-shadow: 0rpx -2rpx 9rpx 0rpx rgba(235, 235, 245, 0.302);
-		border-radius: 61rpx 61rpx 0rpx 0rpx;
+		border-radius: 61rpx 61rpx 61rpx 61rpx;
 		border: 4rpx solid;
 		overflow-y: auto;
 	}
@@ -292,6 +325,7 @@
 						position: relative;
 						padding-bottom: 24rpx;
 						padding-top: 64rpx;
+						margin-bottom: 50rpx;
 						// .flex-center;
 						display: flex;
 						flex-direction: column;

@@ -138,13 +138,13 @@
 				<view class="box">
 					<view class="item" :class="index==0?'item-active':''" @click="changeTab(0)">
 						<view class="title">
-							<text>Junior table</text>
+							<text>Beginner Table</text>
 						</view>
 						<view class="active" v-if="index==0"></view>
 					</view>
 					<view class="item" :class="index==1?'item-active':''" @click="changeTab(1)">
 						<view class="title">
-							<text>Premium Table</text>
+							<text>Advanced Table</text>
 						</view>
 						<view class="active" v-if="index==1"></view>
 					</view>
@@ -184,7 +184,7 @@
 											<text class="label">USDT</text>
 										</view>
 										<view class="wen">
-											<text>Number of online users</text>
+											<text>Online Users</text>
 										</view>
 									</view>
 									<view class="content-right">
@@ -210,10 +210,10 @@
 				<view class="right" @click="defaultClick">
 					<view class="text">
 						<view class="title">
-							<text>Random lucky airdrop with a single drop of up to</text>
+							<text>Random Lucky Airdrop，Single drop can yield up to</text>
 						</view>
 						<view class="label">
-							<text>100 times USDT</text>
+							<text>100 times USDT.</text>
 						</view>
 					</view>
 					<view class="bottom">
@@ -1179,8 +1179,8 @@
 
 	.hr3 {
 		width: 100%;
-		border-top: 1px dashed #38D1DC;
-		border-bottom: 1px dashed #38D1DC;
+		// border-top: 1px dashed #38D1DC;
+		// border-bottom: 1px dashed #38D1DC;
 		margin-bottom: 95rpx;
 
 		image {

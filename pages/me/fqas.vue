@@ -54,7 +54,9 @@
 
 	page {
 		height: 100%;
-		background: #201f29 url('../../static/login_bk.png') no-repeat 100% 100%;
+		// background: #201f29 url('../../static/login_bk.png') no-repeat 100% 100%;
+		background:#000000 url('../../static/ku.png') no-repeat top left;
+		background-size: 100% auto;
 	}
 
 	.fqas {

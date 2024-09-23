@@ -22,10 +22,10 @@
 						<input type="text" placeholder="用户名">
 					</view>
 					<view class="send">
-						<input type="text" placeholder="邮箱验证码">
+						<input type="text" placeholder="Email Verification Code">
 						<view class="btn">
 							<view class="">
-								<text>send out</text>
+								<text>Send</text>
 							</view>
 						</view>
 					</view> -->
@@ -83,7 +83,7 @@
 		// overflow-y: auto;
 		background: #000000;
 		box-shadow: 0rpx -2rpx 9rpx 0rpx rgba(235, 235, 245, 0.302);
-		border-radius: 61rpx 61rpx 0rpx 0rpx;
+		border-radius: 61rpx 61rpx 61rpx 61rpx;
 		border: 4rpx solid;
 	}
 

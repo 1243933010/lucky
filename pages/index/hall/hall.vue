@@ -88,21 +88,23 @@
 						</view>
 					</view>
 				</view>
-				<view class="submit">
-					<view class="box">
-						<view class="left"></view>
-						<view class="center" @click="submitClick">
-							<text>{{btnText}}</text>
-						</view>
-						<view class="right">
-							<image @click="$refs.textCom.open()" src="../../../static/hell_icon4.png" mode="widthFix">
-							</image>
+				<view class=""  style="position: fixed;bottom: 0rpx;left: 0;width: 100%;">
+					<view class="submit">
+						<view class="box">
+							<view class="left"></view>
+							<view class="center" @click="submitClick">
+								<text>{{btnText}}</text>
+							</view>
+							<view class="right">
+								<image @click="$refs.textCom.open()" src="../../../static/hell_icon4.png" mode="widthFix">
+								</image>
+							</view>
 						</view>
 					</view>
-				</view>
-				<view class="hr">
-					<view class="box" @click="autoClick">
-						<text>Automatic betting</text>
+					<view class="hr">
+						<view class="box" @click="autoClick" v-if="!autoBool">
+							<text> Auto Bet</text>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -166,7 +168,7 @@
 				borderActive: null,
 				roomInfo: {},
 				roomStatus: {},
-				btnText: 'Preparation for betting',
+				btnText: 'Participate in Game',
 				testNum: 0,
 				autoBool:false
 			};
@@ -229,9 +231,12 @@
 		methods: {
 			autoClick(){
 				this.autoBool = !this.autoBool;
-				let str = 'Successful automatic betting'
+				let str = 'Successful  Auto Bet'
 				if(!this.autoBool){
-					str = 'Automatic betting has been canceled'
+					str = ' Auto Bet has been canceled'
+				}
+				if(this.autoBool){
+					this.btnText = 'Cancel Auto Bet'
 				}
 				uni.showToast({
 					icon:'none',
@@ -314,7 +319,12 @@
 				}, 1000);
 
 				// 初始化时马上更新一次倒计时显示
-				this.btnText = time;
+				if(time<=3){
+					this.btnText = time;
+				}else{
+					this.btnText = '';
+				}
+				
 			},
 			clearCountdown() {
 				if (this.intervalId) {
@@ -331,6 +341,11 @@
 				}
 			},
 			async submitClick() {
+				if(this.autoBool){
+					this.autoBool = !this.autoBool;
+					this.btnText = 'Participate in Game'
+					return
+				}
 				if (this.roomStatus.status == 0 || (this.roomStatus.is_join == 0 && this.roomStatus.status == 5)) {
 					this.gameJoin()
 				}
@@ -484,6 +499,7 @@
 					// 	this.testNum = -5;
 					// }
 					// res.data.data.status = this.testNum+=5
+					 // res.data.data.status = 20
 					this.roomStatus = res.data.data;
 					this.listenNum(res.data.data)
 					if (this.roomStatus.status == 0) {
@@ -520,7 +536,13 @@
 						this.startCountdown(time)
 					} else {
 						this.clearCountdown()
-						this.btnText = 'Preparation for betting'
+						// if()
+						if(this.autoBool){
+							this.btnText = 'Cancel Auto Bet'
+						}else{
+							this.btnText = 'Participate in Game'
+						}
+						
 					}
 
 					return
@@ -749,6 +771,7 @@
 		width: 100%;
 		position: relative;
 		z-index: 10;
+		padding-bottom: 200rpx;
 		.radio {
 			position: relative;
 			z-index: 10;

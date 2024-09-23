@@ -58,6 +58,7 @@
 			</view>
 		</view>
 			<OrderPopup ref="orderPopup"></OrderPopup>
+			<FixedCom />
 	</view>
 </template>
 
@@ -67,11 +68,13 @@
 	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import OrderPopup from '../../components/orderPopup.vue';
+	import FixedCom from '@/components/fixed.vue';
 	// import DefaultFooter from '../../components/defaultFooter.vue';
 	export default {
 		components: {
 			DefaultHeader,
-			 OrderPopup
+			 OrderPopup,
+			 FixedCom
 		},
 		data() {
 			return {
@@ -129,9 +132,9 @@
 
 	page {
 		height: 100%;
-		// background-color: #040405;
+		// background-color: #1e1c26;
 		// background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
-		background: #201f29 url('../../static/login_bk.png') no-repeat 100% 100%;
+		// background: #201f29 url('../../static/login_bk.png') no-repeat 100% 100%;
 	}
 
 	.recharge {

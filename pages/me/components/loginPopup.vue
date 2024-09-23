@@ -10,14 +10,14 @@
 				</view>
 				<view class="form">
 					<view class="form-item">
-						<input v-model="formData.password" type="text" placeholder="更换登录密码">
+						<input v-model="formData.password" type="text" placeholder=" New Password ">
 					</view>
 					<view class="form-item">
-						<input v-model="formData.password_confirmation"  type="text" placeholder="确认密码">
+						<input v-model="formData.password_confirmation"  type="text" placeholder="Confirm Password">
 					</view>
 					
 					<view class="send">
-						<input v-model="formData.email_code"  type="text" placeholder="邮箱验证码">
+						<input v-model="formData.email_code"  type="text" placeholder="Email Verification Code">
 						<view class="btn">
 							<view class="" @click="handleTime">
 								<text>{{codeText}}</text>
@@ -48,7 +48,7 @@
 					password_confirmation:'',
 					email_code:''
 				},
-				codeText:'send out',
+				codeText:'Send',
 				timeFnc: null,
 				
 			};
@@ -70,7 +70,7 @@
 				this.timeFnc = setInterval(() => {
 					this.codeText--;
 					if (this.codeText == 0) {
-						this.codeText = 'send out';
+						this.codeText = 'Send';
 						clearInterval(this.timeFnc);
 						this.timeFnc = null
 					}
@@ -107,7 +107,7 @@
 		// overflow-y: auto;
 		background: #000000;
 		box-shadow: 0rpx -2rpx 9rpx 0rpx rgba(235, 235, 245, 0.302);
-		border-radius: 61rpx 61rpx 0rpx 0rpx;
+		border-radius: 61rpx 61rpx 61rpx 61rpx;
 		border: 4rpx solid;
 	}
 

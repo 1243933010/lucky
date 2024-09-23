@@ -28,13 +28,22 @@
 								<text>{{rechargeConfig.channel_name}}</text>
 							</view>
 						</view>
-						<view class="item">
+						<view class="item" style="margin-bottom: 10rpx;">
 							<view class="title">
-								<text>Amount:</text>
+								<text>Please recharge:</text>
+								<image src="../../static/warning.png" mode="widthFix"></image>
 							</view>
 							<view class="num">
 								<image src="../../static/me_icon.png" mode="widthFix"></image>
 								<text>{{rechargeConfig.amount*1}}</text>
+							</view>
+						</view>
+						<view class="tip">
+							<view class="con-item">
+								<text>Please strictly follow the USDT address for transfer, and the balance must be consistent with the current page credit amount, otherwise it cannot be credited to the account.</text>
+							</view>
+							<view class="posi">
+								
 							</view>
 						</view>
 					</view>
@@ -72,6 +81,7 @@
 		</view>
 		
 		<!-- <DefaultPopup ref="defaultPopup" :rechargeConfig="rechargeConfig" /> -->
+		<FixedCom />
 	</view>
 </template>
 
@@ -84,11 +94,13 @@
 	import logo from '../../static/logo.png'
 	// import DefaultFooter from '../../components/defaultFooter.vue';
 	import ayQrcode from "@/components/ay-qrcode/ay-qrcode.vue"
+	import FixedCom from '@/components/fixed.vue';
 	export default {
 		components: {
 			DefaultHeader,
 			ayQrcode,
-			DefaultPopup
+			DefaultPopup,
+			FixedCom
 			// DefaultFooter
 		},
 		data() {
@@ -169,7 +181,7 @@
 		height: 100%;
 		// background-color: #040405;
 		// background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
-		background: #201f29 url('../../static/login_bk.png') no-repeat 100% 100%;
+		// background: #201f29 url('../../static/login_bk.png') no-repeat 100% 100%;
 	}
 
 	.recharge {
@@ -233,6 +245,12 @@
 						.title {
 							color: #AAAAAA;
 							font-size: 24rpx;
+							.flex-direction;
+							image{
+								width: 23rpx;
+								margin-top: 8rpx;
+								margin-left: 8rpx;
+							}
 						}
 
 						.label {
@@ -248,6 +266,31 @@
 								margin-right: 24rpx;
 							}
 
+						}
+					}
+					.tip{
+						width: 100%;
+						position: relative;
+						.con-item{
+							width: 100%;
+							border-radius: 15rpx;
+							border: 1px solid #663737;
+							color: #FA4545;
+							font-size: 18rpx;
+							box-sizing: border-box;
+							padding: 5rpx 10rpx;
+						}
+						.posi{
+							position: absolute;
+							top: -15rpx;
+							background-color: #1e1c26;
+							left: 192rpx;
+							width: 25rpx;
+							height: 25rpx;
+							// border: 1px solid #663737;
+							border-left: 1px solid #663737;
+							border-top: 1px solid #663737;
+							transform: rotate(45deg);
 						}
 					}
 				}

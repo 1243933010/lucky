@@ -18,24 +18,27 @@
 							<view class="price">
 								<image src="../static/me_icon.png" mode="widthFix"></image>
 							    <text>{{userInfo.balance}}</text>
+								<view class="add" @click="goUrl('/pages/me/recharge')">
+									<text>+</text>
+								</view>
 							</view>
 						</view>
 					</view>
 					<view class="list">
 						<view class="item" @click="goUrl('/pages/index/index')">
-							<text>home page</text>
+							<text>Home Page</text>
 						</view>
 						<view class="item" @click="goUrl('/pages/me/me')">
-							<text>User Center</text>
+							<text>Personal Center</text>
 						</view>
 						<view class="item" @click="goUrl('/pages/team/team')">
-							<text>My team</text>
+							<text>My Team</text>
 						</view>
 						<view class="item" @click="goUrl('/pages/index/room/room')">
-							<text>Create a table</text>
+							<text>Create Table</text>
 						</view>
 						<view class="item" @click="goUrl('/pages/index/room/room?type=1')">
-							<text>Join the table</text>
+							<text>Join Table</text>
 						</view>
 						<view class="item" @click="goUrl('/pages/me/fqas')">
 							<text>FAQ</text>
@@ -45,18 +48,28 @@
 						<view class="box">
 							<view class="item" @click="outLink('1')">
 								<image src="../static/icon_1.png" mode="widthFix"></image>
+								<text>Facebook</text>
 							</view>
+							<view class="tt">/</view>
 							<view class="item" @click="outLink('2')">
 								<image src="../static/icon_2.png" mode="widthFix"></image>
+								<text>Twitter </text>
 							</view>
+							<view class="tt">/</view>
 							<view class="item" @click="outLink('3')">
 								<image src="../static/icon_3.png" mode="widthFix"></image>
+								<text> Tele. </text>
 							</view>
+							<view class="tt">/</view>
 							<view class="item" @click="outLink('4')">
 								<image src="../static/icon_4.png" mode="widthFix"></image>
+								<text> Disco.</text>
 							</view>
 						</view>
 					</view>
+				</view>
+				<view class="fixed-icon">
+					<image src="../static/shou.png" mode="widthFix"></image>
 				</view>
 			</view>
 	</uni-popup>
@@ -116,8 +129,22 @@
 		// overflow-y: auto;
 		background: #000000;
 		box-shadow: 0rpx -2rpx 9rpx 0rpx rgba(235, 235, 245, 0.302);
-		border-radius: 61rpx 61rpx 0rpx 0rpx;
+		// border-radius: 61rpx 61rpx 61rpx 61rpx;
 		border: 4rpx solid;
+		position: relative;
+	}
+	.fixed-icon{
+		position: absolute;
+		width: 251rpx;
+		height: 256rpx;
+		background: linear-gradient( 146deg, #9DFE00 0%, #14D9E5 100%);
+		border-radius: 168rpx 168rpx 168rpx 168rpx;
+		top: -60rpx;
+		right: -60rpx;
+		.flex-center;
+		image{
+			width: 155rpx;
+		}
 	}
 
 	.popup-content {
@@ -171,6 +198,22 @@
 							width: 40rpx;
 							margin-right: 5rpx;
 						}
+						text{
+							margin-right: 5rpx;
+						}
+						.add{
+							width: 28rpx;
+							height: 28rpx;
+							background: linear-gradient( 146deg, #9DFE00 0%, #14D9E5 100%);
+							// border: 1rpx solid #DDDDDD;
+							.flex-center;
+							border-radius: 28rpx;
+							text{
+								line-height: 1;
+								padding-left: 2rpx;
+								padding-bottom: 1rpx;
+							}
+						}
 					}
 				}
 			}
@@ -183,17 +226,31 @@
 			}
 			.icon{
 				position: absolute;
-				left: 87rpx;
+				left: 49rpx;
 				bottom: 122rpx;
 				.box{
 					.flex-direction;
 					.item{
-						width: 52rpx;
-						height: 52rpx;
-						margin-right: 70rpx;
+						width: 112rpx;
+						// height: 52rpx;
+						// margin-right: 70rpx;
+						.flex-column;
 						image{
-							width: 100%;
+							width: 52rpx;
+							margin-bottom: 30rpx;
 						}
+						text{
+							color: #FFFFFF;
+							font-size: 24rpx;
+						}
+					}
+					.tt{
+						color: white;
+						font-size: 24rpx;
+						display: flex;
+						// align-self: flex-end;
+						padding-top: 85rpx;
+						padding-left: 20rpx;
 					}
 				}
 			}

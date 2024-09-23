@@ -6,7 +6,7 @@
 		<view class="form">
 			<view class="form-item">
 				<view class="label">
-					<text>Username or email</text>
+					<text>Username or Email</text>
 				</view>
 				<view class="input">
 					<input type="text" v-model="formData.email" />
@@ -14,7 +14,7 @@
 			</view>
 			<view class="form-item">
 				<view class="label">
-					<text>Password</text>
+					<text>Login Password </text>
 				</view>
 				<view class="input">
 					<input type="password" v-model="formData.password" />
@@ -22,7 +22,7 @@
 			</view>
 			<view class="forget">
 				<view class="" @click="$refs.forgetPopop.open()">
-					<text>Forget password</text>
+					<text>Forgot Password</text>
 				</view>
 			</view>
 		</view>
@@ -33,8 +33,8 @@
 		</view>
 		<view class="other">
 			<view class="label">
-				<text class="one">I don't have an account yet, go</text>
-				<text class="two" @click="goUrl">sign up</text>
+				<text class="one">Don't have an account? </text>
+				<text class="two" @click="goUrl">Go to Register.</text>
 			</view>
 		</view>
 		<ForgetPopop ref="forgetPopop" />
@@ -94,9 +94,8 @@
 @import url("../../static/default.less");
 .page-container{
 	height: 100%;
-	// background-color: red;
-	// background: url('../../static/login_bk.png') no-repeat 100% 100%;
-	background:  url('../../static/login_bk.png') no-repeat center center / 100% 100%;
+	background:#000000 url('../../static/login_bk.png') no-repeat top left;
+	background-size: 100% auto;
 	.logo{
 		width: 175rpx;
 		height: 175rpx;
@@ -181,7 +180,7 @@
 	}
 	.other{
 		position: fixed;
-		bottom: 138rpx;
+		bottom: 122rpx;
 		width: 100%;
 		// padding-top: 20rpx;
 		.flex-center;

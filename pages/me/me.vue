@@ -172,7 +172,9 @@
 		height: 100%;
 		// background-color: #040405;
 		// background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
-		background: #201f29 url('../../static/login_bk.png') no-repeat 100% 100%;
+		// background: #201f29 url('../../static/ku.png') no-repeat 100% 100%;
+		background:#000000 url('../../static/ku.png') no-repeat top left;
+		background-size: 105% auto;
 	}
 	.me{
 		width: 100%;

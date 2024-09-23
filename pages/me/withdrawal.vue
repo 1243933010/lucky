@@ -5,14 +5,14 @@
 			<view class="click">
 				<view class="recharge-btn" @click="goUrl">
 					<text>Recharge</text>
-					<image src="../../static/recharge.png" mode="widthFix"></image>
+					<image src="../../static/recharge1.png" mode="widthFix"></image>
 				</view>
 				<view class="logo">
 					<image src="../../static/logo.png" mode="widthFix"></image>
 				</view>
 				<view class="withdraw">
 
-					<image src="../../static/withdraw.png" mode="widthFix"></image>
+					<image src="../../static/withdraw1.png" mode="widthFix"></image>
 					<text>Withdraw</text>
 				</view>
 			</view>
@@ -84,6 +84,7 @@
 		</view>
 		<defaultPopup ref="popup" @listenData="listenData" :withdrawConfig="withdrawConfig"></defaultPopup>
 		<OrderPopup ref="orderPopup" ></OrderPopup>
+		<FixedCom />
 	</view>
 </template>
 
@@ -94,11 +95,13 @@
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import defaultPopup from '../../components/defaultPopup.vue';
 	import OrderPopup from '../../components/orderPopup.vue';
+	import FixedCom from '@/components/fixed.vue';
 	export default {
 		components: {
 			DefaultHeader,
 			defaultPopup,
-			OrderPopup
+			OrderPopup,
+			FixedCom
 		},
 		data() {
 			return {
@@ -172,7 +175,7 @@
 		height: 100%;
 		// background-color: #040405;
 		// background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
-		background: #201f29 url('../../static/login_bk.png') no-repeat 100% 100%;
+		// background: #201f29 url('../../static/login_bk.png') no-repeat 100% 100%;
 	}
 
 	.recharge {

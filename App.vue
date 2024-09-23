@@ -19,7 +19,7 @@
 				this.polling = true;
 				while (this.polling) {
 					await this.getRoomInfo(); // 等待请求返回
-					await this.sleep(2000); // 等待 1 秒后再继续轮询
+					await this.sleep(6000); // 等待 1 秒后再继续轮询
 				}
 			},
 			async getRoomInfo(){

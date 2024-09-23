@@ -10,12 +10,12 @@ let requestObj = {
 		type: 'POST'
 	},
 	loginByCode: {
-		name: "邮箱验证码（需要登录）",
+		name: "Email Verification Code（需要登录）",
 		url: '/api/email/send_code_login',
 		type: 'POST'
 	},
 	emailPassword:{
-		name: "邮箱验证码",
+		name: "Email Verification Code",
 		url: '/api/email/send_code',
 		type: 'POST'
 	},
