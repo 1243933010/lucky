@@ -1,6 +1,6 @@
 <template>
 	<view class="page-container">
-		<view class="" style="position: fixed;top: 0;width: 100%;">
+		<view class="" style="position: fixed;top: 0;width: 100%;z-index: 100;">
 			<DefaultHeader />
 		</view>
 		<view class="" style="opacity: 0;">
@@ -30,7 +30,7 @@
 							<image @click="openOrder" class="pic" src="../../static/order.png" mode="widthFix"></image>
 						</view>
 					</view>
-					<view class="desc" @click="openOrder">Received a reward of {{commissionInfo.today_commission}} USDT today</view>
+					<view class="desc" @click="openOrder">Today Earned X   {{commissionInfo.today_commission}} USDT Reward</view>
 					<view class="btn-box" @click="Transfer">Transfer</view>
 				</view>
 				<view class="storage-total">
@@ -80,7 +80,7 @@
 					<view class="header">
 						<view class="name">
 							<image src="../../static/gift1.png" mode="widthFix"></image>
-							<text>Invitation record</text>
+							<text>Invitation Records</text>
 						</view>
 						<view class="wen"  @click="ask(2)">
 							<image src="../../static/wen.png" mode="widthFix"></image>
@@ -90,7 +90,7 @@
 						<view class="record-list-header">
 							<view class="time">Time</view>
 							<view class="user-name">UserName</view>
-							<view class="status">Game status</view>
+							<view class="status">Game Status</view>
 							<view class="reward">reward</view>
 						</view>
 						<scroll-view scroll-y="true" style="max-height: 500rpx;">
@@ -104,7 +104,7 @@
 					</view>
 					<view class="record-btn">
 						<view class="btn" @click="Invite">
-							<text>Invite friends</text>
+							<text>Invite Friends</text>
 						</view>
 					</view>
 				</view>
@@ -113,10 +113,10 @@
 			<view class="count">
 				<view class="tab">
 					<view class="item" :class="index==0?'active':''" @click="setIndex(0)">
-						<text>Today's team game count</text>
+						<text>Today's Team Games Count</text>
 					</view>
 					<view class="item" :class="index==1?'active':''" @click="setIndex(1)">
-						<text>Number of team game bureaus</text>
+						<text>Total Historical Games Count</text>
 					</view>
 				</view>
 				<view class="me">
@@ -292,7 +292,7 @@
 				}else{
 					uni.showToast({
 						icon:'none',
-						title:'Invite friends to register and bet for more than 20 minutes, and reward 10U/person',
+						title:'Invite friends to register and bet for over 20 minutes,both parties receive a reward of 10U each person.',
 						duration:2000
 					})
 				}

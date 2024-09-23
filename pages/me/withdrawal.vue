@@ -34,7 +34,7 @@
 									v-model="formData.amount" />
 
 							</view>
-							<text class="label">Withdrawable: 1000.33 USDT</text>
+							<text class="label">Available for Withdrawal: 1000.33 USDT</text>
 						</view>
 					</view>
 					<view class="radio">

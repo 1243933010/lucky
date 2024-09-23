@@ -1,6 +1,6 @@
 <template>
 	<view class="page-container">
-		<view class="" style="position: fixed;top: 0;width: 100%;">
+		<view class="" style="position: fixed;top: 0;width: 100%;z-index: 100;">
 			<DefaultHeader />
 		</view>
 		<view class="" style="opacity: 0;">
@@ -30,17 +30,17 @@
 				</view>
 				<view class="item" @click="goUrl('/pages/me/bill')">
 					<image src="../../static/logo.png" mode="widthFix"></image>
-					<text>bill</text>
+					<text>Billing</text>
 				</view>
 			</view>
 			<view class="hr">
-				<text>ACCOUNT SETTING</text>
+				<text>Account Settings</text>
 			</view>
 			<view class="menu">
 				<view class="item" @click="goUrl('/pages/me/personalData')">
 					<view class="left">
 						<image src="../../static/me_icon2.png" mode="widthFix"></image>
-						<text>Personal data</text>
+						<text>Profile Information</text>
 					</view>
 					<view class="right">
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
@@ -49,7 +49,7 @@
 				<view class="item"  @click="goUrl('/pages/index/record')">
 					<view class="left">
 						<image src="../../static/me_icon3.png" mode="widthFix"></image>
-						<text>Record</text>
+						<text>Game Record </text>
 					</view>
 					<view class="right">
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
@@ -58,7 +58,7 @@
 				<view class="item" @click="goUrl('/pages/team/team')">
 					<view class="left">
 						<image src="../../static/me_icon4.png" mode="widthFix"></image>
-						<text>Team</text>
+						<text> My Team</text>
 					</view>
 					<view class="right">
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
@@ -76,7 +76,7 @@
 				<view class="item" @click="goUrl('')">
 					<view class="left">
 						<image src="../../static/me_icon6.png" mode="widthFix"></image>
-						<text>Log out</text>
+						<text>Logout</text>
 					</view>
 					<view class="right">
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>

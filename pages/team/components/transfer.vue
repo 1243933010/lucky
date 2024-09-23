@@ -10,7 +10,7 @@
 				</view>
 				<view class="form">
 					<view class="form-item">
-						<input v-model="formData.amount" type="text" placeholder="Enter the transfer amount">
+						<input v-model="formData.amount" type="text" placeholder="Input Transfer Amount ">
 					</view>
 					<view class="text-item">
 						<text>Transferable amount：20000USDT</text>

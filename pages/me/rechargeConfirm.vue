@@ -70,7 +70,7 @@
 					</view>
 					<view class="recharge-submit">
 						<view class="con" @click="payment">
-							<text>Payment completed</text>
+							<text>Payment Completed</text>
 						</view>
 					</view>
 					<view class="footer-text">

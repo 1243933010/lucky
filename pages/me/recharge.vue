@@ -34,7 +34,7 @@
 					</view>
 					<view class="radio">
 						<view class="title">
-							<text>Choose Payment Method</text>
+							<text>Select Recharge Method</text>
 						</view>
 						<view class="radio-con">
 							<view class="radio-item" v-for="(item,index) in rechargeConfig" :key="index">
