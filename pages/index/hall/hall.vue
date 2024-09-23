@@ -353,13 +353,15 @@
 			},
 			async gameJoin() {
 				let obj = {is_multiple: ''};
-				
+				console.log(this.borderActive)
+				let arr = [2,5,10]
 				if(this.borderActive==null){
 					obj.is_multiple = 0;
 					// obj.multiple = ''
 				}else{
 					obj.is_multiple = 1;
-					obj.multiple = this.borderActive;
+					// obj.multiple = this.borderActive;
+					obj.multiple = arr[this.borderActive];
 				}
 				let res = await $request('gameJoin',obj);
 				$totast(res.data.message)

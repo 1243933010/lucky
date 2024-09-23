@@ -330,6 +330,7 @@
 				],
 				swipterActive: 0,
 				faqList: [],
+				faqListCopy: [],
 				colorList: ["#3e92cc", "#f2a91f", "#a612ee", "#07c34d", "#56d894", "#ffa4bb", "#e8cd22", "#4f32cc",
 					"#ffcc11", "#0e9c5a"
 				],
@@ -350,9 +351,9 @@
 			}
 		},
 		onLoad() {
-			this.faqList.forEach((val, ind) => {
-				val.color = this.colorList[Math.min(10, this.getRandomInt(1, 10))]
-			})
+			// this.faqList.forEach((val, ind) => {
+			// 	val.color = this.colorList[Math.min(10, this.getRandomInt(1, 10))]
+			// })
 			// console.log(Math.min(10, this.getRandomInt(1, 10)))
 			this.startToggle();
 			this.getFaqs();
@@ -374,13 +375,22 @@
 			this.pageScroll = e.scrollTop;
 		},
 		methods: {
-			defaultClick(){
-				uni.removeStorageSync('loopNum');
-				uni.removeStorageSync('loopArr');
-				uni.removeStorageSync('newLoopBool');
-				uni.navigateTo({
-					url: `/pages/index/hall/hall?id=${this.indexInfo.room_id_10u}&type=${1}&bet_amount=${10}`
-				})
+			async defaultClick(){
+				let res = await $request('joinSystem', {
+					room_id: this.indexInfo.room_id_10u
+				});
+				// console.log(res)
+				if (res.data.code == 200) {
+					
+					uni.removeStorageSync('loopNum');
+					uni.removeStorageSync('loopArr');
+					uni.removeStorageSync('newLoopBool');
+					uni.navigateTo({
+						url: `/pages/index/hall/hall?id=${this.indexInfo.room_id_10u}&type=${1}&bet_amount=${10}`
+					})
+					return
+				}
+				$totast(res.data.message)
 			},
 			goUrl(url){
 				uni.navigateTo({
@@ -499,55 +509,66 @@
 			swipterChange(e) {
 				this.swipterActive = e.detail.current;
 			},
-			// 开始每2秒执行一次切换
-			startToggle() {
-				setInterval(() => {
-					// 计算要切换状态的元素个数（1-3个）
-					const count = this.getRandomInt(1, 3);
-
-					// 随机获取要切换的元素
-					const itemsToToggle = this.getRandomElements(this.faqList, count);
-
-					// 切换状态
-					itemsToToggle.forEach(item => {
-						item.show = !item.show; // 反转当前的show值
-					});
-				}, 2000);
-			},
-
-			// 获取min-max之间的随机整数
-			getRandomInt(min, max) {
-				return Math.floor(Math.random() * (max - min + 1)) + min;
-			},
-
-			// 随机从数组中选择count个不同的元素
-			getRandomElements(arr, count) {
-				const result = [];
-				const usedIndices = new Set();
-
-				while (result.length < count) {
-					const index = Math.floor(Math.random() * arr.length);
-					if (!usedIndices.has(index)) {
-						result.push(arr[index]);
-						usedIndices.add(index);
-					}
-				}
-
-				return result;
-			},
-			// goUrl(){
-			// 	uni.navigateTo({
-			// 		url:'/pages/me/me'
-			// 	})
-			// },
-			async getFaqs() {
+		startToggle() {
+		    if (this.toggleInterval) {
+		        clearInterval(this.toggleInterval);
+		    }
+		
+		    // 每隔 2 秒执行一次
+		    this.toggleInterval = setInterval(() => {
+		        // 计算要切换状态的元素个数（至少1，最多3个）
+		        const count = this.getRandomInt(1, Math.min(3, this.faqListCopy.length));
+		        // 随机获取要切换的元素
+		        const itemsToToggle = this.getRandomElements(this.faqListCopy, count);
+		// console.log(itemsToToggle)
+		        // 将选中的元素的 show 属性设置为 true
+		        itemsToToggle.forEach(item => {
+		            item.show = true;
+		        });
+				this.faqList = itemsToToggle
+		        // 你可以在这里添加额外的逻辑，例如在下次切换前重置某些元素的 show 属性
+		    }, 2000);
+		},
+		
+		stopToggle() {
+		    if (this.toggleInterval) {
+		        clearInterval(this.toggleInterval);
+		        this.toggleInterval = null;
+		    }
+		},
+		
+		getRandomInt(min, max) {
+		    return Math.floor(Math.random() * (max - min + 1)) + min;
+		},
+		
+		getRandomElements(arr, count) {
+		    // 确保 count 不超过数组的长度
+		    if (count > arr.length) {
+		        count = arr.length;
+		    }
+		
+		    // 使用 Fisher-Yates 算法打乱数组
+		    const shuffled = arr.slice(); // 复制数组以免修改原数组
+		    for (let i = shuffled.length - 1; i > 0; i--) {
+		        const j = Math.floor(Math.random() * (i + 1));
+		        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // 交换元素
+		    }
+		
+		    // 取前 count 个元素
+		    return shuffled.slice(0, count);
+		},
+		async getFaqs() {
 				let res = await $request('faq', {});
 				// console.log(res)
 				if (res.data.code == 200) {
+					// res.data.data.list.push({question:'ces1'})
+					// res.data.data.list.push({question:'ces2'})
 					res.data.data.list.forEach((val) => {
-						val.show = true;
+						val.show = false;
 					})
 					this.faqList = res.data.data.list;
+					this.faqListCopy = res.data.data.list;
+					
 				}
 			},
 			goFaq() {
@@ -1275,7 +1296,7 @@
 		box-sizing: border-box;
 		// padding: 0 38rpx;
 		padding: 0 38rpx 120rpx 38rpx;
-		margin-bottom: 118rpx;
+		// margin-bottom: 118rpx;
 
 		.title {
 			font-size: 69rpx;
@@ -1294,7 +1315,7 @@
 			display: flex;
 			flex-direction: row;
 			flex-wrap: wrap;
-
+			min-height: 150rpx;
 			.item {
 				background: #1D1B26;
 				// background: red;

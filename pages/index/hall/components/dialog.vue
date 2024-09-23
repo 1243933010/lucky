@@ -2,7 +2,7 @@
 	<view>
 		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="center"  >
 			<view class="aaa" style="background: #000000;padding-bottom: 20rpx;">
-				<view class="popup-content">
+				<view class="popup-content" :style="{'margin-top':marginTop}">
 					<view class="close" @click="$refs.popup.close()">
 						<image src="@/static/close.png" mode="widthFix"></image>
 					</view>
@@ -42,8 +42,32 @@
 			return {
 				options:{},
 				boolType:'1',
-				url:''
+				url:'',
+				sysInfo:{}
 			};
+		},
+		computed:{
+			marginTop(){
+				if(this.sysInfo.screenHeight<=700){
+					return '360rpx'
+				}
+				if(this.sysInfo.screenHeight<=750&&this.sysInfo.screenHeight>700){
+					return '370rpx'
+				}
+				if(this.sysInfo.screenHeight<=850&&this.sysInfo.screenHeight>800){
+					return '70rpx'
+				}
+				return '60rpx'
+			}
+		},
+		mounted() {
+			console.log('111')
+			let sysInfo = uni.getSystemInfo({
+				success:(res)=>{
+					console.log(res.screenHeight,'---')
+					this.sysInfo = res;
+				}
+			})
 		},
 		methods: {
 			open(data) {
@@ -166,7 +190,7 @@
 			padding-bottom: 52rpx;
 			
 			.form-item{
-				width: 596rpx;
+				// width: 596rpx;
 				height: 70rpx;
 				// background: #111111;
 				border-radius: 18rpx 18rpx 18rpx 18rpx;

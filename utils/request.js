@@ -1,6 +1,6 @@
 import requestObj from '@/utils/requestObj.js'
 export let filesUrl = 'https://maojian886.oss-ap-northeast-1.aliyuncs.com/';
-export let url = 'http://coingames.top'
+export let url = 'https://api.uk.goldkites.com'
 export let urlPath = 'http://2405.devnft.top'
 
 export const $request = (requestName,params,headerType=0)=>{
