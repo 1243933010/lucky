@@ -34,7 +34,7 @@
 				<view class="team">
 					<view class="posi">
 						<view class="box">
-							<view class="item">
+							<view class="item" v-if="teamInfoData.today_invite_list&&teamInfoData.today_invite_list[0]">
 								<view class="add">
 									<image v-if="teamInfoData.today_invite_list[0]"
 										:src="teamInfoData.today_invite_list[0].avatar" mode="widthFix"></image>
@@ -47,7 +47,7 @@
 								    <!-- <text>11111112121212</text> -->
 								</view>
 							</view>
-							<view class="item">
+							<view class="item" v-if="teamInfoData.today_invite_list&&teamInfoData.today_invite_list[1]">
 							<view class="add">
 								<image v-if="teamInfoData.today_invite_list[1]"
 									:src="teamInfoData.today_invite_list[1].avatar" mode="widthFix"></image>
@@ -59,7 +59,7 @@
 							    <!-- <text>11111112121212</text> -->
 							</view>
 							</view>
-							<view class="item">
+							<view class="item" v-if="teamInfoData.today_invite_list&&teamInfoData.today_invite_list[2]">
 							<view class="add">
 								<image v-if="teamInfoData.today_invite_list[2]"
 									:src="teamInfoData.today_invite_list[2].avatar" mode="widthFix"></image>
@@ -71,7 +71,7 @@
 							    <!-- <text>11111112121212</text> -->
 							</view>
 							</view>
-							<view class="item">
+							<view class="item" v-if="teamInfoData.today_invite_list&&teamInfoData.today_invite_list[3]">
 							<view class="add">
 								<image v-if="teamInfoData.today_invite_list[3]"
 									:src="teamInfoData.today_invite_list[3].avatar" mode="widthFix"></image>
