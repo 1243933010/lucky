@@ -14,6 +14,7 @@
 				</uni-collapse-item>
 			</uni-collapse>
 		</view>
+		<DefaultFooter />
 	</view>
 </template>
 
@@ -22,9 +23,10 @@
 		$request,$totast
 	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
+	import DefaultFooter from '../../components/defaultFooter.vue';
 	export default {
 		components: {
-			DefaultHeader,
+			DefaultHeader,DefaultFooter
 		},
 		data() {
 			return {
@@ -55,7 +57,7 @@
 	page {
 		height: 100%;
 		// background: #201f29 url('../../static/login_bk.png') no-repeat 100% 100%;
-		background:#000000 url('../../static/ku.png') no-repeat top left;
+		background:#000 url('../../static/ku.png') no-repeat 100% 100%/cover;
 		background-size: 100% auto;
 	}
 
@@ -92,6 +94,9 @@
 						.uni-collapse-item__title-box {
 							background-color: transparent;
 							color: #fff;
+							// padding: 17rpx 20rpx;
+							// height: 88rpx !important;
+							// line-height: 88rpx !important;
 						}
 					}
 				}

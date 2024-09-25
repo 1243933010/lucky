@@ -89,6 +89,7 @@
 		 // background:#201f29 ;
 		 // position: relative;
 		 // z-index: 1000;
+		 background-color: #000;
 	}
 	// .page-container{
 	// 	background:#201f29 url('../../static/ku2.png') no-repeat bottom right / auto 40%;
@@ -98,7 +99,7 @@
 
 	.bill{
 		width: 100%;
-		
+		padding-bottom: 150rpx;
 		.header{
 			box-sizing: border-box;
 			padding: 86rpx 36rpx 0 54rpx;

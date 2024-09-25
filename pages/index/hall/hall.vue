@@ -569,7 +569,7 @@
 
 	page {
 		height: 100vh;
-
+		// background: #000;
 	}
 	.fixed-1{
 		position: fixed;
@@ -612,6 +612,7 @@
 
 			// align-items: center;
 			.item {
+				width: 150rpx;
 				background: #0B0B0B;
 				border-radius: 10rpx;
 				color: #FFFFFF;
@@ -619,6 +620,7 @@
 				box-sizing: border-box;
 				padding: 13rpx 3rpx;
 				margin-bottom: 15rpx;
+				 word-break: break-all;
 			}
 		}
 	}
@@ -681,14 +683,35 @@
 							margin-right: 30rpx;
 						}
 
-						.add {
-							width: 23rpx;
-							height: 23rpx;
-							border-radius: 50%;
-							border: 1ps solid #00319A;
-							.flex-center;
-							color: #91FB14;
-							font-size: 24rpx;
+						// .add {
+						// 	width: 23rpx;
+						// 	height: 23rpx;
+						// 	border-radius: 50%;
+						// 	border: 1ps solid #00319A;
+						// 	.flex-center;
+						// 	color: #91FB14;
+						// 	font-size: 24rpx;
+						// }
+						.add{
+							width: 32rpx;
+							height: 32rpx;
+							background: linear-gradient( 146deg, #9DFE00 0%, #14D9E5 100%);
+							box-sizing: border-box;
+							// border: 1rpx solid #DDDDDD;
+							// .flex-center;
+							border-radius: 28rpx;
+							text-align: center;
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							padding-left: 28rpx;
+							padding-bottom: 7rpx;
+							text{
+								// width: 100%;
+								color: #222222;
+								font-size: 36rpx;
+								font-weight: 600;
+							}
 						}
 					}
 				}
@@ -812,15 +835,17 @@
 						border-radius: 50%;
 						.flex-center;
 						padding-top: 2rpx;
-						padding-left: 2rpx;
-
+						padding-left: 0rpx;
+						background: rgba(0, 0, 0, 0.2);
 						view {
 							width: 90%;
 							height: 90%;
 							border-radius: 50%;
 							background: #999999;
+							// background: rgba(0, 0, 0, 0.2);
 							box-sizing: border-box;
-
+							font-size: 26rpx;
+							color: #FFFFFF;
 							.flex-center;
 						}
 					}
@@ -846,6 +871,8 @@
 						// height: 51rpx;
 						color: #FFFFFF;
 						font-size: 26rpx;
+						text-shadow: 0rpx 9rpx 4rpx rgba(4,2,8,0.57);
+						text-stroke: 2px #657383;
 					}
 
 					.active {
@@ -868,6 +895,7 @@
 							.flex-center;
 							color: #FFFFFF;
 							font-size: 26rpx;
+							
 						}
 					}
 				}
@@ -899,6 +927,7 @@
 					height: 65rpx;
 					border-radius: 50%;
 					border: 1px solid darkgrey;
+					background: rgba(0, 0, 0, 0.4);
 					.flex-center;
 
 					image {
@@ -916,7 +945,10 @@
 			.box {
 				color: #FFFFFF;
 				font-size: 26rpx;
-
+				background: rgba(255, 255, 255, 0.4);
+				box-sizing: border-box;
+				padding: 5rpx 10rpx;
+				border-radius: 5rpx;
 				text {
 					text-decoration: underline;
 				}

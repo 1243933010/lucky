@@ -110,24 +110,46 @@
 					num: ''
 				},
 				options: {
-					value: 'https://uqrcode.cn/doc',
+					value: '',
 					foregroundImageSrc: logo
 				},
-				rechargeConfig:{}
+				rechargeConfig:{},
+				polling:false,
+				id:''
 			};
 		},
 		mounted() {
 			let that = this;
 			that.showQrcode(); //一加载生成二维码
+			this.startPolling()
 		},
 		onLoad(e) {
 			// e.id = 1;
 			if(!e.id){
 				e.id = '1'
 			}
+			this.id = e.id;
 			this.getOrderDetail(e.id);
 		},
+		destroyed(){
+			this.polling = false
+		},
 		methods: {
+			async startPolling() {
+				// 启动轮询，每隔 1 秒调用一次
+				this.polling = true;
+				while (this.polling) {
+					await this.getOrderDetail(this.id); // 等待请求返回
+					await this.sleep(6000); // 等待 1 秒后再继续轮询
+				}
+			},
+			async getRoomInfo(){
+				let res = await $request('heartbeat', {});
+				// console.log(res)
+			},
+			sleep(ms) {
+				return new Promise(resolve => setTimeout(resolve, ms));
+			},
 			copy(str){
 				uni.setClipboardData({
 					data:str,
@@ -141,7 +163,24 @@
 				console.log(res)
 				if(res.data.code==200){
 					this.rechargeConfig = res.data.data;
-					this.options.value = res.data.data.channel_qr_code;
+					this.options.value = res.data.data.address;
+					if(res.data.data.status==-2){
+						$totast('cancel')
+						return
+					}
+					if(res.data.data.status==-1){
+						$totast('fail')
+						return
+					}
+					if(res.data.data.status==1){
+						$totast('success')
+						setTimeout(()=>{
+							uni.reLaunch({
+								url:'/pages/index/index'
+							})
+						})
+						return
+					}
 				}
 			},
 			payment(){
@@ -203,6 +242,7 @@
 				.title {
 					font-size: 42rpx;
 					color: white;
+					font-weight: 600
 				}
 
 				.time {
@@ -255,7 +295,7 @@
 
 						.label {
 							color: #FFFFFF;
-							font-size: 28rpx;
+							font-size: 24rpx;
 						}
 
 						.num {
@@ -276,7 +316,7 @@
 							border-radius: 15rpx;
 							border: 1px solid #663737;
 							color: #FA4545;
-							font-size: 18rpx;
+							font-size: 24rpx;
 							box-sizing: border-box;
 							padding: 5rpx 10rpx;
 						}
@@ -326,7 +366,7 @@
 						margin-bottom: 17rpx;
 					}
 					.input{
-						width: 613rpx;
+						width: 100%;
 						// height: 70rpx;
 						box-sizing: border-box;
 						padding: 15rpx 17rpx;
@@ -335,10 +375,12 @@
 						border: 1rpx solid #999999;
 						.flex-space-between;
 						.left{
+							width: 85%;
 							color: #999999;
 							font-size: 24rpx;
 							input{
 								line-height: 1.5;
+								font-size: 22rpx;
 							}
 						}
 						.right{

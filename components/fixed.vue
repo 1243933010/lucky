@@ -10,7 +10,7 @@
 	export default{
 		props:{
 			bkColor:{
-				default:'#1e1c26'
+				default:'#000'
 			}
 		},
 		data(){

@@ -55,8 +55,14 @@
 				formData:{
 					email:'',
 					password:""
-				}
+				},
+				onLoadParams:{}
 			};
+		},
+		onLoad(e){
+			if(e){
+				this.onLoadParams = e;
+			}
 		},
 		methods:{
 			async submitBtn(){
@@ -67,16 +73,30 @@
 					let {token} = res.data.data;
 					uni.setStorageSync("token", `Bearer ${token}`); // 存储token
 					setTimeout(()=>{
-						uni.reLaunch({
-							url: "/pages/index/index",
-						});
+						if(this.onLoadParams.invite_code&&this.onLoadParams.room_code){
+							uni.reLaunch({
+								url: `/pages/index/index?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
+							})
+						}else{
+							uni.reLaunch({
+								url: "/pages/index/index",
+							});
+						}
+						
 					},1500)
 				}
 			},
 			goUrl(){
-				uni.reLaunch({
-					url:'/pages/login/register'
-				})
+				if(this.onLoadParams.invite_code||this.onLoadParams.room_code){
+					uni.reLaunch({
+						url:`/pages/login/register?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
+					})
+				}else{
+					uni.reLaunch({
+						url:`/pages/login/register`
+					})
+				}
+				
 			}
 		}
 	}

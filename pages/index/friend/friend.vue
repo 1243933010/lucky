@@ -101,13 +101,13 @@
 				</view>
 			</view>
 
-			<view class="portrait">
+			<!-- <view class="portrait">
 				<view class="box" v-if="testList.length">
 					<view :style="{'top':item.top+'px','z-index':index+2,'left':item.left+'px'}" class="item" v-for="(item,index) in testList" :key="index">
 						<image :src="item.url" mode="widthFix"></image>
 					</view>
 				</view>
-			</view>
+			</view> -->
 
 
 		</view>
@@ -140,9 +140,9 @@
 				</view>
 			</view>
 			<view class="hr">
-				<view class="box">
+				<view class="box"  @click="autoClick" v-if="!autoBool">
 					<image src="../../../static/friend_icon2.png" mode="widthFix"></image>
-					<text>Cancel</text>
+					<text>Auto Bet</text>
 				</view>
 			</view>
 		</view>
@@ -192,9 +192,11 @@
 				countdownText: '', // 用于显示格式化后的倒计时
 				intervalId: null, // 存储定时器ID
 				roomStatus:{},
-				btnText: 'Preparation for betting',
+				btnText: 'Participate in Game',
 				testNum: 0,
-				// autoBool:false
+				autoBool:false,
+				type:'',
+				room_code:''
 			};
 		},
 		computed: {
@@ -239,15 +241,20 @@
 		onLoad(e) {
 			this.getUser();
 			if (e.id) {
-				this.roomId = e.id
+				this.roomId = e.id;
+				this.getRoomDetail(this.roomId)
 			}
-			if(e.type==='create'){
-				this.share()
+			if(e.type){
+				this.type = e.type;
+			}
+			if(e.room_code){
+				this.room_code = e.room_code;
+				this.joinFriendRoom(e.room_code)
 			}
 			// else {
 			// 	this.roomId = '1'
 			// }
-			this.getRoomDetail(this.roomId)
+			// this.getRoomDetail(this.roomId)
 		},
 		mounted() {
 			this.startPolling();
@@ -261,17 +268,33 @@
 			this.clearCountdown();
 		},
 		methods: {
-			// autoClick(){
-			// 	this.autoBool = !this.autoBool;
-			// 	let str = 'Successful automatic betting'
-			// 	if(!this.autoBool){
-			// 		str = 'Automatic betting has been canceled'
-			// 	}
-			// 	uni.showToast({
-			// 		icon:'none',
-			// 		title:str
-			// 	})
-			// },
+			async joinFriendRoom(room_code){
+				let res = await $request('roomJoin', {
+					code:room_code
+				});
+				console.log(res.data.data.room_id)
+				if (res.data.code == 200) {
+					this.roomId = res.data.data.room_id;
+					this.getRoomDetail(res.data.data.room_id)
+					return
+				}
+				$totast(res.data.message)
+			},
+			autoClick(){
+				this.autoBool = !this.autoBool;
+				let str = 'Successful  Auto Bet'
+				if(!this.autoBool){
+					str = ' Auto Bet has been canceled'
+				}
+				if(this.autoBool){
+					this.btnText = 'Cancel Auto Bet'
+				}
+				uni.showToast({
+					icon:'none',
+					title:str
+				})
+			},
+			
 			goUrl(){
 				this.stopPolling();
 				this.stopPolling1();
@@ -342,6 +365,11 @@
 				}
 			},
 			async submitClick(){
+				if(this.autoBool){
+					this.autoBool = !this.autoBool;
+					this.btnText = 'Participate in Game'
+					return
+				}
 				if (this.roomStatus.status == 0 || (this.roomStatus.is_join == 0 && this.roomStatus.status == 5)) {
 					this.gameJoin()
 				}
@@ -367,6 +395,12 @@
 				// console.log(res)
 				$totast(res.data.message)
 				if(res.data.code==200){
+					if(this.room_code){
+						uni.reLaunch({
+							url:'/pages/index/index'
+						})
+						return
+					}
 					let canNavBack = getCurrentPages()
 					if( canNavBack && canNavBack.length>1) {  
 					    uni.navigateBack() 
@@ -404,7 +438,12 @@
 				}, 1000);
 				
 				// 初始化时马上更新一次倒计时显示
-				this.btnText = time;
+				// this.btnText = time;
+				if(time<=3){
+					this.btnText = time;
+				}else{
+					this.btnText = '';
+				}
 				// // 每秒更新一次倒计时
 				// this.intervalId = setInterval(() => {
 				// 	time -= 1000;
@@ -435,6 +474,14 @@
 				// console.log(res)
 				if (res.data.code == 200) {
 					this.roomDetail = res.data.data;
+					let info = {
+						detail: this.roomDetail,
+						info: this.roomInfo,
+						room_id:id
+					}
+					if(this.type){
+						this.$refs.shareCom.open(info)
+					}
 					return
 				}
 				$totast(res.data.message)
@@ -528,7 +575,11 @@
 						this.startCountdown(time)
 					} else {
 						this.clearCountdown()
-						this.btnText = 'Preparation for betting'
+						if(this.autoBool){
+							this.btnText = 'Cancel Auto Bet'
+						}else{
+							this.btnText = 'Participate in Game'
+						}
 					}
 				
 					return
@@ -547,7 +598,8 @@
 			share() {
 				let info = {
 					detail: this.roomDetail,
-					info: this.roomInfo
+					info: this.roomInfo,
+					room_id:this.roomId
 				}
 				this.$refs.shareCom.open(info)
 			
@@ -573,6 +625,7 @@
 			.flex-column;
 
 			.item {
+				width: 150rpx;
 				background: #0B0B0B;
 				border-radius: 10rpx;
 				color: #FFFFFF;
@@ -580,6 +633,7 @@
 				box-sizing: border-box;
 				padding: 13rpx 3rpx;
 				margin-bottom: 15rpx;
+				word-break: break-all;
 			}
 		}
 	}
@@ -642,14 +696,26 @@
 							margin-right: 30rpx;
 						}
 
-						.add {
-							width: 23rpx;
-							height: 23rpx;
-							border-radius: 50%;
-							border: 1ps solid #00319A;
-							.flex-center;
-							color: #91FB14;
-							font-size: 24rpx;
+						.add{
+							width: 32rpx;
+							height: 32rpx;
+							background: linear-gradient( 146deg, #9DFE00 0%, #14D9E5 100%);
+							box-sizing: border-box;
+							// border: 1rpx solid #DDDDDD;
+							// .flex-center;
+							border-radius: 28rpx;
+							text-align: center;
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							padding-left: 28rpx;
+							padding-bottom: 7rpx;
+							text{
+								// width: 100%;
+								color: #222222;
+								font-size: 36rpx;
+								font-weight: 600;
+							}
 						}
 					}
 				}
@@ -731,7 +797,7 @@
 						height: 43rpx;
 						margin: 0 auto;
 						background: url('../../../static/hell_icon5.png') no-repeat 10% 100%/cover;
-						margin-bottom: 32rpx;
+						// margin-bottom: 32rpx;
 
 						.box {
 							width: 100%;
@@ -739,6 +805,7 @@
 							.flex-center;
 							color: #FFFFFF;
 							font-size: 24rpx;
+							padding-top: 0;
 						}
 					}
 				}

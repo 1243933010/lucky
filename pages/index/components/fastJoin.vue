@@ -35,7 +35,7 @@
 							</view>
 						</view>
 						<view class="content" v-if="index==0">
-							<view class="con-item" v-for="(item,index) in list" :key="index">
+							<view class="con-item" v-for="(item,index) in list" :key="index" @click="goItem(item,'1')">
 								<view class="fixed">
 									<text>{{item.id}}</text>
 								</view>
@@ -63,7 +63,7 @@
 							</view> -->
 						</view>
 						<view class="content" v-if="index==1">
-							<view class="con-item" v-for="(item,index) in list" :key="index">
+							<view class="con-item" v-for="(item,index) in list" :key="index" @click="goItem(item,'5')">
 								<view class="fixed">
 									<text>{{item.id}}</text>
 								</view>
@@ -142,6 +142,25 @@
 			this.getRoomList();
 		},
 		methods: {
+			async goItem(item,type){
+				console.log(item,type)
+				let res = await $request('joinSystem', {
+					room_id: item.id
+				});
+				// console.log(res)
+				if (res.data.code == 200) {
+					this.$refs.popup.close()
+					uni.removeStorageSync('loopNum');
+					uni.removeStorageSync('loopArr');
+					uni.removeStorageSync('newLoopBool');
+					uni.navigateTo({
+						url: `/pages/index/hall/hall?id=${item.id}&type=${type}&bet_amount=${item.bet_amount}`
+					})
+					return
+				}
+				$totast(res.data.message)
+			
+			},
 			async getRoomList() {
 				let type = '';
 				if (this.index == 0) {

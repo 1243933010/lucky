@@ -8,7 +8,7 @@
 						<text>FRIEND'S</text>
 					</view>
 					<view class="label">
-						<text>Create a friend table, invite your friends to play together or join your friend table Create a friend table, invite your friends to play together or join your friend table Create a friend table, invite your friends to play together or join your friend table</text>
+						<text>Private space, entry by invitation only.Create a friend table and invite friends to battle until dawn.</text>
 					</view>
 				</view>
 			</view>
@@ -289,6 +289,10 @@
 				}
 				.label{
 					font-size: 24rpx;
+					background-color: #000;
+					box-sizing:border-box;
+					padding: 10rpx;
+					border-radius: 10rpx;
 				}
 			}
 		}
@@ -453,6 +457,7 @@
 										color: #999999;
 										font-size: 21rpx;
 										margin-right: 35rpx;
+										box-shadow: 0rpx -2rpx 9rpx 0rpx rgba(235,235,245,0.302);
 										.flex-center;
 									}
 									.form-active{

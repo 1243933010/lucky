@@ -1,10 +1,10 @@
 <template>
 	<view>
-		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="center">
-			<view class="" style="background: #000000;padding-bottom: 20rpx;">
+		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="bottom">
+			<view class="" style="padding-bottom: 20rpx;">
 				<view class="popup-content">
 					<view class="close" @click="$refs.popup.close()">
-						<image src="@/static/close.png" mode="widthFix"></image>
+						<image src="@/static/white_close.png" mode="widthFix"></image>
 					</view>
 					<view class="form">
 						<view class="form-item" v-for="(item,index) in dataList" :key="index">
@@ -21,7 +21,7 @@
 									<text>Table number</text>
 								</view>
 								<view class="input">
-									<text>{{options.detail.no}}</text>
+									<text>{{userInfo.room_title}}</text>
 								</view>
 							</view>
 							<view class="box1">
@@ -29,7 +29,7 @@
 									<text>invitation link</text>
 								</view>
 								<view class="input">
-									<text>http://www.baidu.com</text>
+									<text>{{`${this.userInfo.host_url}/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`}}</text>
 								</view>
 							</view>
 							<view class="btn">
@@ -59,35 +59,57 @@
 					{title:'Maximum capacity',value:'150people'},
 					{title:'Automatic dissolution',value:'24h'},
 				],
-				options:{}
+				options:{},
+				userInfo:{}
 			};
 		},
+		mounted(){
+			
+		},
 		methods: {
+			async inviteLink(){
+				let res = await $request('inviteLink',{room_id:this.options.room_id});
+				console.log(res)
+				if(res.data.code==200){
+					this.userInfo = res.data.data;
+					// if(!res.data.data){
+					// 	this.dataList=[
+					// 		{title:'Table name',value:'NameNameName'},
+					// 		{title:'Amount of money',value:'5USD'},
+					// 		{title:'Maximum capacity',value:'150people'},
+					// 		{title:'Automatic dissolution',value:'24h'},
+					// 	]
+					// }
+					let info = res.data.data;
+					this.dataList = [
+						{title:'Table name',value:info.room_title},
+						{title:'Amount of money',value:info.room_bet_amount*1+'USDT'},
+						{title:'Maximum capacity',value:info.room_max_people+'people'},
+						{title:'Automatic dissolution',value:info.room_dismiss_time},
+					]
+					// console.log(this.userInfo)
+				}
+			},
 			copyLink(){
-				uni.showToast({
-					icon:'none',
-					title:'success'
+				uni.setClipboardData({
+					// data:`${this.userInfo.host_url}/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`,
+					data:`http://localhost:8080/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`,
+					success:(res)=>{
+						uni.showToast({
+							icon:'none',
+							title:'success'
+						})
+					}
 				})
+				
 			},
 			open(data) {
 				this.options = data;
-				console.log(data)
-				if(!data){
-					this.dataList=[
-						{title:'Table name',value:'NameNameName'},
-						{title:'Amount of money',value:'5USD'},
-						{title:'Maximum capacity',value:'150people'},
-						{title:'Automatic dissolution',value:'24h'},
-					]
-				}
-				this.dataList = [
-					{title:'Table name',value:data.detail.title},
-					{title:'Amount of money',value:data.detail.bet_amount*1+'USDT'},
-					{title:'Maximum capacity',value:data.detail.max_people+'people'},
-					{title:'Automatic dissolution',value:'11111'},
-				]
+				// console.log(data)
+				
 				this.$nextTick(()=>{
 					this.$refs.popup.open()
+					this.inviteLink();
 				})
 			},
 			
@@ -114,7 +136,7 @@
 	}
 
 	.popup-content {
-		width: 709rpx;
+		// width: 709rpx;
 		// height: 1118rpx;
 		// max-height: 600rpx;
 		// overflow-y: auto;
@@ -133,10 +155,18 @@
 		.close {
 			position: absolute;
 			left:50%;
-			bottom: -130rpx;
+			top: -130rpx;
+			width: 60rpx;
+			height: 60rpx;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			// background-color: #FFFFFF;
+			background: rgba(255, 255, 255, 0.4);
+			border-radius: 50%;
 
 			image {
-				width: 43rpx;
+				width: 33rpx;
 			}
 		}
 		.form{
@@ -189,6 +219,16 @@
 						border-radius: 10rpx;
 						box-sizing: border-box;
 						padding: 10rpx 0 10rpx 10rpx;
+						color: white;
+						font-size: 24rpx;
+						// text{
+						// 	display: inline-block;
+						// 	width: 100%;
+						// }
+						text{
+							// word-break: break-word;
+							word-break: break-all;
+						}
 					}
 				}
 				.btn{

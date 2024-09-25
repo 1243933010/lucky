@@ -1,10 +1,10 @@
 <template>
 	<view>
-		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="center">
-			<view class="" style="background: #000000;padding-bottom: 20rpx;">
+		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="bottom">
+			<view class="" style="padding-bottom: 20rpx;">
 				<view class="popup-content">
 					<view class="close" @click="$refs.popup.close()">
-						<image src="@/static/close.png" mode="widthFix"></image>
+						<image src="@/static/white_close.png" mode="widthFix"></image>
 					</view>
 					<view class="form">
 						<view class="form-item" v-for="(item,index) in dataList" :key="index">
@@ -41,57 +41,91 @@
 					</view>
 				</view>
 			</view>
-	</uni-popup>
+		</uni-popup>
 	</view>
 </template>
 
 <script>
 	import {
-		$request,$totast
+		$request,
+		$totast
 	} from "@/utils/request";
 	export default {
 		name: "defaultPopup",
 		data() {
 			return {
-				dataList:[
-					{title:'Table name',value:'NameNameName'},
-					{title:'Amount of money',value:'5USD'},
-					{title:'Maximum capacity',value:'150people'},
-					{title:'Automatic dissolution',value:'24h'},
+				dataList: [{
+						title: 'Table name',
+						value: 'NameNameName'
+					},
+					{
+						title: 'Amount of money',
+						value: '5USD'
+					},
+					{
+						title: 'Maximum capacity',
+						value: '150people'
+					},
+					{
+						title: 'Automatic dissolution',
+						value: '24h'
+					},
 				],
-				options:{}
+				options: {}
 			};
 		},
 		methods: {
-			copyLink(){
+			copyLink() {
 				uni.showToast({
-					icon:'none',
-					title:'success'
+					icon: 'none',
+					title: 'success'
 				})
 			},
 			open(data) {
 				this.options = data;
 				console.log(data)
-				if(!data){
-					this.dataList=[
-						{title:'Table name',value:'NameNameName'},
-						{title:'Amount of money',value:'5USD'},
-						{title:'Maximum capacity',value:'150people'},
-						{title:'Automatic dissolution',value:'24h'},
+				if (!data) {
+					this.dataList = [{
+							title: 'Table name',
+							value: 'NameNameName'
+						},
+						{
+							title: 'Amount of money',
+							value: '5USD'
+						},
+						{
+							title: 'Maximum capacity',
+							value: '150people'
+						},
+						{
+							title: 'Automatic dissolution',
+							value: '24h'
+						},
 					]
 				}
-				this.dataList = [
-					{title:'Table name',value:data.detail.title},
-					{title:'Amount of money',value:data.detail.bet_amount*1+'USDT'},
-					{title:'Maximum capacity',value:data.detail.max_people+'people'},
-					{title:'Automatic dissolution',value:'11111'},
+				this.dataList = [{
+						title: 'Table name',
+						value: data.detail.title
+					},
+					{
+						title: 'Amount of money',
+						value: data.detail.bet_amount * 1 + 'USDT'
+					},
+					{
+						title: 'Maximum capacity',
+						value: data.detail.max_people + 'people'
+					},
+					{
+						title: 'Automatic dissolution',
+						value: '11111'
+					},
 				]
-				this.$nextTick(()=>{
+				this.$nextTick(() => {
 					this.$refs.popup.open()
 				})
 			},
-			
-			async submitBtn(){
+
+			async submitBtn() {
 				// let res = await $request("userUpdate", this.formData)
 				// // console.log(res)
 				// $totast(res.data.message)
@@ -106,18 +140,20 @@
 
 <style lang="less" scoped>
 	@import url("@/static/default.less");
+
 	/deep/ .uni-popup__wrapper {
 		border-radius: 25rpx;
-		
+
 		// background: url('../../../../static/share_bk.png') no-repeat 100% 100%/cover;
 		// padding-bottom: 20rpx;
 	}
 
 	.popup-content {
-		width: 709rpx;
+		width: 100%;
 		// height: 1118rpx;
 		// max-height: 600rpx;
 		// overflow-y: auto;
+		// margin: 0 auto;
 		height: 819rpx;
 		background: url('../../../../static/share_bk.png') no-repeat 100% 100%/cover;
 		// box-shadow: 0rpx -2rpx 9rpx 0rpx rgba(235, 235, 245, 0.302);
@@ -125,34 +161,45 @@
 		// border: 4rpx solid;
 		// margin-bottom: 20rpx;
 	}
+
 	.popup-content {
 		position: relative;
-	
+
 		padding-top: 52rpx;
 
 		.close {
 			position: absolute;
-			left:50%;
-			bottom: -130rpx;
+			left: 50%;
+			top: -130rpx;
+			width: 60rpx;
+			height: 60rpx;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			// background-color: #FFFFFF;
+			background: rgba(255, 255, 255, 0.4);
+			border-radius: 50%;
 
 			image {
-				width: 43rpx;
+				width: 33rpx;
 			}
 		}
-		.form{
+
+		.form {
 			width: 100%;
 			box-sizing: border-box;
 			padding-left: 52rpx;
 			padding-right: 52rpx;
 			padding-bottom: 52rpx;
 			padding-top: 150rpx;
-			.form-item{
+
+			.form-item {
 				width: 596rpx;
 				// height: 70rpx;
 				// background: #111111;
 				// border-radius: 18rpx 18rpx 18rpx 18rpx;
 				// border: 1rpx solid #999999;
-				
+
 				margin-bottom: 19rpx;
 				box-sizing: border-box;
 				padding-left: 17rpx;
@@ -161,27 +208,33 @@
 				.flex-space-between;
 				color: white;
 				font-size: 28rpx;
-				.left{
+
+				.left {
 					color: #BBBBBB;
 				}
-				.right{
-					
-				}
+
+				.right {}
 			}
-			.form-input{
+
+			.form-input {
 				color: white;
-				.box{
+
+				.box {
 					padding-top: 31rpx;
 					margin-bottom: 15rpx;
 				}
-				.box1{
+
+				.box1 {
 					margin-bottom: 55rpx;
 				}
-				.box,.box1{
-					.title{
+
+				.box,
+				.box1 {
+					.title {
 						margin-bottom: 10rpx;
 					}
-					.input{
+
+					.input {
 						color: black;
 						width: 100%;
 						background: #7a7c83;
@@ -191,10 +244,12 @@
 						padding: 10rpx 0 10rpx 10rpx;
 					}
 				}
-				.btn{
+
+				.btn {
 					width: 100%;
 					.flex-center;
-					.con{
+
+					.con {
 						width: 380rpx;
 						height: 80rpx;
 						border-radius: 50rpx;
@@ -204,9 +259,9 @@
 					}
 				}
 			}
-			
+
 		}
 
-		
+
 	}
 </style>

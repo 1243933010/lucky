@@ -185,8 +185,8 @@
 					display: flex;
 					justify-content: center;
 					align-items: center;
-					border-right: 1px solid #fefefe;
-					border-bottom: 1px solid #fefefe;
+					border-right: 1px solid #333;
+					border-bottom: 1px solid #333;
 				}
 				.no-right{
 					border-right: none;

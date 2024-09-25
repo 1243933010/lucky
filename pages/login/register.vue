@@ -88,10 +88,8 @@
 			this.onLoadParams = e;
 			let {
 				invite_code,
-				type,
-				id
+				room_code
 			} = this.onLoadParams;
-			console.log(this.onLoadParams)
 			this.formData.invite_code = invite_code;
 		},
 		methods:{
@@ -104,9 +102,15 @@
 				// }
 			},
 			goUrl(){
-				uni.reLaunch({
-					url:'/pages/login/login'
-				})
+				if(this.onLoadParams.invite_code||this.onLoadParams.room_code){
+					uni.reLaunch({
+						url:`/pages/login/login?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
+					})
+				}else{
+					uni.reLaunch({
+						url:`/pages/login/login`
+					})
+				}
 			}
 			
 		}

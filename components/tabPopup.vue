@@ -10,7 +10,7 @@
 				</view>
 				<view class="link">
 					<view class="label">
-						<image class="image" src="../static/logo.png" mode="widthFix"></image>
+						<image class="image" :src="userInfo.avatar?filesUrl1+userInfo.avatar:'../static/default_user.png'" mode="widthFix"></image>
 						<view class="text">
 							<view class="name">
 								<text>{{userInfo.nickname}}</text>
@@ -78,7 +78,7 @@
 
 <script>
 	import {
-		$request,$totast
+		$request,$totast,filesUrl
 	} from "@/utils/request";
 	export default {
 		name: "defaultPopup",
@@ -88,6 +88,11 @@
 				list:[],
 				userInfo:{}
 			};
+		},
+		computed:{
+			filesUrl1(){
+				return filesUrl
+			}
 		},
 		mounted(){
 			this.getUser();

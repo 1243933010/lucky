@@ -2,6 +2,14 @@
 	<view class="page-container">
 		<DefaultHeader />
 		<view class="record">
+			<view class="header">
+				<view class="title">
+					<text>bill</text>
+				</view>
+				<view class="icon">
+					<image src="../../static/bill_icon.png" mode="widthFix"></image>
+				</view>
+			</view>
 			<view class="collapse" :style="{'padding-bottom':item.open?'0rpx':''}"
 				v-for="(item,index) in gameRecordsList" :key="index" @click="collapseClick(item,index)">
 				<view class="collapse-top">
@@ -202,15 +210,40 @@
 		// background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
 		// background: #201f29 url('../../static/ku2.png') no-repeat 100% 100%;
 		// background:#201f29 url('../../static/ku2.png') no-repeat bottom right / auto 40%;
-		background:#201f29 ;
+		// background:#201f29 ;
+		background-color: #000;
 		position: relative;
 		z-index: 1000;
 	}
 
 	.page-container {
+		
 		.record {
 			padding-top: 96rpx;
-
+			.header{
+				width: 100%;
+				box-sizing: border-box;
+				padding: 0 31rpx;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 20rpx;
+				.title{
+					color: #DDDDDD;
+					font-size: 52rpx;
+				}
+				.icon{
+					width: 61rpx;
+					height: 61rpx;
+					background: #222222;
+					box-shadow: 2rpx -2rpx 5rpx 0rpx rgba(255,255,255,0.3);
+					.flex-center;
+					border-radius: 50%;
+					image{
+						width: 31rpx;
+					}
+				}
+			}
 			.collapse {
 				background: rgba(17, 17, 17, 0.7);
 				padding-top: 20rpx;

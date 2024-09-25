@@ -209,5 +209,11 @@ let requestObj = {
 		url: '/api/heartbeat',
 		type: 'GET'
 	},
+	threeCommissionInfo:{
+		name: "三级佣金信息",
+		url: '/api/user/three_commission_info',
+		type: 'POST'
+	},
+	
 }
 export default requestObj;

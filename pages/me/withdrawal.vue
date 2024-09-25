@@ -34,7 +34,7 @@
 									v-model="formData.amount" />
 
 							</view>
-							<text class="label">Available for Withdrawal: 1000.33 USDT</text>
+							<text class="label">Available for Withdrawal: {{withdrawConfig.balance}} USDT</text>
 						</view>
 					</view>
 					<view class="radio">
@@ -67,7 +67,7 @@
 						</view>
 						<view class="input">
 							<view class="left">
-								<input type="text" />
+								<input type="text" v-model="address" />
 							</view>
 							<!-- <view class="right">
 								<text>Copy</text>
@@ -76,7 +76,7 @@
 					</view>
 					<view class="recharge-submit">
 						<view class="con" @click="openPopUpHandle">
-							<text>recharge</text>
+							<text>Recharge</text>
 						</view>
 					</view>
 				</view>
@@ -85,6 +85,7 @@
 		<defaultPopup ref="popup" @listenData="listenData" :withdrawConfig="withdrawConfig"></defaultPopup>
 		<OrderPopup ref="orderPopup" ></OrderPopup>
 		<FixedCom />
+		<WithdrawalPopup ref="withdrawalPopupRef" />
 	</view>
 </template>
 
@@ -95,13 +96,15 @@
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import defaultPopup from '../../components/defaultPopup.vue';
 	import OrderPopup from '../../components/orderPopup.vue';
+	import WithdrawalPopup from './components/withdrawalPopup.vue';
 	import FixedCom from '@/components/fixed.vue';
 	export default {
 		components: {
 			DefaultHeader,
 			defaultPopup,
 			OrderPopup,
-			FixedCom
+			FixedCom,
+			WithdrawalPopup
 		},
 		data() {
 			return {
@@ -112,7 +115,8 @@
 					pay_password:''
 				},
 				rechargeConfig:[],
-				withdrawConfig:{}
+				withdrawConfig:{},
+				address:''
 			};
 		},
 		mounted(){
@@ -131,8 +135,33 @@
 			},
 			chooseRadio(index) {
 				this.radioIndex = index;
+				if(this.radioIndex==0){
+					if(this.withdrawConfig.trc20_address){
+						this.address = this.withdrawConfig.trc20_address;
+					}
+				}else{
+					if(this.withdrawConfig.bep20_address){
+						this.address = this.withdrawConfig.bep20_address;
+					}
+				}
 			},
 			openPopUpHandle() {
+				if(this.radioIndex==0){
+					if(!this.withdrawConfig.trc20_address){
+						this.$refs.withdrawalPopupRef.open({
+							title:'Message',
+							content:'Please set the address',
+							cancelText:'Cancel',
+							confirmText:'Ok'
+						})
+						return
+					}
+				}else{
+					if(!this.withdrawConfig.bep20_address){
+					this.$refs.withdrawalPopupRef.open()
+						return
+					}
+				}
 				this.$refs.popup.open()
 			},
 			async getWithdrawalConfig(){
@@ -140,6 +169,15 @@
 				console.log(res)
 				if(res.data.code==200){
 					this.withdrawConfig = res.data.data;
+					if(this.radioIndex==0){
+						if(this.withdrawConfig.trc20_address){
+							this.address = this.withdrawConfig.trc20_address;
+						}
+					}else{
+						if(this.withdrawConfig.bep20_address){
+							this.address = this.withdrawConfig.bep20_address;
+						}
+					}
 				}
 			},
 			async getRechargeConfig(){
@@ -176,6 +214,9 @@
 		// background-color: #040405;
 		// background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
 		// background: #201f29 url('../../static/login_bk.png') no-repeat 100% 100%;
+	}
+	/deeep/.uni-modal{
+		background-color: red;
 	}
 
 	.recharge {

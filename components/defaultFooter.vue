@@ -22,10 +22,12 @@
 				</view>
 			</view>
 		</view>
+		<FastJoin ref="fastJoin" />
 	</view>
 </template>
 
 <script>
+	import FastJoin from '@/pages/index/components/fastJoin.vue';
 	import {
 		$request,
 		$totast,
@@ -33,9 +35,13 @@
 	} from "@/utils/request";
 	export default {
 		name: "defaultFooter",
+		components:{FastJoin},
 		props:{
 			fiexed:{
 				default:true
+			},
+			index:{
+				default:false
 			}
 		},
 		data() {
@@ -80,6 +86,10 @@
 				}
 			},
 			async gogo(){
+				if(!this.index){
+					this.$refs.fastJoin.open()
+					return
+				}
 				let res = await $request('joinSystem', {
 					room_id: this.swiperData[0].id
 				});
@@ -128,7 +138,11 @@
 		height: 105rpx;
 		margin: 0rpx auto;
 		border-radius: 61rpx 61rpx 61rpx 61rpx;
-		background: rgba(255, 255, 255, 0.1);
+		// background: rgba(255, 255, 255, 0.1);
+		background-color: hsl(0deg, 1%, 14%/96%);
+		border: 1px solid #353535;
+		box-shadow: inset 0px 5rpx 5rpx #9b9b9b5c, -2rpx -4rpx 11rpx #656464;
+		// box-shadow: inset 0 5px 5px #9b9b9b5c, -2px -4px 11px #656464;
 		opacity: 1;
 		display: flex;
 		flex-direction: column;

@@ -21,15 +21,15 @@
 			</view>
 			<view class="button">
 				<view class="item" @click="goUrl('/pages/me/recharge')">
-					<image src="../../static/logo.png" mode="widthFix"></image>
+					<image src="../../static/me_icon33.png" mode="widthFix"></image>
 					<text>Recharge</text>
 				</view>
 				<view class="item" @click="goUrl('/pages/me/withdrawal')">
-					<image src="../../static/logo.png" mode="widthFix"></image>
+					<image src="../../static/me_icon44.png" mode="widthFix"></image>
 					<text>Withdraw</text>
 				</view>
 				<view class="item" @click="goUrl('/pages/me/bill')">
-					<image src="../../static/logo.png" mode="widthFix"></image>
+					<image src="../../static/me_icon55.png" mode="widthFix"></image>
 					<text>Billing</text>
 				</view>
 			</view>
@@ -173,7 +173,7 @@
 		// background-color: #040405;
 		// background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
 		// background: #201f29 url('../../static/ku.png') no-repeat 100% 100%;
-		background:#000000 url('../../static/ku.png') no-repeat top left;
+		background:#000000 url('../../static/ku.png') no-repeat 100% 100%/cover;
 		background-size: 105% auto;
 	}
 	.me{

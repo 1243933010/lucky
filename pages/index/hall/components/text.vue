@@ -1,10 +1,10 @@
 <template>
 	<view>
 		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="bottom">
-			<view class="" style="background: #000000;padding-bottom: 20rpx;">
+			<view class="" style="padding-bottom: 20rpx;">
 				<view class="popup-content">
 					<view class="close" @click="$refs.popup.close()">
-						<image src="@/static/close.png" mode="widthFix"></image>
+						<image src="../../../../static/white_close.png" mode="widthFix"></image>
 					</view>
 					<view class="form">
 						<view class="rich">
@@ -126,7 +126,15 @@
 			position: absolute;
 			left: 50%;
 			top: -90rpx;
-
+			transform: translate(-50%,0rpx);
+			width: 60rpx;
+			height: 60rpx;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			// background-color: #FFFFFF;
+			background: rgba(255, 255, 255, 0.4);
+			border-radius: 50%;
 			image {
 				width: 43rpx;
 			}
@@ -138,16 +146,16 @@
 			overflow-y: auto;
 			margin: 0 auto;
 			box-sizing: border-box;
-			padding-left: 40rpx;
-			padding-right: 40rpx;
+			// padding-left: 40rpx;
+			// padding-right: 40rpx;
 			// padding-bottom: rpx;
 			padding-top: 40rpx;
-			
+			background-color: #000;
 			border: 1px solid #01A802;
 			border-radius: 20rpx;
 			.rich {
-				width: 100%;
-
+				width: 95%;
+				margin: 0 auto;
 				.box {
 					color: white;
 					color: #999999;

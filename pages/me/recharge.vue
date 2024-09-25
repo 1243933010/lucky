@@ -132,7 +132,7 @@
 
 	page {
 		height: 100%;
-		// background-color: #1e1c26;
+		// background-color: #000;
 		// background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
 		// background: #201f29 url('../../static/login_bk.png') no-repeat 100% 100%;
 	}
@@ -211,6 +211,7 @@ background: #201f29 url('../../static/bk_icon2.png')  no-repeat center center / 
 				.title {
 					font-size: 42rpx;
 					color: white;
+					font-weight: 600;
 				}
 
 				.icon {

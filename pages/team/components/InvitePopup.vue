@@ -3,9 +3,9 @@
 		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="center">
 			<view class="popup-content">
 				<view class="close" @click="$refs.popup.close()">
-					<image src="../../../static/close.png" mode="widthFix"></image>
+					<image :src="userInfo.avatar?filesUrl1+userInfo.avatar:'../../../static/close.png'" mode="widthFix"></image>
 				</view>
-				<view class="copy" >
+				<view class="copy"  @click="copy">
 					<image src="../../../static/copy_icon.png" mode="widthFix"></image>
 				    <text>Copy Link</text>
 				</view>
@@ -26,7 +26,7 @@
 
 <script>
 	import {
-		$request,$totast
+		$request,$totast,filesUrl
 	} from "@/utils/request";
 	export default {
 		name: "defaultPopup",
@@ -41,6 +41,11 @@
 		mounted(){
 			this.inviteLink();
 		},
+		computed: {
+			filesUrl1() {
+				return filesUrl
+			}
+		},
 		methods: {
 			open(options = {type: 'center'}) {
 				this.type = options.type;
@@ -51,6 +56,7 @@
 				console.log(res)
 				if(res.data.code==200){
 					this.userInfo = res.data.data;
+					// console.log(this.userInfo)
 				}
 			},
 			async submitBtn(){
@@ -61,7 +67,18 @@
 					this.$refs.popup.close()
 					this.$emit('updateData')
 				}
-			}
+			},
+			copy(){
+				uni.setClipboardData({
+					data:this.userInfo.invite_code,
+					success:(res)=>{
+						uni.showToast({
+							icon:'none',
+							title:'Copy Success'
+						})
+					}
+				})
+			},
 		}
 	}
 </script>

@@ -107,6 +107,8 @@
 		}
 		.list{
 			width: 100%;
+			max-height: 650rpx;
+			overflow-y: auto;
 			.item{
 				width: 613rpx;
 				height: 105rpx;

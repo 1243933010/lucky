@@ -1,13 +1,27 @@
 <template>
 	<view class="page-container" id="pageId">
-		<view class="page-header">
+		<view class="page-header"
+		 style="z-index: 10;width:100%;position: fixed;top: 0;left: 0rpx;background-color: black;padding-left: 23rpx;box-sizing: border-box;padding-bottom: 50rpx;padding-right: 23rpx;">
 			<view class="logo1" @click="goUrl('/pages/me/recharge')">
 				<image src="../../static/me_icon.png" mode="widthFix"></image>
 				<text>{{teamInfoData.balance*1}}</text>
 				<view class="image">
 					<text>+</text>
 				</view>
-				<!-- <image class="img" src="../../static/logo.png" mode="widthFix"></image> -->
+				
+			</view>
+			<view class="setting" @click="openDialog">
+				<view class=""></view>
+				<view class=""></view>
+			</view>
+		</view>
+		<view class="page-header" style="opacity: 0;">
+			<view class="logo1" @click="goUrl('/pages/me/recharge')">
+				<image src="../../static/me_icon.png" mode="widthFix"></image>
+				<text>{{teamInfoData.balance*1}}</text>
+				<view class="image">
+					<text>+</text>
+				</view>
 			</view>
 			<view class="setting" @click="openDialog">
 				<view class=""></view>
@@ -34,24 +48,24 @@
 				<view class="team">
 					<view class="posi">
 						<view class="box">
-							<view class="item" v-if="teamInfoData.today_invite_list&&teamInfoData.today_invite_list[0]">
+							<view class="item">
 								<view class="add">
-									<image v-if="teamInfoData.today_invite_list[0]"
+									<image v-if="teamInfoData.today_invite_list&&teamInfoData.today_invite_list[0]"
 										:src="teamInfoData.today_invite_list[0].avatar" mode="widthFix"></image>
-									<image v-if="!teamInfoData.today_invite_list[0]" src="../../static/add.png"
+									<image @click="invitation" v-if="!teamInfoData.today_invite_list[0]" src="../../static/add.png"
 										mode="widthFix"></image>
 								
 								</view>
 								<view class="name" >
 									<text v-if="teamInfoData.today_invite_list[0]">{{teamInfoData.today_invite_list[0].nickname}}</text>
-								    <!-- <text>11111112121212</text> -->
+								  
 								</view>
 							</view>
-							<view class="item" v-if="teamInfoData.today_invite_list&&teamInfoData.today_invite_list[1]">
+							<view class="item" >
 							<view class="add">
 								<image v-if="teamInfoData.today_invite_list[1]"
 									:src="teamInfoData.today_invite_list[1].avatar" mode="widthFix"></image>
-								<image v-if="!teamInfoData.today_invite_list[1]" src="../../static/add.png"
+								<image @click="invitation"  v-if="!teamInfoData.today_invite_list[1]" src="../../static/add.png"
 									mode="widthFix"></image>
 							</view>
 							<view class="name" >
@@ -59,11 +73,11 @@
 							    <!-- <text>11111112121212</text> -->
 							</view>
 							</view>
-							<view class="item" v-if="teamInfoData.today_invite_list&&teamInfoData.today_invite_list[2]">
+							<view class="item">
 							<view class="add">
 								<image v-if="teamInfoData.today_invite_list[2]"
 									:src="teamInfoData.today_invite_list[2].avatar" mode="widthFix"></image>
-								<image v-if="!teamInfoData.today_invite_list[2]" src="../../static/add.png"
+								<image @click="invitation"  v-if="!teamInfoData.today_invite_list[2]" src="../../static/add.png"
 									mode="widthFix"></image>
 							</view>
 							<view class="name" >
@@ -71,11 +85,11 @@
 							    <!-- <text>11111112121212</text> -->
 							</view>
 							</view>
-							<view class="item" v-if="teamInfoData.today_invite_list&&teamInfoData.today_invite_list[3]">
+							<view class="item">
 							<view class="add">
 								<image v-if="teamInfoData.today_invite_list[3]"
 									:src="teamInfoData.today_invite_list[3].avatar" mode="widthFix"></image>
-								<image v-if="!teamInfoData.today_invite_list[3]" src="../../static/add.png"
+								<image @click="invitation"  v-if="!teamInfoData.today_invite_list[3]" src="../../static/add.png"
 									mode="widthFix"></image>
 							</view>
 							<view class="name" >
@@ -130,7 +144,7 @@
 			</view>
 			<view class="bk">
 				<image class="peo" src="../../static/peo1.png" mode="widthFix"></image>
-				<view class="po"></view>
+				<!-- <view class="po"></view> -->
 			</view>
 		</view>
 		<view class="tab">
@@ -217,7 +231,7 @@
 						</view>
 					</view>
 					<view class="bottom">
-						<text>It has fallen today <span style="color: #2cd7b5;">03</span>times</text>
+						<text>It has fallen today <span style="color: #2cd7b5;">{{indexInfo.today_drop_count}}</span>times</text>
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
 					</view>
 				</view>
@@ -264,6 +278,10 @@
 				</view>
 			</view>
 		</view>
+		<view class="hr1">
+			<image src="../../static/me_icon1.png" mode="widthFix"></image>
+			<text>Notice：NoticeNoticeNoticeNoticeNoticeNoticeNoticsdsdsdsdsdssdsdsdd</text>
+		</view>
 		<!-- <view class="foot">
 			<view class="logo">
 				<text>LOGO</text>
@@ -283,16 +301,17 @@
 		  <!-- v-if="pageScroll<pageScrollBottom" -->
 	<view style="position: fixed;width: 100%;bottom: 0;"  v-if="pageScrollBool">
 		<view style="padding: 9rpx 0 35rpx 0;">
-			<DefaultFooter :fiexed="false"  @share="$refs.invitePopup.open()"  />
+			<DefaultFooter  :index="true"  :fiexed="false"  @share="$refs.invitePopup.open()"  />
 		</view>
 	</view>
 	<view style="padding: 9rpx 0 35rpx 0;">
-		<DefaultFooter :fiexed="false" @share="$refs.invitePopup.open()" />
+		<DefaultFooter  :index="true"  :fiexed="false" @share="$refs.invitePopup.open()" />
 	</view>
-		<FastJoin ref="fastJoin" />
+		<FastJoin ref="fastJoin"/>
 		<TabPopup ref="tabPopup" />
 		<InvitePopup ref="invitePopup"/>
 		<!-- <FriendJoin ref="friendJoin" /> -->
+		<DefaultPopup ref="defaultPopup"></DefaultPopup>
 	</view>
 </template>
 
@@ -307,13 +326,15 @@
 	import TabPopup from '../../components/tabPopup.vue';
 	import DefaultFooter from '../../components/defaultFooter.vue';
 	import InvitePopup from '@/pages/team/components/InvitePopup.vue';
+	import DefaultPopup from './components/defaultPopup.vue';
 	export default {
 		components: {
 			FastJoin,
 			FriendJoin,
 			TabPopup,
 			DefaultFooter,
-			InvitePopup
+			InvitePopup,
+			DefaultPopup
 		},
 		data() {
 			return {
@@ -340,7 +361,8 @@
 				amountList: [],
 				amountIndex: 0,
 				pageScroll: 0,
-				pageScrollBool:true
+				pageScrollBool:true,
+				onLoadParams:{}
 
 				// roomList:[]
 			}
@@ -350,7 +372,24 @@
 				return filesUrl
 			}
 		},
-		onLoad() {
+		onLoad(e) {
+			this.onLoadParams = e;
+			let {
+				invite_code,
+				room_code
+			} = this.onLoadParams;
+			if(room_code){
+				setTimeout(()=>{
+					console.log(this.$refs)
+					this.$refs.defaultPopup.open({
+						title:'Message',
+						content:'Confirm join room?',
+						cancelText:'Cancel',
+						confirmText:'Ok',
+						room_code
+					})
+				},1000)
+			}
 			// this.faqList.forEach((val, ind) => {
 			// 	val.color = this.colorList[Math.min(10, this.getRandomInt(1, 10))]
 			// })
@@ -375,6 +414,9 @@
 			this.pageScroll = e.scrollTop;
 		},
 		methods: {
+			invitation(){
+				this.$refs.invitePopup.open()
+			},
 			async defaultClick(){
 				let res = await $request('joinSystem', {
 					room_id: this.indexInfo.room_id_10u
@@ -443,7 +485,7 @@
 			},
 			async teamInfo() {
 				let res = await $request('teamInfo', {});
-				console.log(res)
+				// console.log(res)
 				if (res.data.code == 200) {
 					this.teamInfoData = res.data.data;
 				}
@@ -517,7 +559,7 @@
 		    // 每隔 2 秒执行一次
 		    this.toggleInterval = setInterval(() => {
 		        // 计算要切换状态的元素个数（至少1，最多3个）
-		        const count = this.getRandomInt(1, Math.min(3, this.faqListCopy.length));
+		        const count = this.getRandomInt(1, Math.min(2, this.faqListCopy.length));
 		        // 随机获取要切换的元素
 		        const itemsToToggle = this.getRandomElements(this.faqListCopy, count);
 		// console.log(itemsToToggle)
@@ -594,7 +636,7 @@
 	}
 
 	.page-container {
-		background: linear-gradient(141deg, #292734 0%, #000000 100%);
+		background: linear-gradient(141deg, #1b1a1c 0%, #000  100%);
 	}
 
 	/* 轮播图 */
@@ -812,7 +854,8 @@
 			padding-bottom: 8rpx;
 
 			.people {
-				background: gainsboro;
+				// background: gainsboro;
+				background:  url('../../static/index_bk5.png') no-repeat 50% 100%/cover;
 				border-radius: 45rpx;
 				height: 104rpx;
 				.flex-space-between;
@@ -986,16 +1029,13 @@
 		display: flex;
 		justify-self: flex-start;
 		margin-bottom: 59rpx;
-
 		.label {
 			display: flex;
 			flex-direction: column;
-
 			.text {
 				display: flex;
 				flex-direction: column;
 				margin-bottom: 30rpx;
-
 				.text1 {
 					font-size: 62rpx;
 					font-weight: 600;
@@ -1025,8 +1065,8 @@
 
 			.peo {
 				padding-top: 10rpx;
-				width: 206rpx;
-				height: 248rpx;
+				width: 324rpx;
+				// height: 248rpx;
 				z-index: 10;
 			}
 
@@ -1315,7 +1355,8 @@
 			display: flex;
 			flex-direction: row;
 			flex-wrap: wrap;
-			min-height: 150rpx;
+			height: 200rpx;
+			overflow-y: auto;
 			.item {
 				background: #1D1B26;
 				// background: red;
@@ -1340,6 +1381,28 @@
 				visibility: hidden;
 				position: absolute;
 			}
+		}
+	}
+	.hr1{
+		width: calc(100% - 42rpx);
+		margin: 0 auto;
+		background: rgba(0, 0, 0, .35);
+		padding: 10rpx 0 10rpx 10rpx;
+		border-radius: 5rpx;
+		.flex-direction;
+		
+		image{
+			width: 22rpx;
+			margin-right: 15rpx;
+		}
+		text{
+			width: 600rpx;
+			color: #D8D8D8;
+			font-size: 21rpx;
+			line-height: 2;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
 		}
 	}
 

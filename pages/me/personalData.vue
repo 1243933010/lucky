@@ -2,7 +2,7 @@
 	<view class="page-container">
 		<DefaultHeader />
 		<view class="logo">
-			<image @click="changeImg" :src="userInfo.avatar?filesUrl1+userInfo.avatar:'../../static/logo.png'" mode="widthFix"></image>
+			<image @click="changeImg" :src="userInfo.avatar?filesUrl1+userInfo.avatar:'../../static/default_user.png'" mode="widthFix"></image>
 		</view>
 		<view class="form">
 			<view class="form-item" @click="setUser">
@@ -47,7 +47,7 @@
 					</view>
 				</view>
 			</view>
-			<view class="form-item"  @click="helpFnc">
+			<view class="form-item"  @click="helpFnc1">
 				<view class="label" >
 					<text>Email</text>
 					<image src="../../static/help.png" mode="widthFix"></image>
@@ -135,7 +135,7 @@
 				return filesUrl
 			}
 		},
-		onLoad() {
+		onLoad(e) {
 			let sysInfo = uni.getSystemInfo({
 				success:(res)=>{
 					console.log(res.screenHeight)
@@ -143,13 +143,24 @@
 				}
 			})
 			this.getUser();
+			if(e&&e.type=='trc20_address'){
+				this.$nextTick(()=>{
+					this.$refs.rechargePopup.open(1);
+				})
+			}
+			if(e&&e.type=='bep20_address'){
+				this.$nextTick(()=>{
+				this.$refs.rechargePopup.open(2);
+				})
+			}
 			// this.sysInfo = sysInfo.screenHeight;
 			// console.log(sysInfo.screenHeight)
 		},
 		methods:{
-			helpFnc(){
-				// console.log('11122',uni.showToast)
+			helpFnc1(){
+				console.log('11122',uni.showToast)
 				// uni.showLoading()
+				// this.$refs.rechargePopup.open();
 				// uni.showToast({
 				// 	icon:'none',
 				// 	title:'1111'
@@ -194,11 +205,11 @@
 <style lang="less" scoped>
 	page {
 		height: 100%;
-		background-color: #121613;
+		// background-color: #000;
 		// background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
 		// background: #121613 url('../../static/login_bk.png') no-repeat 100% 100%;
 		position: relative;
-		z-index: 1000;
+		z-index: 10;
 	}
 
 	text {
@@ -211,7 +222,7 @@
 		height: 100%;
 		// background-color: red;
 		padding-bottom: 40rpx;
-
+		// background-color: #000;
 
 		.logo {
 			width: 175rpx;
@@ -260,14 +271,14 @@
 
 				.input {
 					width: calc(100% - 45.77rpx);
-					height: 91rpx;
+					height: 78rpx;
 					border: 1px solid #999999;
 					background-color: #111111;
 					border-radius: 20rpx;
 					display: flex;
 					justify-content: center;
 					align-items: center;
-					padding-left: 32rpx;
+					padding-left: 20rpx;
 					
 					.box {
 						width: 100%;
