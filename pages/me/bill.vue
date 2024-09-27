@@ -38,7 +38,7 @@
 						</view>
 						<view class="label">
 							<view class="name">
-								<text>{{item.change_object}}</text>
+								<text>{{item.change_desc}}</text>
 							</view>
 							<view class="time">
 								<text>{{item.add_time}}</text>
@@ -145,8 +145,8 @@
 				line-height: 1;
 			}
 			.logo{
-				width: 61rpx;
-				height: 61rpx;
+				width: 63rpx;
+				height: 63rpx;
 				background: #222222;
 				box-shadow: 2rpx -2rpx 5rpx 0rpx rgba(255,255,255,0.3);
 				border-radius: 50%;

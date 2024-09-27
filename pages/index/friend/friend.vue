@@ -101,7 +101,7 @@
 				</view>
 			</view>
 
-			<view class="portrait" style="padding-bottom: 300rpx;">
+			<view class="portrait" >
 				<view class="box" v-if="roomInfo.joined_users&&roomInfo.joined_users.length">
 					<view :style="{'top':item.top+'px','z-index':index+2,'left':item.left+'px'}" class="item" v-for="(item,index) in testList" :key="index">
 						<image :src="item.url?filesUrl1+item.url:'../../../static/default_user.png'" mode="aspectFit"></image>
@@ -205,7 +205,8 @@
 				type:'',
 				room_code:'',
 				intervalIdTwo:null,
-				testList:[]
+				testList:[],
+				randomIndex:4
 			};
 		},
 		computed: {
@@ -555,20 +556,27 @@
 				// console.log(res)
 				if (res.data.code == 200) {
 					this.roomInfo = res.data.data;
-					let list = [];
-					 this.roomInfo.joined_users.forEach((val)=>{
-						 list.push({url:val})
-					 })
-					list.forEach(avatar => {
-						// 随机生成位置偏移量
-						const offsetX =Math.floor(Math.random() * 275);
-						const offsetY = Math.floor(Math.random() * 35);
-						// 应用偏移量
-						
-						avatar.left = `${offsetX}`;
-						avatar.top = `${offsetY}`;
-					});
-					this.testList = list;
+					this.randomIndex++
+					if(this.randomIndex==5){
+						let list = [];
+						 this.roomInfo.joined_users.forEach((val)=>{
+							 list.push({url:val})
+						 })
+						list.forEach(avatar => {
+							// 随机生成位置偏移量
+							const offsetX =Math.floor((Math.random()+0.2) * 285);
+							const offsetY = Math.floor(Math.random() * 35);
+							// 应用偏移量
+							
+							avatar.left = `${offsetX}`;
+							avatar.top = `${offsetY}`;
+						});
+						this.testList = list;
+						this.randomIndex=0
+					}
+					
+					
+					
 					return
 				}
 				$totast(res.data.message)
@@ -579,10 +587,10 @@
 				});
 				// console.log(res)
 				if (res.data.code == 200) {
-					// if(this.testNum===25){
-					// 	this.testNum = -5;
-					// }
-					// res.data.data.status = this.testNum+=5
+					if(this.testNum===25){
+						this.testNum = -5;
+					}
+					res.data.data.status = this.testNum+=5
 					this.roomStatus = res.data.data;
 					this.listenNum(res.data.data)
 					if (this.roomStatus.status == 0) {
@@ -613,11 +621,11 @@
 							return
 						}
 						uni.hideLoading()
-						let end = new Date(this.roomStatus.lock_start_time).getTime();
-						let start = new Date(this.roomStatus.countdown_start_time).getTime();
-						let time = end / 1000 - start / 1000;
+						// let end = new Date(this.roomStatus.lock_start_time).getTime();
+						// let start = new Date(this.roomStatus.countdown_start_time).getTime();
+						// let time = end / 1000 - start / 1000;
 						// console.log(end,start,time)
-						this.startCountdown(time)
+						this.startCountdown(3)
 					} else {
 						this.clearCountdown()
 						if(this.autoBool){
@@ -924,17 +932,25 @@
 		.portrait {
 			width: 100%;
 			overflow: hidden;
-			position: relative;
+			// position: relative;
+			position: absolute;
+			bottom: 300rpx;
+			left: 0;
+			// z-index: 0;
 			.box {
 				width: 100%;
+				position: relative;
 				height: 181rpx;
+				// z-index: 100;
 				.item{
 					width: 81rpx;
 					height: 81rpx;
 					 position: absolute;
+					 // z-index: 100;
 					 transition: transform 0.2s;
 					image{
 						width: 100%;
+						height: 100%;
 						border-radius: 50%;
 					}
 				}

@@ -344,7 +344,7 @@
 
 			},
 			Transfer() {
-				this.$refs.transfer.open()
+				this.$refs.transfer.open(this.commissionInfo.commission)
 			},
 			openOrder() {
 				this.$refs.orderPopup.open()

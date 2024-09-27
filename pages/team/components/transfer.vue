@@ -13,7 +13,7 @@
 						<input v-model="formData.amount" type="text" placeholder="Input Transfer Amount ">
 					</view>
 					<view class="text-item">
-						<text>Transferable amount：20000USDT</text>
+						<text>Transferable amount：{{mount}}USDT</text>
 					</view>
 					<!-- <view class="form-item">
 						<input type="text" placeholder="名字">
@@ -49,11 +49,12 @@
 				formData:{
 					amount:''
 				},
+				mount:''
 			};
 		},
 		methods: {
-			open(options = {type: 'center'}) {
-				this.type = options.type;
+			open(mount) {
+				this.mount = mount;
 				this.$refs.popup.open()
 			},
 			

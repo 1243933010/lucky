@@ -54,8 +54,8 @@
 					</view>
 				</view>
 			</view>
-			<view class="submit-btn" @click="submitBtn">
-				<view class="">
+			<view class="submit-btn">
+				<view class=""  @click="submitBtn">
 					<text>Register</text>
 				</view>
 			</view>
