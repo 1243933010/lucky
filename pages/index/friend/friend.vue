@@ -5,7 +5,7 @@
 				<view class="user-left">
 					<view class="logo">
 						<image @click="changeImg"
-							:src="logoUrlr?logoUrl:'../../../static/default_user.png'" mode="widthFix">
+							:src="logoUrl?logoUrl:'../../../static/default_user.png'" mode="widthFix">
 						</image>
 					</view>
 					<view class="msg">

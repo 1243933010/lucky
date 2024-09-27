@@ -7,7 +7,7 @@
 				<view class="user">
 					<view class="user-left">
 						<view class="logo">
-							<image @click="changeImg" :src="logoUrlr?logoUrl:'../../../static/default_user.png'"
+							<image @click="changeImg" :src="logoUrl?logoUrl:'../../../static/default_user.png'"
 								mode="widthFix">
 							</image>
 						</view>
@@ -56,7 +56,7 @@
 							@change="switchSystemRoom1" :indicator-dots="false" :autoplay="false">
 							<swiper-item v-for="(item,index) in amountList" :key="index">
 								<view class="box" v-if="amountIndex1===index"
-									:style="{'left':(377-amountIndex1*135)+'rpx'}">
+									:style="{'left':(320-(amountIndex1+1)*135)+'rpx'}">
 									<!-- :class="index==uActive?'uActive':''" -->
 									<view class="item" @click="radioChoose(item,index)"
 										v-for="(item,index) in amountList" :key="index">
