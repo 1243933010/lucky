@@ -11,11 +11,17 @@
 						<image src="../../static/order.png" mode="widthFix"></image>
 					</view> -->
 					<view class="time">
-						<view class="box"><text>11</text></view>
+						<!-- <view class="box"><text>11</text></view>
 						<view class="fu"><text>:</text></view>
 						<view class="box"><text>11</text></view>
 						<view class="fu"><text>:</text></view>
-						<view class="box"><text>11</text></view>
+						<view class="box"><text>11</text></view> -->
+						<view class="con">
+							<view class="item" :class="countdownText[index]==':'?'active':''"
+								v-for="(item,index) in countdownText.length">
+								<text>{{countdownText[index]}}</text>
+							</view>
+						</view>
 					</view>
 				</view>
 				<view class="content">
@@ -68,11 +74,11 @@
 							</view>
 						</view>
 					</view>
-					<view class="recharge-submit">
+					<!-- <view class="recharge-submit">
 						<view class="con" @click="payment">
 							<text>Payment Completed</text>
 						</view>
-					</view>
+					</view> -->
 					<view class="footer-text">
 						<text>choose your cryptocurrency: Please scan the QR codsor copy the details to your wallet or exchange tocomplete the payment.</text>
 					</view>
@@ -109,19 +115,31 @@
 				formData: {
 					num: ''
 				},
-				options: {
-					value: '',
-					foregroundImageSrc: logo
-				},
+				
 				rechargeConfig:{},
 				polling:false,
-				id:''
+				id:'',
+				countdownText: '', // 用于显示格式化后的倒计时
+				intervalId:null,
+				firstReqBool:false
 			};
 		},
 		mounted() {
 			let that = this;
 			that.showQrcode(); //一加载生成二维码
 			this.startPolling()
+		},
+		computed:{
+			logoUrl(){
+				console.log(getApp().globalData)
+				return getApp().globalData.indexConfig.system_logo
+			},
+			options(){
+				return {
+					value: '',
+					foregroundImageSrc: getApp().globalData.indexConfig.system_logo
+				}
+			}
 		},
 		onLoad(e) {
 			// e.id = 1;
@@ -130,11 +148,70 @@
 			}
 			this.id = e.id;
 			this.getOrderDetail(e.id);
+			this.startCountdown(e.id)
 		},
 		destroyed(){
 			this.polling = false
 		},
 		methods: {
+			async startCountdown(id) {
+				let res = await $request('rechargeDetail',{id});
+				console.log(res)
+				
+				if(res.data.code==200){
+					if(res.data.data.status==0){
+						// startCountdown
+						let endTime = new Date(res.data.data.expired_at).getTime()
+						let startTime = new Date(res.data.data.created_at).getTime()
+						let time = endTime - startTime;
+						// console.log(endTime,startTime)
+						// if()
+						// this.clearCountdown();
+						// this.startCountdown(endTime-startTime)
+						if(this.intervalId){
+							return
+						}
+						// 每秒更新一次倒计时
+						this.intervalId = setInterval(() => {
+							time -= 1000;
+									
+							// 更新倒计时显示
+							this.countdownText = this.formatCountdown(time);
+									
+							// 当倒计时为零或小于零时，清除定时器
+							if (time <= 0) {
+								this.clearCountdown();
+								this.countdownText = "";
+							}
+						}, 1000);
+									
+						// 初始化时马上更新一次倒计时显示
+						this.countdownText = this.formatCountdown(time);
+					}
+				}
+				
+				
+			},
+			formatCountdown(ms) {
+				let totalSeconds = Math.floor(ms / 1000);
+			
+				const hours = Math.floor(totalSeconds / 3600);
+				totalSeconds %= 3600;
+				const minutes = Math.floor(totalSeconds / 60);
+				const seconds = totalSeconds % 60;
+			
+				const formattedHours = hours < 10 ? `0${hours}` : hours;
+				const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+				const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+			
+				return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+			},
+			clearCountdown() {
+				if (this.intervalId) {
+					clearInterval(this.intervalId);
+					this.intervalId = null;
+				}
+			},
 			async startPolling() {
 				// 启动轮询，每隔 1 秒调用一次
 				this.polling = true;
@@ -161,9 +238,22 @@
 			async getOrderDetail(id){
 				let res = await $request('rechargeDetail',{id});
 				console.log(res)
+				
 				if(res.data.code==200){
 					this.rechargeConfig = res.data.data;
 					this.options.value = res.data.data.address;
+					if(res.data.data.status==0){
+						// startCountdown
+						// let endTime = new Date(res.data.data.expired_at).getTime()
+						// let startTime = new Date(res.data.data.created_at).getTime()
+						// // console.log(endTime,startTime)
+						// // if()
+						// this.clearCountdown();
+						// this.startCountdown(endTime-startTime)
+						// setTimeout(()=>{
+						// 	this.firstReqBool = true;
+						// },100)
+					}
 					if(res.data.data.status==-2){
 						$totast('cancel')
 						return
@@ -247,25 +337,47 @@
 
 				.time {
 					.flex-direction;
-
-					.box {
-						width: 35rpx;
-						height: 35rpx;
-						background: linear-gradient(146deg, rgba(68, 68, 68, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%);
-						box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84, 84, 84, 0.2118);
-						border-radius: 4rpx 4rpx 4rpx 4rpx;
-						border: 1rpx solid #666666;
+					.con {
 						.flex-center;
-						color: #FFFFFF;
-						font-size: 24rpx;
-						margin-right: 7rpx;
+					
+						.item {
+							width: 35rpx;
+							height: 35rpx;
+							background: linear-gradient(146deg, rgba(68, 68, 68, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%);
+							box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84, 84, 84, 0.2118);
+							border-radius: 4rpx 4rpx 4rpx 4rpx;
+							border: 1rpx solid #666666;
+							.flex-center;
+							color: #FFFFFF;
+							font-size: 24rpx;
+							margin-right: 7rpx;
+						}
+					
+						.active {
+							width: 10rpx;
+							height: 35rpx;
+							background: none;
+							border: none;
+						}
 					}
+					// .box {
+					// 	width: 35rpx;
+					// 	height: 35rpx;
+					// 	background: linear-gradient(146deg, rgba(68, 68, 68, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%);
+					// 	box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84, 84, 84, 0.2118);
+					// 	border-radius: 4rpx 4rpx 4rpx 4rpx;
+					// 	border: 1rpx solid #666666;
+					// 	.flex-center;
+					// 	color: #FFFFFF;
+					// 	font-size: 24rpx;
+					// 	margin-right: 7rpx;
+					// }
 
-					.fu {
-						color: #FFFFFF;
-						font-size: 24rpx;
-						margin-right: 7rpx;
-					}
+					// .fu {
+					// 	color: #FFFFFF;
+					// 	font-size: 24rpx;
+					// 	margin-right: 7rpx;
+					// }
 				}
 			}
 
@@ -331,6 +443,7 @@
 							border-left: 1px solid #663737;
 							border-top: 1px solid #663737;
 							transform: rotate(45deg);
+							background-color: black;
 						}
 					}
 				}

@@ -16,7 +16,7 @@
 						<input type="text" v-model="formData.pay_password" placeholder="Transaction Password">
 					</view>
 					<view class="form-item">
-						<input type="text" v-model="formData.pay_password_confirmation"  placeholder="确认交易密码">
+						<input type="text" v-model="formData.pay_password_confirmation"  placeholder="Confirm Transaction Password">
 					</view>
 					<view class="send">
 						<input  v-model="formData.email_code"  type="text" placeholder="Email Verification Code">
@@ -158,6 +158,7 @@
 				flex-direction: row;
 				align-items: center;
 				input{
+					width: 100%;
 					color: #999999;
 					font-size: 24rpx;
 				}

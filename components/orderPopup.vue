@@ -13,7 +13,7 @@
 						<view class="item" v-for="(item,index) in list" :key="index">
 							<view class="left">
 								<view class="title">
-									<text>{{item.status_text}}</text>
+									<text>{{item.type}}</text>
 								</view>
 								<view class="time">
 									<text>{{item.create_time}}</text>
@@ -23,7 +23,7 @@
 								<text>{{item.amount}}</text>
 							</view>
 							<view class="status">
-								<text>success</text>
+								<text>{{item.status_text}}</text>
 							</view>
 						</view>
 					</view>
@@ -144,9 +144,12 @@
 				.right{
 					color: #FFFFFF;
 					font-size: 35rpx;
+					padding-top: 10rpx;
 				}
 				.status{
-					width: 105rpx;
+					// width: 105rpx;
+					box-sizing: border-box;
+					padding: 0 10rpx;
 					height: 32rpx;
 					background: linear-gradient( 136deg, rgba(21,191,253,0.7) 0%, rgba(156,55,253,0.7) 100%);
 					border-radius: 2rpx 18rpx 2rpx 18rpx;

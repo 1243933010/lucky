@@ -10,7 +10,8 @@
 				</view>
 				<view class="link">
 					<view class="label">
-						<image class="image" :src="userInfo.avatar?filesUrl1+userInfo.avatar:'../static/default_user.png'" mode="widthFix"></image>
+						<image v-if="userInfo.avatar" class="image" :src="filesUrl1+userInfo.avatar" mode="widthFix"></image>
+						<image v-if="!userInfo.avatar" class="image" src="../static/default_user.png" mode="widthFix"></image>
 						<view class="text">
 							<view class="name">
 								<text>{{userInfo.nickname}}</text>
@@ -46,22 +47,22 @@
 					</view>
 					<view class="icon">
 						<view class="box">
-							<view class="item" @click="outLink('1')">
+							<view class="item" @click="outLink(indexInfo.system_facebook)">
 								<image src="../static/icon_1.png" mode="widthFix"></image>
 								<text>Facebook</text>
 							</view>
 							<view class="tt">/</view>
-							<view class="item" @click="outLink('2')">
+							<view class="item" @click="outLink(indexInfo.system_twitter)">
 								<image src="../static/icon_2.png" mode="widthFix"></image>
 								<text>Twitter </text>
 							</view>
 							<view class="tt">/</view>
-							<view class="item" @click="outLink('3')">
+							<view class="item" @click="outLink(indexInfo.system_telegram)">
 								<image src="../static/icon_3.png" mode="widthFix"></image>
 								<text> Tele. </text>
 							</view>
 							<view class="tt">/</view>
-							<view class="item" @click="outLink('4')">
+							<view class="item" @click="outLink(indexInfo.system_discord)">
 								<image src="../static/icon_4.png" mode="widthFix"></image>
 								<text> Disco.</text>
 							</view>
@@ -86,7 +87,8 @@
 			return {
 				type: 'center',
 				list:[],
-				userInfo:{}
+				userInfo:{},
+				indexInfo:{}
 			};
 		},
 		computed:{
@@ -96,8 +98,19 @@
 		},
 		mounted(){
 			this.getUser();
+			this.indexConfigFnc()
 		},
 		methods: {
+			async indexConfigFnc() {
+				let res = await $request('indexConfig', {});
+				// console.log(res)
+				if (res.data.code == 200) {
+					res.data.data.system_logo = filesUrl+res.data.data.system_logo
+					// getApp().globalData.indexConfig=res.data.data;
+					// console.log(res,getApp().globalData.indexConfig)
+					this.indexInfo = res.data.data;
+				}
+			},
 			open(options = {type: 'center'}) {
 				this.type = options.type;
 				this.$refs.popup.open()
@@ -115,7 +128,12 @@
 				})
 			},
 			outLink(type){
-				
+				// #ifdef H5
+				console.log(type)
+				// window.open('https://www.baidu.com')
+				location.href = type;
+				// location.href = 'https://www.baidu.com';
+				// #endif
 			}
 		}
 	}

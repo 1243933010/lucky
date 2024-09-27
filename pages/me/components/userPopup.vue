@@ -152,6 +152,7 @@
 				flex-direction: row;
 				align-items: center;
 				input{
+					width: 100%;
 					color: #999999;
 					font-size: 24rpx;
 				}
@@ -178,6 +179,7 @@
 					align-items: center;
 					color: #999999;
 					font-size: 24rpx;
+					width: 100%;
 				}
 				.btn{
 					width: 175rpx;

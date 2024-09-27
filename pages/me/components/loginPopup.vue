@@ -156,6 +156,7 @@
 				flex-direction: row;
 				align-items: center;
 				input{
+					width: 100%;
 					color: #999999;
 					font-size: 24rpx;
 				}

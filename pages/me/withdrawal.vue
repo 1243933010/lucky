@@ -8,7 +8,7 @@
 					<image src="../../static/recharge1.png" mode="widthFix"></image>
 				</view>
 				<view class="logo">
-					<image src="../../static/logo.png" mode="widthFix"></image>
+					<image :src="logoUrl" mode="widthFix"></image>
 				</view>
 				<view class="withdraw">
 
@@ -76,7 +76,7 @@
 					</view>
 					<view class="recharge-submit">
 						<view class="con" @click="openPopUpHandle">
-							<text>Recharge</text>
+							<text>Withdrawal</text>
 						</view>
 					</view>
 				</view>
@@ -122,6 +122,12 @@
 		mounted(){
 			this.getWithdrawalConfig()
 			this.getRechargeConfig()
+		},
+		computed:{
+			logoUrl(){
+				console.log(getApp().globalData)
+				return getApp().globalData.indexConfig.system_logo
+			}
 		},
 		methods: {
 			goUrl(){
@@ -253,7 +259,7 @@
 
 			.recharge-btn {
 				padding-left: 21rpx;
-				background: #201f29 url('../../static/bk_icon1.png') no-repeat center center / 100%;
+				background:  url('../../static/bk_icon1.png') no-repeat center center / 100%;
 				;
 
 				text {
@@ -266,7 +272,7 @@
 				display: flex;
 				flex-direction: row;
 				justify-content: flex-end;
-				background: #201f29 url('../../static/bk_icon2.png') no-repeat center center / 100%;
+				background:  url('../../static/bk_icon2.png') no-repeat center center / 100%;
 				;
 
 				text {

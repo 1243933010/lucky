@@ -5,7 +5,7 @@
 				<view class="user-left">
 					<view class="logo">
 						<image @click="changeImg"
-							:src="userInfo.avatar?filesUrl1+userInfo.avatar:'../../../static/logo.png'" mode="widthFix">
+							:src="logoUrlr?logoUrl:'../../../static/default_user.png'" mode="widthFix">
 						</image>
 					</view>
 					<view class="msg">
@@ -114,7 +114,7 @@
 		<view class="usdt">
 			<view class="border">
 				<view class="box">
-					<view class="item"  @click="borderActive===index?borderActive=undefined:borderActive=index" v-for="(item,index) in uList" :key="index">
+					<view class="item"  @click="borderActive===index?borderActive=null:borderActive=index" v-for="(item,index) in uList" :key="index">
 						<view class="no-active" v-if="index!==borderActive">
 							<view class="">
 								<text>{{item}}X</text>
@@ -184,7 +184,7 @@
 				roomId: '',
 				roomDetail: {},
 				userInfo: {},
-				uList: ['2', '5', '6'],
+				uList: ['2', '5', '10'],
 				uActive: 0,
 				borderList: [],
 				borderActive: null,
@@ -196,10 +196,15 @@
 				testNum: 0,
 				autoBool:false,
 				type:'',
-				room_code:''
+				room_code:'',
+				intervalIdTwo:null
 			};
 		},
 		computed: {
+			logoUrl(){
+				console.log(getApp().globalData)
+				return getApp().globalData.indexConfig.system_logo
+			},
 			filesUrl1() {
 				return filesUrl
 			},
@@ -288,6 +293,7 @@
 				}
 				if(this.autoBool){
 					this.btnText = 'Cancel Auto Bet'
+					this.gameJoin();
 				}
 				uni.showToast({
 					icon:'none',
@@ -365,6 +371,9 @@
 				}
 			},
 			async submitClick(){
+				if(this.roomStatus.status == 10 ){
+					return false
+				}
 				if(this.autoBool){
 					this.autoBool = !this.autoBool;
 					this.btnText = 'Participate in Game'
@@ -382,12 +391,14 @@
 					// obj.multiple = ''
 				}else{
 					obj.is_multiple = 1;
-					obj.multiple = this.borderActive;
+					obj.multiple = this.uList[this.borderActive];
 				}
 				let res = await $request('gameJoin',obj);
 				$totast(res.data.message)
 				if(res.data.code==200){
 					this.getRoomDetail(this.roomId)
+				}else{
+					this.autoBool = false;
 				}
 			},
 			async singOut(){
@@ -461,6 +472,23 @@
 				// // 初始化时马上更新一次倒计时显示
 				// this.countdownText = this.formatCountdown(time);
 			},
+			startCountdown1(time){
+				// 每秒更新一次倒计时
+				this.intervalIdTwo = setInterval(() => {
+					time -= 1000;
+					// 更新倒计时显示
+					this.countdownText = this.formatCountdown(time);
+				
+					// 当倒计时为零或小于零时，清除定时器
+					if (time <= 0) {
+						this.clearCountdown();
+						this.countdownText = "";
+					}
+				}, 1000);
+				
+				// 初始化时马上更新一次倒计时显示
+				this.countdownText = this.formatCountdown(time);
+			},
 			clearCountdown() {
 				if (this.intervalId) {
 					clearInterval(this.intervalId);
@@ -479,6 +507,11 @@
 						info: this.roomInfo,
 						room_id:id
 					}
+					let end = new Date(this.roomDetail.dismiss_time).getTime();
+					let start = new Date().getTime();
+					let time = end -start;
+					console.log(end,start,time)
+					this.startCountdown1(time)
 					if(this.type){
 						this.$refs.shareCom.open(info)
 					}
@@ -553,12 +586,16 @@
 					if (this.roomStatus.status == 20) {
 						uni.hideLoading()
 						this.getGameResult();
+						setTimeout(()=>{
+							uni.hideLoading()
+							this.$refs.popup.close()
+						},5000)
 				
 					}
-					if (this.roomStatus.status == 25) {
-						uni.hideLoading()
-						this.$refs.popup.close()
-					}
+					// if (this.roomStatus.status == 25) {
+					// 	uni.hideLoading()
+					// 	this.$refs.popup.close()
+					// }
 					if (this.roomStatus.status == 15) {
 						uni.showLoading()
 					}
@@ -621,6 +658,8 @@
 		bottom: 42rpx;
 		left: 17rpx;
 		z-index: 0;
+		height: 600rpx;
+		overflow: hidden;
 		.box {
 			.flex-column;
 
@@ -975,8 +1014,8 @@
 						padding-left: 2rpx;
 
 						view {
-							width: 90%;
-							height: 90%;
+							width: 93%;
+							height: 93%;
 							border-radius: 50%;
 							background: #999999;
 							box-sizing: border-box;
@@ -1019,7 +1058,7 @@
 							width: 95%;
 							height: 95%;
 							border-radius: 10rpx;
-							background: rgba(84, 103, 132, 0.8);
+							background: rgba(84, 103, 132, 0.5);
 							box-sizing: border-box;
 							.flex-center;
 							color: #FFFFFF;

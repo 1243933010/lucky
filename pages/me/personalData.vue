@@ -15,7 +15,7 @@
 						<input type="text" v-model="userInfo.nickname" :disabled="true" />
 					</view>
 					<view class="arrow">
-						<image src="../../static/right_arrow2.png" mode="widthFix"></image>
+						<image src="../../static/right_arrow_icon2.png" mode="widthFix"></image>
 					</view>
 				</view>
 			</view>
@@ -29,7 +29,7 @@
 						<input type="password" v-model="userInfo.password"   :disabled="true" />
 					</view>
 					<view class="arrow">
-						<image src="../../static/right_arrow2.png" mode="widthFix"></image>
+						<image src="../../static/right_arrow_icon2.png" mode="widthFix"></image>
 					</view>
 				</view>
 			</view>
@@ -43,7 +43,7 @@
 						<input type="password" v-model="formData.transactionPassword" :disabled="true" />
 					</view>
 					<view class="arrow">
-						<image src="../../static/right_arrow2.png" mode="widthFix"></image>
+						<image src="../../static/right_arrow_icon2.png" mode="widthFix"></image>
 					</view>
 				</view>
 			</view>
@@ -58,7 +58,7 @@
 					<!-- <image class="arrow" src="../../static/right_arrow.png" mode="widthFix"></image> -->
 				</view>
 			</view>
-			<view class="form-item" :style="sysInfo.screenHeight < 850 ? 'padding-bottom:200rpx' : ''">
+			<view class="form-item" :style="sysInfo.screenHeight < 850 ? 'padding-bottom:300rpx' : ''">
 				<view class="label">
 					<text>Withdrawal address</text>
 				</view>
@@ -68,7 +68,7 @@
 						<input type="text" v-model="userInfo.trc20_address" placeholder="USDT-TRC20"  :disabled="true" />
 					</view>
 					<view class="arrow">
-						<image src="../../static/right_arrow2.png" mode="widthFix"></image>
+						<image src="../../static/right_arrow_icon2.png" mode="widthFix"></image>
 					</view>
 				</view>
 				<view class="input"  @click="setAddress(2)">
@@ -77,7 +77,7 @@
 						<input type="text" v-model="userInfo.bep20_address" placeholder="USDT-BNB Smart Chain/BEP20"  :disabled="true" />
 					</view>
 					<view class="arrow">
-						<image src="../../static/right_arrow2.png" mode="widthFix"></image>
+						<image src="../../static/right_arrow_icon2.png" mode="widthFix"></image>
 					</view>
 				</view>
 			</view>
@@ -305,7 +305,7 @@
 					}
 
 					.arrow {
-						width: 11rpx;
+						width: 22rpx;
 						margin-right: 20rpx;
 						image{
 							width: 100%;

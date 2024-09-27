@@ -7,8 +7,7 @@
 				<view class="user">
 					<view class="user-left">
 						<view class="logo">
-							<image @click="changeImg"
-								:src="userInfo.avatar?filesUrl1+userInfo.avatar:'../../../static/logo.png'"
+							<image @click="changeImg" :src="logoUrlr?logoUrl:'../../../static/default_user.png'"
 								mode="widthFix">
 							</image>
 						</view>
@@ -50,45 +49,51 @@
 					</view>
 				</view>
 			</view>
-			<view class="usdt">
-				<view class="radio">
-					<swiper style="height: 150rpx;width: 100%;z-index: 100;" :current="amountIndex1"  @change="switchSystemRoom1" :indicator-dots="false" :autoplay="false">
-						<swiper-item v-for="(item,index) in amountList" :key="index">
-							<view class="box" v-if="amountIndex1===index" :style="{'left':(377-amountIndex1*135)+'rpx'}">
-								<!-- :class="index==uActive?'uActive':''" -->
-								<view class="item" @click="radioChoose(item,index)" v-for="(item,index) in amountList"
-									:key="index">
-									<view class="no-active" v-if="index!==amountIndex1">
-										<view class="">
+			<view class="" style="position: fixed;bottom: 0rpx;left: 0;width: 100%;">
+				<view class="usdt">
+					<view class="radio">
+						<swiper style="height: 150rpx;width: 100%;z-index: 100;" :current="amountIndex1"
+							@change="switchSystemRoom1" :indicator-dots="false" :autoplay="false">
+							<swiper-item v-for="(item,index) in amountList" :key="index">
+								<view class="box" v-if="amountIndex1===index"
+									:style="{'left':(377-amountIndex1*135)+'rpx'}">
+									<!-- :class="index==uActive?'uActive':''" -->
+									<view class="item" @click="radioChoose(item,index)"
+										v-for="(item,index) in amountList" :key="index">
+										<view class="no-active" v-if="index!==amountIndex1">
+											<view class="">
+												<text>{{item.bet_amount*1}}</text>
+											</view>
+										</view>
+										<view class="active" v-if="index==amountIndex1">
 											<text>{{item.bet_amount*1}}</text>
 										</view>
 									</view>
-									<view class="active" v-if="index==amountIndex1">
-										<text>{{item.bet_amount*1}}</text>
+								</view>
+							</swiper-item>
+						</swiper>
+
+					</view>
+					<!-- <view class=""  style="position: fixed;bottom: 220rpx;left: 0;width: 100%;"> -->
+					<view class="border">
+						<view class="box">
+							<view class="item" @click="borderActive===index?borderActive=undefined:borderActive=index"
+								v-for="(item,index) in uList" :key="index">
+								<view class="no-active" v-if="index!==borderActive">
+									<view class="">
+										<text>{{item}}X</text>
 									</view>
 								</view>
-							</view>
-						</swiper-item>
-					</swiper>
-					
-				</view>
-				<view class="border">
-					<view class="box">
-						<view class="item" @click="borderActive===index?borderActive=undefined:borderActive=index" v-for="(item,index) in uList" :key="index">
-							<view class="no-active" v-if="index!==borderActive">
-								<view class="">
-									<text>{{item}}X</text>
-								</view>
-							</view>
-							<view class="active" v-if="index==borderActive">
-								<view class="">
-									<text>{{item}}X</text>
+								<view class="active" v-if="index==borderActive">
+									<view class="">
+										<text>{{item}}X</text>
+									</view>
 								</view>
 							</view>
 						</view>
 					</view>
-				</view>
-				<view class=""  style="position: fixed;bottom: 0rpx;left: 0;width: 100%;">
+					<!-- </view> -->
+					<!-- <view class=""  style="position: fixed;bottom: 0rpx;left: 0;width: 100%;"> -->
 					<view class="submit">
 						<view class="box">
 							<view class="left"></view>
@@ -96,7 +101,8 @@
 								<text>{{btnText}}</text>
 							</view>
 							<view class="right">
-								<image @click="$refs.textCom.open()" src="../../../static/hell_icon4.png" mode="widthFix">
+								<image @click="$refs.textCom.open()" src="../../../static/hell_icon4.png"
+									mode="widthFix">
 								</image>
 							</view>
 						</view>
@@ -106,9 +112,9 @@
 							<text> Auto Bet</text>
 						</view>
 					</view>
+					<!-- </view> -->
 				</view>
 			</view>
-
 			<view class="posi">
 				<view class="box2">
 					<view class="item" v-for="(item,index) in roomInfo.messages">
@@ -128,7 +134,7 @@
 				<swiper style="height: 500rpx;" @change="switchSystemRoom" :indicator-dots="false" :autoplay="false">
 					<swiper-item v-for="(item,index) in amountList" :key="index">
 						<view class="">
-							
+
 						</view>
 					</swiper-item>
 				</swiper>
@@ -154,7 +160,7 @@
 		},
 		data() {
 			return {
-				bet_amount:'',
+				bet_amount: '',
 				roomType: '',
 				amountIndex: 0,
 				amountIndex1: 0,
@@ -170,10 +176,14 @@
 				roomStatus: {},
 				btnText: 'Participate in Game',
 				testNum: 0,
-				autoBool:false
+				autoBool: false
 			};
 		},
 		computed: {
+			logoUrl() {
+				console.log(getApp().globalData)
+				return getApp().globalData.indexConfig.system_logo
+			},
 			filesUrl1() {
 				return filesUrl
 			},
@@ -201,7 +211,7 @@
 			if (e.bet_amount) {
 				this.bet_amount = e.bet_amount
 			}
-			
+
 			// else {
 			// 	this.roomId = '1'
 			// }
@@ -229,29 +239,30 @@
 
 		},
 		methods: {
-			autoClick(){
+			autoClick() {
 				this.autoBool = !this.autoBool;
 				let str = 'Successful  Auto Bet'
-				if(!this.autoBool){
+				if (!this.autoBool) {
 					str = ' Auto Bet has been canceled'
 				}
-				if(this.autoBool){
+				if (this.autoBool) {
 					this.btnText = 'Cancel Auto Bet'
+					this.gameJoin();
 				}
 				uni.showToast({
-					icon:'none',
-					title:str
+					icon: 'none',
+					title: str
 				})
 			},
-			goUrl(){
+			goUrl() {
 				this.stopPolling();
 				this.stopPolling1();
 				uni.navigateTo({
-					url:'/pages/me/recharge'
+					url: '/pages/me/recharge'
 				})
 			},
 			async radioChoose(item, index) {
-				console.log(this.amountIndex,index,'11')
+				console.log(this.amountIndex, index, '11')
 				this.amountIndex = index;
 				this.amountIndex1 = index;
 				// let res = await $request('switchSystemRoom', {
@@ -269,6 +280,7 @@
 				let loopArr = uni.getStorageSync('loopArr')
 				if (loopNum === 3) {
 					console.log('要被踢走了')
+					// this.singOut();
 					// return
 				}
 				if (!loopArr) {
@@ -319,12 +331,12 @@
 				}, 1000);
 
 				// 初始化时马上更新一次倒计时显示
-				if(time<=3){
+				if (time <= 3) {
 					this.btnText = time;
-				}else{
+				} else {
 					this.btnText = '';
 				}
-				
+
 			},
 			clearCountdown() {
 				if (this.intervalId) {
@@ -341,7 +353,10 @@
 				}
 			},
 			async submitClick() {
-				if(this.autoBool){
+				if(this.roomStatus.status == 10 ){
+					return false
+				}
+				if (this.autoBool) {
 					this.autoBool = !this.autoBool;
 					this.btnText = 'Participate in Game'
 					return
@@ -352,24 +367,28 @@
 
 			},
 			async gameJoin() {
-				let obj = {is_multiple: ''};
+				let obj = {
+					is_multiple: ''
+				};
 				console.log(this.borderActive)
-				let arr = [2,5,10]
-				if(this.borderActive==null){
+				let arr = [2, 5, 10]
+				if (this.borderActive == null) {
 					obj.is_multiple = 0;
 					// obj.multiple = ''
-				}else{
+				} else {
 					obj.is_multiple = 1;
 					// obj.multiple = this.borderActive;
 					obj.multiple = arr[this.borderActive];
 				}
-				let res = await $request('gameJoin',obj);
+				let res = await $request('gameJoin', obj);
 				$totast(res.data.message)
-				if(res.data.code==200){
+				if (res.data.code == 200) {
 					this.getRoomDetail(this.roomId)
+				} else {
+					this.autoBool = false;
 				}
 			},
-			
+
 			async singOut() {
 				let res = await $request('roomLeave', {
 					room_id: this.roomId
@@ -395,18 +414,18 @@
 				console.log(res)
 				if (res.data.code == 200) {
 					this.amountList = res.data.data;
-					res.data.data.forEach((val,index)=>{
-						if(+val.bet_amount==(+this.bet_amount)){
+					res.data.data.forEach((val, index) => {
+						if (+val.bet_amount == (+this.bet_amount)) {
 							this.amountIndex = index;
 							this.amountIndex1 = index;
 						}
 					})
-					
+
 				}
 			},
 
 			async switchSystemRoom(e) {
-				console.log(e.detail.current,'222')
+				console.log(e.detail.current, '222')
 				this.amountIndex = e.detail.current;
 				// this.amountIndex1 = e.detail.current;
 				let res = await $request('switchSystemRoom', {
@@ -417,13 +436,13 @@
 					// this.amountList = res.data.data.amount;
 					// this.amountIndex = 0;
 					uni.showToast({
-						icon:'none',
-						title:'The basic betting amount has been switched'
+						icon: 'none',
+						title: 'The basic betting amount has been switched'
 					})
 				}
 			},
 			async switchSystemRoom1(e) {
-				console.log(e.detail.current,'222')
+				console.log(e.detail.current, '222')
 				this.amountIndex1 = e.detail.current;
 				// let res = await $request('switchSystemRoom', {
 				// 	amount: this.amountList[this.amountIndex]
@@ -501,11 +520,11 @@
 					// 	this.testNum = -5;
 					// }
 					// res.data.data.status = this.testNum+=5
-					 // res.data.data.status = 20
+					// res.data.data.status = 20
 					this.roomStatus = res.data.data;
 					this.listenNum(res.data.data)
 					if (this.roomStatus.status == 0) {
-						if(this.autoBool){
+						if (this.autoBool) {
 							this.gameJoin()
 						}
 						uni.hideLoading()
@@ -516,11 +535,15 @@
 					if (this.roomStatus.status == 20) {
 						uni.hideLoading()
 						this.getGameResult();
+						setTimeout(() => {
+							uni.hideLoading()
+							this.$refs.popup.close()
+						}, 5000)
 
 					}
 					if (this.roomStatus.status == 25) {
-						uni.hideLoading()
-						this.$refs.popup.close()
+						// uni.hideLoading()
+						// this.$refs.popup.close()
 					}
 					if (this.roomStatus.status == 15) {
 						uni.showLoading()
@@ -539,12 +562,12 @@
 					} else {
 						this.clearCountdown()
 						// if()
-						if(this.autoBool){
+						if (this.autoBool) {
 							this.btnText = 'Cancel Auto Bet'
-						}else{
+						} else {
 							this.btnText = 'Participate in Game'
 						}
-						
+
 					}
 
 					return
@@ -571,12 +594,14 @@
 		height: 100vh;
 		// background: #000;
 	}
-	.fixed-1{
+
+	.fixed-1 {
 		position: fixed;
 		top: 350rpx;
 		left: 0;
 		width: 100%;
-		.content{
+
+		.content {
 			width: 100%;
 			height: 100%;
 			// background: red;
@@ -599,16 +624,17 @@
 		position: fixed;
 		bottom: 42rpx;
 		left: 17rpx;
-		max-height: 600rpx;
-		overflow-y: auto;
-		// overflow: hidden;
+		height: 600rpx;
+		// overflow-y: auto;
+		overflow: hidden;
 		// z-index: -10;
 
 		.box2 {
 			// width: 150rpx;
 			// .flex-column;
-			display: flex;
-			flex-direction: column;
+			// display: flex;
+			// flex-direction: column;
+			overflow: hidden;
 
 			// align-items: center;
 			.item {
@@ -620,7 +646,7 @@
 				box-sizing: border-box;
 				padding: 13rpx 3rpx;
 				margin-bottom: 15rpx;
-				 word-break: break-all;
+				word-break: break-all;
 			}
 		}
 	}
@@ -692,10 +718,10 @@
 						// 	color: #91FB14;
 						// 	font-size: 24rpx;
 						// }
-						.add{
+						.add {
 							width: 32rpx;
 							height: 32rpx;
-							background: linear-gradient( 146deg, #9DFE00 0%, #14D9E5 100%);
+							background: linear-gradient(146deg, #9DFE00 0%, #14D9E5 100%);
 							box-sizing: border-box;
 							// border: 1rpx solid #DDDDDD;
 							// .flex-center;
@@ -706,7 +732,8 @@
 							align-items: center;
 							padding-left: 28rpx;
 							padding-bottom: 7rpx;
-							text{
+
+							text {
 								// width: 100%;
 								color: #222222;
 								font-size: 36rpx;
@@ -796,15 +823,16 @@
 		width: 100%;
 		position: relative;
 		z-index: 10;
-		padding-bottom: 200rpx;
+
+		// padding-bottom: 200rpx;
 		.radio {
 			position: relative;
 			z-index: 10;
 			.flex-center;
 			// margin-bottom: 99rpx;
-			
+
 			height: 149rpx;
-			
+
 			.box {
 				width: 100%;
 				.flex-center;
@@ -837,9 +865,10 @@
 						padding-top: 2rpx;
 						padding-left: 0rpx;
 						background: rgba(0, 0, 0, 0.2);
+
 						view {
-							width: 90%;
-							height: 90%;
+							width: 93%;
+							height: 93%;
 							border-radius: 50%;
 							background: #999999;
 							// background: rgba(0, 0, 0, 0.2);
@@ -861,17 +890,18 @@
 			.box {
 				width: 100%;
 				.flex-center;
-				
+
 				.item {
-					
+
 					margin: 0 32rpx;
 					box-sizing: border-box;
+
 					.no-active {
 						// width: 131rpx;
 						// height: 51rpx;
 						color: #FFFFFF;
 						font-size: 26rpx;
-						text-shadow: 0rpx 9rpx 4rpx rgba(4,2,8,0.57);
+						text-shadow: 0rpx 9rpx 4rpx rgba(4, 2, 8, 0.57);
 						text-stroke: 2px #657383;
 					}
 
@@ -890,12 +920,12 @@
 							width: 95%;
 							height: 95%;
 							border-radius: 10rpx;
-							background: rgba(84, 103, 132, 0.8);
+							background: rgba(84, 103, 132, 0.5);
 							box-sizing: border-box;
 							.flex-center;
 							color: #FFFFFF;
 							font-size: 26rpx;
-							
+
 						}
 					}
 				}
@@ -945,10 +975,11 @@
 			.box {
 				color: #FFFFFF;
 				font-size: 26rpx;
-				background: rgba(255, 255, 255, 0.4);
+				// background: rgba(255, 255, 255, 0.4);
 				box-sizing: border-box;
 				padding: 5rpx 10rpx;
 				border-radius: 5rpx;
+
 				text {
 					text-decoration: underline;
 				}

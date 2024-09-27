@@ -2,14 +2,14 @@
 	<view class="page-container">
 		<DefaultHeader />
 		<view class="record">
-			<view class="header">
+			<!-- <view class="header">
 				<view class="title">
 					<text>bill</text>
 				</view>
 				<view class="icon">
 					<image src="../../static/bill_icon.png" mode="widthFix"></image>
 				</view>
-			</view>
+			</view> -->
 			<view class="collapse" :style="{'padding-bottom':item.open?'0rpx':''}"
 				v-for="(item,index) in gameRecordsList" :key="index" @click="collapseClick(item,index)">
 				<view class="collapse-top">
@@ -18,8 +18,8 @@
 					</view>
 					<view class="right">
 						<view class="num">
-							<text v-if="+item.profit_percent.current_profit<=0">({{item.profit_percent.current_profit}})</text>
-						<text style="color: red;" v-if="+item.profit_percent.current_profit>0">(+{{item.profit_percent.current_profit}})</text>
+							<text  style="color: red;"  v-if="+item.profit_percent.current_profit<=0">({{item.profit_percent.current_profit}})</text>
+						<text  v-if="+item.profit_percent.current_profit>0">(+{{item.profit_percent.current_profit}})</text>
 						</view>
 						<view class="arrow" v-if="item.open">
 							<image src="../../static/top_arrow.png" mode="widthFix"></image>
@@ -40,7 +40,9 @@
 						<view :style="{'border-bottom':ind==item.records.premium_table.length-1?'none':''}" class="item"
 							v-for="(val,ind) in item.records.premium_table" :key="ind">
 							<view class="num">
-								<text>{{val.profit}}</text>
+								<text  style="color: red;"  v-if="+val.profit<0">{{val.profit}}</text>
+								<text  v-if="+val.profit>=0">+{{val.profit}}</text>
+								<!-- <text>{{val.profit}}</text> -->
 							</view>
 							<view class="time">
 								{{val.time}}
@@ -54,7 +56,9 @@
 						<view :style="{'border-bottom':ind==item.records.junior_table.length-1?'none':''}" class="item"
 							v-for="(val,ind) in item.records.junior_table" :key="ind">
 							<view class="num">
-								<text>{{val.profit}}</text>
+								<!-- <text>+{{val.profit}}</text> -->
+								<text  style="color: red;"  v-if="+val.profit<0">{{val.profit}}</text>
+								<text  v-if="+val.profit>=0">+{{val.profit}}</text>
 							</view>
 							<view class="time">
 								{{val.time}}
@@ -68,7 +72,8 @@
 						<view :style="{'border-bottom':ind==item.records.friend_table.length-1?'none':''}" class="item"
 							v-for="(val,ind) in item.records.friend_table" :key="ind">
 							<view class="num">
-								<text>{{val.profit}}</text>
+								<text  style="color: red;"  v-if="+val.profit<0">{{val.profit}}</text>
+								<text  v-if="+val.profit>=0">+{{val.profit}}</text>
 							</view>
 							<view class="time">
 								{{val.time}}
@@ -99,76 +104,7 @@
 		},
 		data() {
 			return {
-				gameRecordsList: [{
-						"date": "08/29",
-						open:false,
-						"records": {
-							"premium_table": [],
-							"junior_table": [{
-								"id": 1,
-								"bet_amount": "2.00",
-								"profit": "0.10",
-								"is_win": 1,
-								"time": "14:00"
-							}],
-							"friend_table": []
-						},
-						"profit_percent": {
-							"current_profit": "0.10",
-							"last_profit": "-17.50",
-							"diff": 17.6,
-							"percent": "100.57%"
-						}
-					},
-					{
-						"date": "08/28",
-						open:false,
-						"records": {
-							"premium_table": [{
-								"id": 2,
-								"bet_amount": "20.00",
-								"profit": "-10.00",
-								"is_win": 0,
-								"time": "14:02"
-							}],
-							"junior_table": [{
-								"id": 3,
-								"bet_amount": "10.00",
-								"profit": "-7.50",
-								"is_win": 0,
-								"time": "14:03"
-							}],
-							"friend_table": []
-						},
-						"profit_percent": {
-							"current_profit": "-17.50",
-							"last_profit": "6.00",
-							"diff": -23.5,
-							"percent": "-391.67%"
-						}
-					},
-					{
-						"date": "08/27",
-						open:false,
-						"records": {
-							"premium_table": [],
-							"junior_table": [],
-							"friend_table": [{
-								"id": 4,
-								"bet_amount": "5.00",
-								"profit": "6.00",
-								"is_win": 1,
-								"time": "14:06"
-							}]
-						},
-						"profit_percent": {
-							"current_profit": "6.00",
-							"last_profit": 0,
-							"diff": 6,
-							"percent": "0.00%"
-						}
-					}
-				],
+				gameRecordsList: [],
 				list: []
 			};
 		},

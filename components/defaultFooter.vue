@@ -141,7 +141,7 @@
 		// background: rgba(255, 255, 255, 0.1);
 		background-color: hsl(0deg, 1%, 14%/96%);
 		border: 1px solid #353535;
-		box-shadow: inset 0px 5rpx 5rpx #9b9b9b5c, -2rpx -4rpx 11rpx #656464;
+		// box-shadow: inset 0px 5rpx 5rpx #9b9b9b5c, -2rpx -4rpx 11rpx #656464;
 		// box-shadow: inset 0 5px 5px #9b9b9b5c, -2px -4px 11px #656464;
 		opacity: 1;
 		display: flex;

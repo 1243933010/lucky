@@ -2,7 +2,7 @@
 	<view>
 		<view class="page-header">
 			<view class="logo1">
-				<image src="../static/logo.png" @click="goIndex" mode="widthFix"></image>
+				<image :src="logoUrl" @click="goIndex" mode="widthFix"></image>
 			</view>
 			<view class="setting" @click="openDialog">
 				<view class=""></view>
@@ -22,6 +22,12 @@
 			return {
 
 			};
+		},
+		computed:{
+			logoUrl(){
+				console.log(getApp().globalData)
+				return getApp().globalData.indexConfig.system_logo
+			}
 		},
 		methods:{
 			openDialog(){

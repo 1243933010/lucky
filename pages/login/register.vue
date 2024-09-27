@@ -2,7 +2,7 @@
 	<view class="page-container">
 		<view class="page-container-box">
 			<view class="logo">
-				<image src="../../static/logo.png" mode="widthFix"></image>
+				<image :src="logoUrl" mode="widthFix"></image>
 			</view>
 			<view class="form">
 				<!-- <view class="form-item">
@@ -56,7 +56,7 @@
 			</view>
 			<view class="submit-btn" @click="submitBtn">
 				<view class="">
-					<text>Login In</text>
+					<text>Register</text>
 				</view>
 			</view>
 			<view class="other">
@@ -83,6 +83,12 @@
 					invite_code:''
 				}
 			};
+		},
+		computed:{
+			logoUrl(){
+				console.log(getApp().globalData)
+				return getApp().globalData.indexConfig.system_logo
+			}
 		},
 		onLoad(e) {
 			this.onLoadParams = e;

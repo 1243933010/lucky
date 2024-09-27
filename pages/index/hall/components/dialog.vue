@@ -57,6 +57,12 @@
 				if(this.sysInfo.screenHeight<=850&&this.sysInfo.screenHeight>800){
 					return '70rpx'
 				}
+				if(this.sysInfo.screenHeight<=900&&this.sysInfo.screenHeight>850){
+					return '0rpx'
+				}
+				if(this.sysInfo.screenHeight<=1000&&this.sysInfo.screenHeight>900){
+					return '-50rpx'
+				}
 				return '60rpx'
 			}
 		},
@@ -89,7 +95,7 @@
 				// // console.log(res)
 				// $totast(res.data.message)
 				// if(res.data.code==200){
-				// 	this.$refs.popup.close()
+					this.$refs.popup.close()
 				// 	this.$emit('updateData')
 				// }
 			}

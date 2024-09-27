@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="bottom">
+		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="center">
 			<view class="" style="padding-bottom: 20rpx;">
 				<view class="popup-content">
 					<view class="close" @click="$refs.popup.close()">
@@ -21,7 +21,7 @@
 									<text>Table number</text>
 								</view>
 								<view class="input">
-									<text>{{userInfo.room_title}}</text>
+									<text>{{userInfo.room_code}}</text>
 								</view>
 							</view>
 							<view class="box1">
@@ -92,8 +92,8 @@
 			},
 			copyLink(){
 				uni.setClipboardData({
-					// data:`${this.userInfo.host_url}/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`,
-					data:`http://localhost:8080/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`,
+					data:`${this.userInfo.host_url}/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`,
+					// data:`http://localhost:8080/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`,
 					success:(res)=>{
 						uni.showToast({
 							icon:'none',
@@ -155,7 +155,7 @@
 		.close {
 			position: absolute;
 			left:50%;
-			top: -130rpx;
+			bottom: -130rpx;
 			width: 60rpx;
 			height: 60rpx;
 			display: flex;
@@ -195,7 +195,13 @@
 					color: #BBBBBB;
 				}
 				.right{
-					
+					.right {
+						width: 40%;
+						text-align: right;
+						 overflow: hidden; /* 确保超出容器的文本会被裁剪 */
+						  white-space: nowrap; /* 确保文本在一行内显示，避免换行 */
+						  text-overflow: ellipsis; /* 使用省略号表示文本超出 */
+					}
 				}
 			}
 			.form-input{
@@ -238,7 +244,8 @@
 						width: 380rpx;
 						height: 80rpx;
 						border-radius: 50rpx;
-						border: 1px solid white;
+						// border: 1px solid white;
+						box-shadow: inset 0px 2rpx 2rpx white, 2rpx 2rpx 10rpx white;
 						.flex-center;
 						.color-text;
 					}

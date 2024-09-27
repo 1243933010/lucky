@@ -1,7 +1,8 @@
 <template>
 	<view class="page-container" id="pageId">
-		<view class="page-header"
-		 style="z-index: 10;width:100%;position: fixed;top: 0;left: 0rpx;background-color: black;padding-left: 23rpx;box-sizing: border-box;padding-bottom: 50rpx;padding-right: 23rpx;">
+		<!-- background-color: black; -->
+		<view class="page-header" :style="{'background-color':!pageScrollBool?'black':'rgba(0,0,0,0)'}"
+		 style="z-index: 10;width:100%;position: fixed;top: 0;left: 0rpx;padding-left: 23rpx;box-sizing: border-box;padding-bottom: 50rpx;padding-right: 23rpx;">
 			<view class="logo1" @click="goUrl('/pages/me/recharge')">
 				<image src="../../static/me_icon.png" mode="widthFix"></image>
 				<text>{{teamInfoData.balance*1}}</text>
@@ -183,7 +184,7 @@
 		</view>
 		<view class="uni-margin-wrap" style="margin-bottom: 173rpx;">
 			<!-- 轮播图 -->
-			<swiper class="banner-container" :indicator-dots="false" :autoplay="false" :circular="false"
+			<swiper v-if="swiperData.length>0" class="banner-container" :indicator-dots="false" :autoplay="false" :circular="false"
 				previous-margin="120rpx" next-margin="120rpx" @change="swipterChange" :current="swipterActive">
 				<block v-for="(item,index) in swiperData" :key="index">
 					<swiper-item class="banner-item">
@@ -215,6 +216,9 @@
 					</swiper-item>
 				</block>
 			</swiper>
+			<view style="color: white;width: 100%;height: 300rpx;display: flex;justify-content: center;align-items: center;" v-if="swiperData.length==0">
+				<text>No Data</text>
+			</view>
 		</view>
 		<view class="Falling">
 			<view class="container">
@@ -267,7 +271,7 @@
 		<view class="faq">
 			<view class="title">
 				<text>FAQS</text>
-				<image src="../../static/right_arrow.png" mode="widthFix"></image>
+				<image @click="goUrl('/pages/me/fqas')" src="../../static/right_arrow_icon2.png" mode="widthFix"></image>
 			</view>
 			<view class="faq-box">
 				<view class="list">
@@ -418,6 +422,9 @@
 				this.$refs.invitePopup.open()
 			},
 			async defaultClick(){
+				if(!this.indexInfo.room_id_10u){
+					return
+				}
 				let res = await $request('joinSystem', {
 					room_id: this.indexInfo.room_id_10u
 				});
@@ -530,7 +537,10 @@
 			},
 			friendJoin() {
 				// this.$refs.friendJoin.open()
-				this.$refs.fastJoin.open()
+				// this.$refs.fastJoin.open()
+				uni.navigateTo({
+					url: '/pages/index/room/room?type=1'
+				})
 			},
 			createRoom() {
 				uni.navigateTo({
@@ -1124,9 +1134,9 @@
 
 				.item-active {
 					box-sizing: border-box;
-					border-top-right-radius: 25rpx;
+					// border-top-right-radius: 25rpx;
 					border-top-left-radius: 15rpx;
-					border: 1px solid #333333;
+					// border-top: 1px solid #333333;
 					border-bottom: none;
 					background-image: linear-gradient(55.53466052546843deg, #9DFE00 0%, #14D9E5 100%);
 					-webkit-background-clip: text;
@@ -1347,7 +1357,7 @@
 			.flex-space-between;
 
 			image {
-				width: 12rpx;
+				width: 20rpx;
 			}
 		}
 

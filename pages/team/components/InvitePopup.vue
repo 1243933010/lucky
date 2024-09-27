@@ -3,14 +3,15 @@
 		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="center">
 			<view class="popup-content">
 				<view class="close" @click="$refs.popup.close()">
-					<image :src="userInfo.avatar?filesUrl1+userInfo.avatar:'../../../static/close.png'" mode="widthFix"></image>
+					<image src="@/static/close_icon2.png" mode="widthFix"></image>
 				</view>
 				<view class="copy"  @click="copy">
 					<image src="../../../static/copy_icon.png" mode="widthFix"></image>
+					<!-- <image :src="userInfo.avatar?filesUrl1+userInfo.avatar:'@/static/default_user.png'" mode="widthFix"></image> -->
 				    <text>Copy Link</text>
 				</view>
 				<view class="nickname">
-					<image src="../../../static/logo.png" mode="widthFix"></image>
+					<image :src="userInfo.avatar?filesUrl1+userInfo.avatar:'@/static/default_user.png'" mode="widthFix"></image>
 					<text>{{userInfo.nickname}}</text>
 				</view>
 				<view class="my">
@@ -70,14 +71,24 @@
 			},
 			copy(){
 				uni.setClipboardData({
-					data:this.userInfo.invite_code,
+					data:`${this.userInfo.host_url}/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`,
+					// data:`http://localhost:8080/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`,
 					success:(res)=>{
 						uni.showToast({
 							icon:'none',
-							title:'Copy Success'
+							title:'success'
 						})
 					}
 				})
+				// uni.setClipboardData({
+				// 	data:this.userInfo.invite_code,
+				// 	success:(res)=>{
+				// 		uni.showToast({
+				// 			icon:'none',
+				// 			title:'Copy Success'
+				// 		})
+				// 	}
+				// })
 			},
 		}
 	}

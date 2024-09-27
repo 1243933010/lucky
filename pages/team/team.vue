@@ -144,7 +144,7 @@
 				<view class="header">
 					<view class="item two" v-if="paiList.length&&paiList[1]">
 						<view class="logo">
-							<image :src="paiList[1].avatar?paiList[1].avatar:'../../static/logo.png'" mode="widthFix">
+							<image :src="paiList[1].avatar?paiList[1].avatar:'../../static/default_user.png'" mode="widthFix">
 							</image>
 							<view class="text">
 								<view class="name">
@@ -161,7 +161,7 @@
 					</view>
 					<view class="item one" v-if="paiList[0]">
 						<view class="logo">
-							<image src="../../static/logo.png" mode="widthFix"></image>
+							<image :src="paiList[0].avatar?paiList[0].avatar:'../../static/default_user.png'" mode="widthFix"></image>
 							<view class="text">
 								<view class="name">
 									<text>{{paiList[0].nickname||''}}</text>
@@ -177,7 +177,7 @@
 					</view>
 					<view class="item three" v-if="paiList[2]">
 						<view class="logo">
-							<image src="../../static/logo.png" mode="widthFix"></image>
+							<image :src="paiList[2].avatar?paiList[2].avatar:'../../static/default_user.png'"  mode="widthFix"></image>
 							<view class="text">
 								<view class="name">
 									<text>{{paiList[2].nickname||''}}</text>
@@ -234,7 +234,8 @@
 <script>
 	import {
 		$request,
-		$totast
+		$totast,
+		filesUrl
 	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import DefaultFooter from '../../components/defaultFooter.vue';
@@ -262,18 +263,25 @@
 				commissionInfo: {},
 				pageScroll: 0,
 				pageScrollBool: true,
-				threeCommissionInfo: {}
+				threeCommissionInfo: {},
+				userInfo:{
+					
+				}
 			};
 		},
 		onLoad() {
 			this.getRecord();
-			this.getTodayGameRank()
+			
 			this.getCommissionInfo()
 			this.threeCommissionInfoFnc();
+			this.getUser();
 		},
 		computed: {
 			handlePaiList() {
 				return this.paiList.slice(3)
+			},
+			filesUrl1(){
+				return filesUrl
 			}
 		},
 		onReachBottom() {
@@ -289,6 +297,14 @@
 			this.pageScroll = e.scrollTop;
 		},
 		methods: {
+			async getUser(){
+				let res = await $request('userInfo',{});
+				console.log(res)
+				if(res.data.code==200){
+					this.userInfo = res.data.data;
+					this.getTodayGameRank()
+				}
+			},
 			async threeCommissionInfoFnc() {
 				let res = await $request('threeCommissionInfo', {});
 				console.log(res)
@@ -362,7 +378,7 @@
 						res.data.data.list.push({
 							"player_id": 15,
 							"nickname": "me",
-							"avatar": "",
+							"avatar": this.userInfo.avatar,
 							// "total_game": 3,
 							"rank": 1,
 						})
@@ -430,7 +446,7 @@
 				border-radius: 35rpx;
 				padding: 35rpx 38rpx;
 				background-color: rgba(0, 0, 0, 0.4);
-
+				box-shadow: 0rpx -2rpx 9rpx 0rpx rgba(235,235,245,0.302);
 				.num-box {
 					display: flex;
 					align-items: center;

@@ -7,8 +7,27 @@
 				<view class="title">
 					<text>bill</text>
 				</view>
-				<view class="logo">
-					<image src="../../static/logo.png" mode="widthFix"></image>
+				<view class="logo" @click="shai">
+					<image src="../../static/shai.png" mode="widthFix"></image>
+				</view>
+				<view class="fixed" v-show="showBool">
+					<view class="con">
+						<view class="item" @click="goItem('')">
+							<text>Recharge</text>
+						</view>
+						<view class="item" @click="goItem('')">
+							<text>Withdrawal</text>
+						</view>
+						<view class="item" @click="goItem('')">
+							<text>Bonus transfer</text>
+						</view>
+						<view class="item" @click="goItem('')">
+							<text>System room record</text>
+						</view>
+						<view class="item" @click="goItem('')">
+							<text>Friend room record</text>
+						</view>
+					</view>
 				</view>
 			</view>
 			<view class="list">
@@ -19,21 +38,25 @@
 						</view>
 						<view class="label">
 							<view class="name">
-								<text>{{item.title}}</text>
+								<text>{{item.change_object}}</text>
 							</view>
 							<view class="time">
-								<text>{{item.time}}</text>
+								<text>{{item.add_time}}</text>
 							</view>
 						</view>
 					</view>
-					<view class="bill-right">
-						<text>-10</text>
+					<view class="bill-right" v-if="item.change_amount.includes('-')">
+						<text>{{item.change_amount}}</text>
+					</view>
+					<view class="bill-right" style="color: green;" v-if="!item.change_amount.includes('-')">
+						<text>+{{item.change_amount}}</text>
 					</view>
 				</view>
 			</view>
 		</view>
 		<DefaultFooter />
 		<FixedCom  />
+		
 	</view>
 </template>
 
@@ -48,29 +71,37 @@
 		components:{DefaultHeader,DefaultFooter,FixedCom},
 		data() {
 			return {
-				list:[
-					{img:'',title:'rECHARGE',time:'1212121',num:10},
-					{img:'',title:'rECHARGE',time:'',num:10},
-					{img:'',title:'rECHARGE',time:'',num:10},
-					{img:'',title:'rECHARGE',time:'',num:10},
-					{img:'',title:'rECHARGE',time:'',num:10},
-					{img:'',title:'rECHARGE',time:'',num:10},
-					{img:'',title:'rECHARGE',time:'',num:10},
-					{img:'',title:'rECHARGE',time:'',num:10},
-					{img:'',title:'rECHARGE',time:'',num:10},
-					{img:'',title:'rECHARGE',time:'',num:10},
-				]
+				showBool:false,
+				list:[],
+				requestForm:{
+					page:1,
+					limit:20,
+					type:''
+				}
 			};
 		},
 		mounted(){
 			this.gameRecords();
 		},
+		onReachBottom(){
+			this.requestForm.page ++;
+			this.gameRecords();
+		},
 		methods:{
+			shai(){
+				this.showBool = !this.showBool;
+			},
+			goItem(){
+				this.requestForm.page=1;
+				this.gameRecords();
+			},
 			async gameRecords(){
-				let res = await $request('gameRecords',{});
-				console.log(res)
+				uni.showLoading();
+				let res = await $request('accountLogs',this.requestForm);
+				uni.hideLoading();
+				// console.log(res)
 				if(res.data.code==200){
-					this.vz = res.data.data;
+					this.list = res.data.data.data;
 				}
 			}
 		}
@@ -107,17 +138,41 @@
 			justify-content: space-between;
 			align-items: center;
 			margin-bottom: 50rpx;
+			position: relative;
 			.title{
 				color: #DDDDDD;
 				font-size: 60rpx;
 				line-height: 1;
 			}
 			.logo{
+				width: 61rpx;
+				height: 61rpx;
+				background: #222222;
+				box-shadow: 2rpx -2rpx 5rpx 0rpx rgba(255,255,255,0.3);
+				border-radius: 50%;
 				width: 70rpx;
 				height: 70rpx;
+				.flex-center;
 				image{
-					width: 100%;
-					border-radius: 50%;
+					width: 32rpx;
+					// border-radius: 50%;
+				}
+			}
+			.fixed{
+				position: absolute;
+				background: white;
+				right: 30rpx;
+				top: 150rpx;
+				border-radius: 10rpx;
+				.con{
+					width: 280rpx;
+					box-sizing: border-box;
+					border-radius: 10rpx;
+					padding: 30rpx 20rpx;
+					.item{
+						margin-bottom: 20rpx;
+						font-size: 24rpx;
+					}
 				}
 			}
 		}

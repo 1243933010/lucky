@@ -1,7 +1,7 @@
 <template>
 	<view class="page-container">
 		<view class="logo">
-			<image src="../../static/logo.png" mode="widthFix"></image>
+			<image :src="indexInfo.system_logo" mode="widthFix"></image>
 		</view>
 		<view class="form">
 			<view class="form-item">
@@ -43,7 +43,7 @@
 
 <script>
 	import {
-		$request,$totast
+		$request,$totast,filesUrl
 	} from "@/utils/request";
 	import ForgetPopop from './components/forgetPopop.vue';
 	export default {
@@ -56,15 +56,48 @@
 					email:'',
 					password:""
 				},
-				onLoadParams:{}
+				onLoadParams:{},
+				indexInfo:{}
 			};
 		},
+		// computed:{
+		// 	logoUrl(){
+		// 		console.log(getApp().globalData)
+		// 		return getApp().globalData.indexConfig.system_logo
+		// 	}
+		// },
 		onLoad(e){
+			this.indexConfigFnc()
 			if(e){
 				this.onLoadParams = e;
 			}
+			let token = uni.getStorageSync('token')
+			if(token){
+				if(this.onLoadParams.invite_code&&this.onLoadParams.room_code){
+					// uni.reLaunch({
+					// 	url: `/pages/index/index?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
+					// })
+					uni.reLaunch({
+						url:`/pages/index/friend/friend?room_code=${this.options.room_code}`
+					})
+				}else{
+					// uni.reLaunch({
+					// 	url: "/pages/index/index",
+					// });
+				}
+			}
 		},
 		methods:{
+			async indexConfigFnc() {
+				let res = await $request('indexConfig', {});
+				// console.log(res)
+				if (res.data.code == 200) {
+					res.data.data.system_logo = filesUrl+res.data.data.system_logo
+					getApp().globalData.indexConfig=res.data.data;
+					// console.log(res,getApp().globalData.indexConfig)
+					this.indexInfo = res.data.data;
+				}
+			},
 			async submitBtn(){
 				let res = await $request('login',this.formData);
 				// console.log(res)

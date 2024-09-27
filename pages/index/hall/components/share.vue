@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="bottom">
+		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="center">
 			<view class="" style="padding-bottom: 20rpx;">
 				<view class="popup-content">
 					<view class="close" @click="$refs.popup.close()">
@@ -21,7 +21,7 @@
 									<text>Table number</text>
 								</view>
 								<view class="input">
-									<text>{{options.detail.no}}</text>
+									<text>{{userInfo.room_code}}</text>
 								</view>
 							</view>
 							<view class="box1">
@@ -29,7 +29,7 @@
 									<text>invitation link</text>
 								</view>
 								<view class="input">
-									<text>http://www.baidu.com</text>
+									<text>{{`${this.userInfo.host_url}/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`}}</text>
 								</view>
 							</view>
 							<view class="btn">
@@ -71,57 +71,57 @@
 						value: '24h'
 					},
 				],
-				options: {}
+				options: {},
+				userInfo:{}
 			};
 		},
 		methods: {
+			async inviteLink(){
+				let res = await $request('inviteLink',{room_id:this.options.detail.id});
+				console.log(res)
+				if(res.data.code==200){
+					this.userInfo = res.data.data;
+					// if(!res.data.data){
+					// 	this.dataList=[
+					// 		{title:'Table name',value:'NameNameName'},
+					// 		{title:'Amount of money',value:'5USD'},
+					// 		{title:'Maximum capacity',value:'150people'},
+					// 		{title:'Automatic dissolution',value:'24h'},
+					// 	]
+					// }
+					let info = res.data.data;
+					this.dataList = [
+						{title:'Table name',value:info.room_title+'sdddddddddddddddddddddddddddddddddddddddddddddd'},
+						{title:'Amount of money',value:info.room_bet_amount*1+'USDT'},
+						{title:'Maximum capacity',value:info.room_max_people+'people'},
+						{title:'Automatic dissolution',value:info.room_dismiss_time},
+					]
+					// console.log(this.userInfo)
+				}
+			},
 			copyLink() {
-				uni.showToast({
-					icon: 'none',
-					title: 'success'
+				uni.setClipboardData({
+					data:`${this.userInfo.host_url}/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`,
+					// data:`http://localhost:8080/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`,
+					success:(res)=>{
+						uni.showToast({
+							icon:'none',
+							title:'success'
+						})
+					}
 				})
+				// uni.showToast({
+				// 	icon: 'none',
+				// 	title: 'success'
+				// })
 			},
 			open(data) {
 				this.options = data;
 				console.log(data)
-				if (!data) {
-					this.dataList = [{
-							title: 'Table name',
-							value: 'NameNameName'
-						},
-						{
-							title: 'Amount of money',
-							value: '5USD'
-						},
-						{
-							title: 'Maximum capacity',
-							value: '150people'
-						},
-						{
-							title: 'Automatic dissolution',
-							value: '24h'
-						},
-					]
-				}
-				this.dataList = [{
-						title: 'Table name',
-						value: data.detail.title
-					},
-					{
-						title: 'Amount of money',
-						value: data.detail.bet_amount * 1 + 'USDT'
-					},
-					{
-						title: 'Maximum capacity',
-						value: data.detail.max_people + 'people'
-					},
-					{
-						title: 'Automatic dissolution',
-						value: '11111'
-					},
-				]
+			
 				this.$nextTick(() => {
 					this.$refs.popup.open()
+					this.inviteLink();
 				})
 			},
 
@@ -170,7 +170,7 @@
 		.close {
 			position: absolute;
 			left: 50%;
-			top: -130rpx;
+			bottom: -130rpx;
 			width: 60rpx;
 			height: 60rpx;
 			display: flex;
@@ -213,28 +213,29 @@
 					color: #BBBBBB;
 				}
 
-				.right {}
+				.right {
+					width: 40%;
+					text-align: right;
+					 overflow: hidden; /* 确保超出容器的文本会被裁剪 */
+					  white-space: nowrap; /* 确保文本在一行内显示，避免换行 */
+					  text-overflow: ellipsis; /* 使用省略号表示文本超出 */
+				}
 			}
 
-			.form-input {
+			.form-input{
 				color: white;
-
-				.box {
+				.box{
 					padding-top: 31rpx;
 					margin-bottom: 15rpx;
 				}
-
-				.box1 {
+				.box1{
 					margin-bottom: 55rpx;
 				}
-
-				.box,
-				.box1 {
-					.title {
+				.box,.box1{
+					.title{
 						margin-bottom: 10rpx;
 					}
-
-					.input {
+					.input{
 						color: black;
 						width: 100%;
 						background: #7a7c83;
@@ -242,18 +243,28 @@
 						border-radius: 10rpx;
 						box-sizing: border-box;
 						padding: 10rpx 0 10rpx 10rpx;
+						color: white;
+						font-size: 24rpx;
+						// text{
+						// 	display: inline-block;
+						// 	width: 100%;
+						// }
+						text{
+							// word-break: break-word;
+							word-break: break-all;
+						}
 					}
 				}
-
-				.btn {
+				.btn{
 					width: 100%;
 					.flex-center;
-
-					.con {
+					
+					.con{
 						width: 380rpx;
 						height: 80rpx;
 						border-radius: 50rpx;
-						border: 1px solid white;
+						// border: 1px solid white;
+						box-shadow: inset 0px 2rpx 2rpx white, 2rpx 2rpx 10rpx white;
 						.flex-center;
 						.color-text;
 					}

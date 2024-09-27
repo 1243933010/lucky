@@ -186,6 +186,7 @@
 				this.getRoomList()
 			},
 			close(){
+				console.log('111')
 				this.$refs.popup.close()
 			},
 			friendJoin(){
@@ -231,7 +232,7 @@
 			position: absolute;
 			right: 43rpx;
 			top: 43rpx;
-
+			z-index: 10;
 			image {
 				width: 43rpx;
 			}
@@ -257,6 +258,7 @@
 			}
 
 			text {
+				max-width: 500rpx;
 				font-size: 70rpx;
 				font-weight: 600;
 				color: white;
@@ -269,7 +271,7 @@
 			width: 681rpx;
 			// height: 165rpx;
 			margin: 0 auto;
-			background: #131413;
+			// background: #131413;
 			// border: 1rpx solid #333333;
 			border-radius: 25rpx;
 			padding-bottom: 27rpx;
@@ -331,7 +333,7 @@
 					// .flex-direction;
 					.flex-space-between;
 					flex-wrap: wrap;
-
+					min-height: 300rpx;
 					.con-item,
 					.con-item1 {
 						width: 262rpx;
@@ -481,6 +483,8 @@
 					.right {
 						// .flex-column;
 						display: flex;
+						flex-direction: column;
+						justify-content: center;
 						align-items: center;
 						width: 263rpx;
 						height: 350rpx;

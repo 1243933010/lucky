@@ -171,7 +171,7 @@
 
 			.recharge-btn {
 				padding-left: 21rpx;
-				background: #201f29 url('../../static/bk_icon1.png')  no-repeat center center / 100%;;
+				background:  url('../../static/bk_icon1.png')  no-repeat center center / 100%;;
 				text {
 					margin-right: 14rpx;
 				}
@@ -182,7 +182,7 @@
 				display: flex;
 				flex-direction: row;
 				justify-content: flex-end;
-background: #201f29 url('../../static/bk_icon2.png')  no-repeat center center / 100%;;
+background:  url('../../static/bk_icon2.png')  no-repeat center center / 100%;;
 				text {
 					margin-left: 14rpx;
 				}

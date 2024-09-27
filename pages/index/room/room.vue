@@ -103,7 +103,11 @@
 									</view>
 								</view>
 								<view class="posi" v-if="pickerBool1">
+									
 									<view class="box1">
+										<view class="title">
+											<text>Histort Table Number</text>
+										</view>
 										<view class="item" @click.stop="choosePicker1(item)" v-for="(item,index) in roomHistory" :key="index">
 											<text>{{item.no}}</text>
 										</view>
@@ -187,7 +191,9 @@
 		},
 		methods:{
 			choosePicker1(item){
-				this.tableList = item.no.split('')
+				// console.log(item)
+				this.tableList = item.no.toString().split('')
+				this.pickerBool1 = false;
 			},
 			listenData(data){
 				// this.formData.pay_password = data.join('')
@@ -218,7 +224,11 @@
 				let res = await $request('roomJoin',obj);
 				$totast(res.data.message)
 				if(res.data.code==200){
-					
+					setTimeout(()=>{
+						uni.navigateTo({
+							url:`/pages/index/friend/friend?id=${res.data.data.room_id}`
+						})
+					},1000)
 				}
 			},
 			changeTab(ind){
@@ -252,6 +262,7 @@
 				let res = await $request('roomHistory',{});
 				console.log(res)
 				if(res.data.code==200){
+					// res.data.data.push({no:705330})
 					this.roomHistory = res.data.data;
 				}
 			},
@@ -264,7 +275,7 @@
 <style lang="less" scoped>
 	@import url("../../../static/default.less");
 	page{
-		background-color: #0f0e13;
+		background-color: #000;
 	}
 
 	.page-container{
@@ -289,7 +300,7 @@
 				}
 				.label{
 					font-size: 24rpx;
-					background-color: #000;
+					// background-color: #000;
 					box-sizing:border-box;
 					padding: 10rpx;
 					border-radius: 10rpx;
@@ -343,7 +354,7 @@
 						box-sizing: border-box;
 						border-top-right-radius: 25rpx;
 						border-top-left-radius: 15rpx;
-						border: 1px solid #444444;
+						border-top: 1px solid #444444;
 						border-bottom: none;
 						background-image: linear-gradient(55.53466052546843deg, #9DFE00 0%, #14D9E5 100%);
 						-webkit-background-clip: text;
@@ -379,12 +390,16 @@
 									margin-bottom: 17rpx;
 								}
 								.input{
-									background: #444444;
+									// background: #444444;
 									height: 70rpx;
 									width: 100%;
 									display: flex;
 									align-items: center;
 									border-radius: 18rpx;
+									background: linear-gradient( 146deg, rgba(68,68,68,0.5) 0%, rgba(0,0,0,0.5) 100%);
+									box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84,84,84,0.2118);
+									border-radius: 18rpx 18rpx 18rpx 18rpx;
+									border: 1rpx solid #666666;
 									input{
 										min-width: 80%;
 										color: #999999;
@@ -404,6 +419,10 @@
 									border-radius: 18rpx;
 									box-sizing: border-box;
 									padding: 0 17rpx;
+									background: linear-gradient( 146deg, rgba(68,68,68,0.5) 0%, rgba(0,0,0,0.5) 100%);
+									box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84,84,84,0.2118);
+									border-radius: 18rpx 18rpx 18rpx 18rpx;
+									border: 1rpx solid #666666;
 									// position: relative;
 									image{
 										width: 28rpx;
@@ -423,7 +442,10 @@
 									left: 0;
 									width: 100%;
 									max-height: 1000rpx;
-									overflow: hidden;
+									overflow: auto;
+									.title{
+										line-height: 1;
+									}
 									.box1{
 										width: 100%;
 										background-color: #444444;
@@ -491,11 +513,18 @@
 						padding: 0 68rpx;
 						.form{
 							.form-input{
-								margin-bottom: 35rpx;
+								
+								.input{
+									background: linear-gradient( 146deg, rgba(68,68,68,0.5) 0%, rgba(0,0,0,0.5) 100%);
+									box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84,84,84,0.2118);
+									border-radius: 18rpx 18rpx 18rpx 18rpx;
+									border: 1rpx solid #666666;
+								}
 							}
 							.form-select{
 								position: relative;
 								margin-bottom: 36rpx;
+								
 							}
 							.form-text{
 								.flex-center;
@@ -547,11 +576,23 @@
 									width: 100%;
 									max-height: 1000rpx;
 									overflow: hidden;
+									
 									.box1{
 										width: 100%;
 										background-color: #444444;
 										border-bottom-left-radius: 18rpx;
 										border-bottom-right-radius: 18rpx;
+										z-index: 100;
+										min-height: 150rpx;
+										.title{
+											width: 100%;
+											background-color: #444444;
+											padding-top: 20rpx;
+											padding-left: 20rpx;
+											text{
+												line-height: 1;
+											}
+										}
 										// display: flex;
 										// flex-direction: column;
 										// align-items: center;
@@ -588,6 +629,10 @@
 									display: flex;
 									align-items: center;
 									border-radius: 18rpx;
+									background: linear-gradient( 146deg, rgba(68,68,68,0.5) 0%, rgba(0,0,0,0.5) 100%);
+									box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84,84,84,0.2118);
+									border-radius: 18rpx 18rpx 18rpx 18rpx;
+									border: 1rpx solid #666666;
 									input{
 										min-width: 80%;
 										color: #999999;

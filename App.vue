@@ -1,11 +1,15 @@
 <script>
 	import {
-		$request
+		$request,filesUrl
 	} from "@/utils/request";
 	export default {
+		  globalData: {  
+		            indexConfig: {}  
+		    },
 		onLaunch: function() {
 			console.log('App Launch')
 			this.startPolling();
+			this.indexConfigFnc();
 		},
 		onShow: function() {
 			console.log('App Show')
@@ -14,6 +18,16 @@
 			console.log('App Hide')
 		},
 		methods:{
+			async indexConfigFnc() {
+				let res = await $request('indexConfig', {});
+				// console.log(res)
+				if (res.data.code == 200) {
+					res.data.data.system_logo = filesUrl+res.data.data.system_logo
+					getApp().globalData.indexConfig=res.data.data;
+					// console.log(res,getApp().globalData.indexConfig)
+					// this.indexInfo = res.data.data;
+				}
+			},
 			async startPolling() {
 				// 启动轮询，每隔 1 秒调用一次
 				this.polling = true;

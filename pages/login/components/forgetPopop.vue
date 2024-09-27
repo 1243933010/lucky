@@ -13,13 +13,13 @@
 						<input type="text" placeholder="输入登录密码">
 					</view> -->
 					<view class="form-item">
-						<input type="text" v-model="formData.email" placeholder="邮箱">
+						<input type="text" v-model="formData.email" placeholder="Email">
 					</view>
 					<view class="form-item">
-						<input type="text" v-model="formData.password"  placeholder="新密码">
+						<input type="text" v-model="formData.password"  placeholder="New Password">
 					</view>
 					<view class="form-item">
-						<input type="text" v-model="formData.password_confirmation"  placeholder="确认密码">
+						<input type="text" v-model="formData.password_confirmation"  placeholder="Confirm Password">
 					</view>
 					<view class="send">
 						<input type="text" v-model="formData.email_code"  placeholder="Email Verification Code">

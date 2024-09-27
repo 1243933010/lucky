@@ -43,7 +43,7 @@
 						<text>Profile Information</text>
 					</view>
 					<view class="right">
-						<image src="../../static/right_arrow.png" mode="widthFix"></image>
+						<image src="../../static/right_arrow_icon2.png" mode="widthFix"></image>
 					</view>
 				</view>
 				<view class="item"  @click="goUrl('/pages/index/record')">
@@ -52,7 +52,7 @@
 						<text>Game Record </text>
 					</view>
 					<view class="right">
-						<image src="../../static/right_arrow.png" mode="widthFix"></image>
+						<image src="../../static/right_arrow_icon2.png" mode="widthFix"></image>
 					</view>
 				</view>
 				<view class="item" @click="goUrl('/pages/team/team')">
@@ -61,7 +61,7 @@
 						<text> My Team</text>
 					</view>
 					<view class="right">
-						<image src="../../static/right_arrow.png" mode="widthFix"></image>
+						<image src="../../static/right_arrow_icon2.png" mode="widthFix"></image>
 					</view>
 				</view>
 				<view class="item" @click="goUrl('/pages/me/fqas')">
@@ -70,7 +70,7 @@
 						<text>FQA</text>
 					</view>
 					<view class="right">
-						<image src="../../static/right_arrow.png" mode="widthFix"></image>
+						<image src="../../static/right_arrow_icon2.png" mode="widthFix"></image>
 					</view>
 				</view>
 				<view class="item" @click="goUrl('')">
@@ -79,7 +79,7 @@
 						<text>Logout</text>
 					</view>
 					<view class="right">
-						<image src="../../static/right_arrow.png" mode="widthFix"></image>
+						<image src="../../static/right_arrow_icon2.png" mode="widthFix"></image>
 					</view>
 				</view>
 			</view>
@@ -97,6 +97,9 @@
 			<DefaultFooter :fiexed="false"  @share="$refs.invitePopup.open()"   /> 
 		</view>
 		<InvitePopup ref="invitePopup"/>
+		<view class="aa">
+			
+		</view>
 	</view>
 </template>
 
@@ -120,6 +123,7 @@
 				pageScrollBool:true
 			};
 		},
+		
 		onLoad(){
 			this.getUser();
 		},
@@ -173,8 +177,18 @@
 		// background-color: #040405;
 		// background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
 		// background: #201f29 url('../../static/ku.png') no-repeat 100% 100%;
+		// background:#000000 url('../../static/ku.png') no-repeat 100% 100%/cover;
+		// background-size: 100% auto;
+	}
+	.aa{
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: -10;
 		background:#000000 url('../../static/ku.png') no-repeat 100% 100%/cover;
-		background-size: 105% auto;
+		background-size: 100% auto;
 	}
 	.me{
 		width: 100%;
@@ -272,7 +286,7 @@
 				}
 				.right{
 					image{
-						width: 11rpx;
+						width: 16rpx;
 					}
 				}
 			}
