@@ -128,7 +128,7 @@
 							<text>{{userInfoData.rank}}</text>
 						</view>
 						<view class="logo">
-							<image :src="userInfoData.avatar?userInfoData.avatar:'../../static/logo.png'"
+							<image :src="userInfoData.avatar?userInfoData.avatar:'../../static/default_user.png'"
 								mode="widthFix"></image>
 						</view>
 						<view class="name">
@@ -200,7 +200,7 @@
 								<text>{{item.rank||""}}</text>
 							</view>
 							<view class="logo">
-								<image :src="item.avatar?item.avatar:'../../static/logo.png'" mode="widthFix"></image>
+								<image :src="item.avatar?item.avatar:'../../static/default_user.png'" mode="widthFix"></image>
 							</view>
 							<view class="name">
 								<text>{{item.nickname||''}}</text>
@@ -299,7 +299,7 @@
 		methods: {
 			async getUser(){
 				let res = await $request('userInfo',{});
-				console.log(res)
+				// console.log(res)
 				if(res.data.code==200){
 					this.userInfo = res.data.data;
 					this.getTodayGameRank()
@@ -307,7 +307,7 @@
 			},
 			async threeCommissionInfoFnc() {
 				let res = await $request('threeCommissionInfo', {});
-				console.log(res)
+				// console.log(res)
 				if (res.data.code == 200) {
 					this.threeCommissionInfo = res.data.data;
 
@@ -367,35 +367,45 @@
 
 				if (res.data.code == 200) {
 					this.commissionInfo = res.data.data;
-					console.log(res, this.commissionInfo, '---')
+					// console.log(res, this.commissionInfo, '---')
 				}
 			},
 			async getTodayGameRank() {
-				let res = await $request('todayGameRank', {});
-				// console.log(res,'1111111111111111111')
-				if (res.data.code == 200) {
-					if (res.data.data.list.length === 0) {
-						res.data.data.list.push({
-							"player_id": 15,
-							"nickname": "me",
-							"avatar": this.userInfo.avatar,
-							// "total_game": 3,
-							"rank": 1,
-						})
-						res.data.data.list.push({
-							"player_id": 15,
-							"nickname": "Number Two",
-							"avatar": "",
-							// "total_game": 2,
-							"rank": 2,
-						})
-						res.data.data.list.push({
-							"player_id": 15,
-							"nickname": "Number Three",
-							"avatar": "",
-							"rank": 3,
-						})
+				let arr = [
+					{
+						"player_id": 15,
+						"nickname": "me",
+						"avatar": this.userInfo.avatar,
+						// "total_game": 3,
+						"rank": 1,
+					},
+					{
+						"player_id": 15,
+						"nickname": "Number Two",
+						"avatar": "",
+						// "total_game": 2,
+						"rank": 2,
+					},
+					{
+						"player_id": 15,
+						"nickname": "Number Three",
+						"avatar": "",
+						"rank": 3,
 					}
+				]
+				let res = await $request('todayGameRank', {});
+				
+				if (res.data.code == 200) {
+					
+					if (res.data.data.list.length === 0) {
+						res.data.data.list.push(...arr)
+					}else if(res.data.data.list.length === 1){
+						res.data.data.list.push(arr[1])
+						res.data.data.list.push(arr[2])
+					}else if(res.data.data.list.length === 2){
+						res.data.data.list.push(arr[2])
+					}
+					console.log(res.data.data.list,'1111111111111111111')
 					this.paiList = res.data.data.list;
 					this.userInfoData = res.data.data.user_info;
 

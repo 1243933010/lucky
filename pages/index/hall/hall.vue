@@ -97,7 +97,10 @@
 					<view class="submit">
 						<view class="box">
 							<view class="left"></view>
-							<view class="center" @click="submitClick">
+							<view class="center1" v-if="roomStatus.status!==0" >
+								<text>{{btnText}}</text>
+							</view>
+							<view class="center" v-if="roomStatus.status===0"  @click="submitClick" :style="{'color':roomStatus.status!==0?'#aaaaaa':''}">
 								<text>{{btnText}}</text>
 							</view>
 							<view class="right">
@@ -107,7 +110,7 @@
 							</view>
 						</view>
 					</view>
-					<view class="hr">
+					<view class="hr" v-if="roomStatus.status===0">
 						<view class="box" @click="autoClick" v-if="!autoBool">
 							<text> Auto Bet</text>
 						</view>
@@ -353,9 +356,12 @@
 				}
 			},
 			async submitClick() {
-				if(this.roomStatus.status == 10 ){
+				if(this.roomStatus.status !== 0 ){
 					return false
 				}
+				// if(this.roomStatus.status == 10 ){
+				// 	return false
+				// }
 				if (this.autoBool) {
 					this.autoBool = !this.autoBool;
 					this.btnText = 'Participate in Game'
@@ -949,6 +955,14 @@
 					background: url('../../../static/hell_icon3.png') no-repeat 100% 100%/cover;
 					.flex-center;
 					color: #9BF9FF;
+					font-size: 34rpx;
+				}
+				.center1 {
+					width: 437rpx;
+					height: 128rpx;
+					background: url('../../../static/aa.png') no-repeat 100% 100%/cover;
+					.flex-center;
+					color: #aaaaaa;
 					font-size: 34rpx;
 				}
 

@@ -1,5 +1,5 @@
 <template>
-	<view class="page-container">
+	<view class="page-container" @click.stop="showBool = false">
 		<DefaultHeader />
 		
 		<view class="bill">
@@ -7,7 +7,7 @@
 				<view class="title">
 					<text>bill</text>
 				</view>
-				<view class="logo" @click="shai">
+				<view class="logo" @click.stop="shai">
 					<image src="../../static/shai.png" mode="widthFix"></image>
 				</view>
 				<view class="fixed" v-show="showBool">

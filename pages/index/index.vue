@@ -51,8 +51,8 @@
 						<view class="box">
 							<view class="item">
 								<view class="add">
-									<image v-if="teamInfoData.today_invite_list&&teamInfoData.today_invite_list[0]"
-										:src="teamInfoData.today_invite_list[0].avatar" mode="widthFix"></image>
+									<image class="image" v-if="teamInfoData.today_invite_list&&teamInfoData.today_invite_list[0]"
+										:src="filesUrl1+teamInfoData.today_invite_list[0].avatar" mode="aspectFit"></image>
 									<image @click="invitation" v-if="!teamInfoData.today_invite_list[0]" src="../../static/add.png"
 										mode="widthFix"></image>
 								
@@ -64,8 +64,8 @@
 							</view>
 							<view class="item" >
 							<view class="add">
-								<image v-if="teamInfoData.today_invite_list[1]"
-									:src="teamInfoData.today_invite_list[1].avatar" mode="widthFix"></image>
+								<image class="image"  v-if="teamInfoData.today_invite_list[1]"
+									:src="filesUrl1+teamInfoData.today_invite_list[1].avatar" mode="aspectFit"></image>
 								<image @click="invitation"  v-if="!teamInfoData.today_invite_list[1]" src="../../static/add.png"
 									mode="widthFix"></image>
 							</view>
@@ -76,8 +76,8 @@
 							</view>
 							<view class="item">
 							<view class="add">
-								<image v-if="teamInfoData.today_invite_list[2]"
-									:src="teamInfoData.today_invite_list[2].avatar" mode="widthFix"></image>
+								<image class="image"  v-if="teamInfoData.today_invite_list[2]"
+									:src="filesUrl1+teamInfoData.today_invite_list[2].avatar" mode="aspectFit"></image>
 								<image @click="invitation"  v-if="!teamInfoData.today_invite_list[2]" src="../../static/add.png"
 									mode="widthFix"></image>
 							</view>
@@ -88,8 +88,8 @@
 							</view>
 							<view class="item">
 							<view class="add">
-								<image v-if="teamInfoData.today_invite_list[3]"
-									:src="teamInfoData.today_invite_list[3].avatar" mode="widthFix"></image>
+								<image class="image"  v-if="teamInfoData.today_invite_list[3]"
+									:src="filesUrl1+teamInfoData.today_invite_list[3].avatar" mode="aspectFit"></image>
 								<image @click="invitation"  v-if="!teamInfoData.today_invite_list[3]" src="../../static/add.png"
 									mode="widthFix"></image>
 							</view>
@@ -944,6 +944,10 @@
 
 							image {
 								width: 26rpx;
+							}
+							.image{
+								width: 100%;
+								height: 69rpx;
 							}
 						}
 						.name{

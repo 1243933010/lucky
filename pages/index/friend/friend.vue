@@ -94,23 +94,26 @@
 
 			<view class="big-icon">
 				<view class="box">
-					<image v-if="btnText==3" src="../../../static/friend_icon5.png" mode="widthFix"></image>
-					<image v-if="btnText==2" src="../../../static/friend_icon4.png" mode="widthFix"></image>
-					<image v-if="btnText==1" src="../../../static/friend_icon3.png" mode="widthFix"></image>
+					<image v-if="btnText==3" src="../../../static/friend_icon5.png" mode="aspectFit"></image>
+					<image v-if="btnText==2" src="../../../static/friend_icon4.png" mode="aspectFit"></image>
+					<image v-if="btnText==1" src="../../../static/friend_icon3.png" mode="aspectFit"></image>
 					<image style="opacity: 0;" v-if="!['1','2','3'].includes(btnText)" src="../../../static/friend_icon3.png" mode="widthFix"></image>
 				</view>
 			</view>
 
-			<!-- <view class="portrait">
-				<view class="box" v-if="testList.length">
+			<view class="portrait" style="padding-bottom: 300rpx;">
+				<view class="box" v-if="roomInfo.joined_users&&roomInfo.joined_users.length">
 					<view :style="{'top':item.top+'px','z-index':index+2,'left':item.left+'px'}" class="item" v-for="(item,index) in testList" :key="index">
-						<image :src="item.url" mode="widthFix"></image>
+						<image :src="item.url?filesUrl1+item.url:'../../../static/default_user.png'" mode="aspectFit"></image>
 					</view>
 				</view>
-			</view> -->
+			</view>
 
 
 		</view>
+		<view class="" style="position: fixed;bottom: 0rpx;left: 0;width: 100%;">
+			
+		
 		<view class="usdt">
 			<view class="border">
 				<view class="box">
@@ -131,7 +134,10 @@
 			<view class="submit">
 				<view class="box">
 					<view class="left"></view>
-					<view class="center" @click="submitClick">
+					<view class="center1" v-if="roomStatus.status!==0" >
+						<text>{{btnText}}</text>
+					</view>
+					<view class="center" v-if="roomStatus.status===0"  @click="submitClick" :style="{'color':roomStatus.status!==0?'#aaaaaa':''}">
 						<text>{{btnText}}</text>
 					</view>
 					<view class="right">
@@ -139,12 +145,13 @@
 					</view>
 				</view>
 			</view>
-			<view class="hr">
+			<view class="hr" v-if="roomStatus.status===0">
 				<view class="box"  @click="autoClick" v-if="!autoBool">
-					<image src="../../../static/friend_icon2.png" mode="widthFix"></image>
+					<!-- <image src="../../../static/friend_icon2.png" mode="widthFix"></image> -->
 					<text>Auto Bet</text>
 				</view>
 			</view>
+		</view>
 		</view>
 
 
@@ -197,7 +204,8 @@
 				autoBool:false,
 				type:'',
 				room_code:'',
-				intervalIdTwo:null
+				intervalIdTwo:null,
+				testList:[]
 			};
 		},
 		computed: {
@@ -208,40 +216,23 @@
 			filesUrl1() {
 				return filesUrl
 			},
-			testList() {
-				let list = [{
-						url: '../../../static/logo.png'
-					},
-					{
-						url: '../../../static/logo.png'
-					},
-					{
-						url: '../../../static/logo.png'
-					},
-					{
-						url: '../../../static/logo.png'
-					},
-					{
-						url: '../../../static/logo.png'
-					},
-					{
-						url: '../../../static/logo.png'
-					},
-					{
-						url: '../../../static/logo.png'
-					}
-				]
-				list.forEach(avatar => {
-					// 随机生成位置偏移量
-					const offsetX =Math.floor(Math.random() * 275);
-					const offsetY = Math.floor(Math.random() * 35);
-					// 应用偏移量
+			// testList() {
+				
+			// 	let list;
+			// 	 this.roomInfo.joined_users.forEach((val)=>{
+			// 		 list.push({url:val})
+			// 	 })
+			// 	list.forEach(avatar => {
+			// 		// 随机生成位置偏移量
+			// 		const offsetX =Math.floor(Math.random() * 275);
+			// 		const offsetY = Math.floor(Math.random() * 35);
+			// 		// 应用偏移量
 					
-					avatar.left = `${offsetX}`;
-					avatar.top = `${offsetY}`;
-				});
-				return list
-			}
+			// 		avatar.left = `${offsetX}`;
+			// 		avatar.top = `${offsetY}`;
+			// 	});
+			// 	return list
+			// }
 		},
 		onLoad(e) {
 			this.getUser();
@@ -371,9 +362,12 @@
 				}
 			},
 			async submitClick(){
-				if(this.roomStatus.status == 10 ){
+				if(this.roomStatus.status !== 0 ){
 					return false
 				}
+				// if(this.roomStatus.status == 10 ){
+				// 	return false
+				// }
 				if(this.autoBool){
 					this.autoBool = !this.autoBool;
 					this.btnText = 'Participate in Game'
@@ -561,6 +555,20 @@
 				// console.log(res)
 				if (res.data.code == 200) {
 					this.roomInfo = res.data.data;
+					let list = [];
+					 this.roomInfo.joined_users.forEach((val)=>{
+						 list.push({url:val})
+					 })
+					list.forEach(avatar => {
+						// 随机生成位置偏移量
+						const offsetX =Math.floor(Math.random() * 275);
+						const offsetY = Math.floor(Math.random() * 35);
+						// 应用偏移量
+						
+						avatar.left = `${offsetX}`;
+						avatar.top = `${offsetY}`;
+					});
+					this.testList = list;
 					return
 				}
 				$totast(res.data.message)
@@ -908,6 +916,7 @@
 
 				image {
 					width: 100%;
+					height:600rpx;
 				}
 			}
 		}
@@ -1040,6 +1049,8 @@
 					margin: 0 32rpx;
 
 					.no-active {
+						// width: 131rpx;
+						// height: 51rpx;
 						color: #FFFFFF;
 						font-size: 26rpx;
 					}
@@ -1048,8 +1059,10 @@
 						width: 131rpx;
 						height: 51rpx;
 						box-sizing: border-box;
-						border: 2px solid #999999;
-						border-radius: 10rpx;
+						// border: 2px solid #999999;
+						background: url('../../../static/bb.png') no-repeat 100% 100%/cover;
+						// border-radius: 10rpx;
+						// padding-bottom: 10rpx;
 						.flex-center;
 
 						// padding-top: 2rpx;
@@ -1063,6 +1076,7 @@
 							.flex-center;
 							color: #FFFFFF;
 							font-size: 26rpx;
+							padding-bottom: 5rpx;
 						}
 					}
 				}
@@ -1086,6 +1100,14 @@
 					background: url('../../../static/friend_icon1.png') no-repeat 100% 100%/cover;
 					.flex-center;
 					color: #9BF9FF;
+					font-size: 34rpx;
+				}
+				.center1 {
+					width: 437rpx;
+					height: 128rpx;
+					background: url('../../../static/aa.png') no-repeat 100% 100%/cover;
+					.flex-center;
+					color: #aaaaaa;
 					font-size: 34rpx;
 				}
 
