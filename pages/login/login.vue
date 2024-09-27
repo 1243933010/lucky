@@ -34,7 +34,7 @@
 		<view class="other">
 			<view class="label">
 				<text class="one">Don't have an account? </text>
-				<text class="two" @click="goUrl">Go to Register.</text>
+				<text class="two" @click="goUrl"> Go to Register.</text>
 			</view>
 		</view>
 		<ForgetPopop ref="forgetPopop" />
@@ -43,21 +43,23 @@
 
 <script>
 	import {
-		$request,$totast,filesUrl
+		$request,
+		$totast,
+		filesUrl
 	} from "@/utils/request";
 	import ForgetPopop from './components/forgetPopop.vue';
 	export default {
-		components:{
+		components: {
 			ForgetPopop
 		},
 		data() {
 			return {
-				formData:{
-					email:'',
-					password:""
+				formData: {
+					email: '',
+					password: ""
 				},
-				onLoadParams:{},
-				indexInfo:{}
+				onLoadParams: {},
+				indexInfo: {}
 			};
 		},
 		// computed:{
@@ -66,187 +68,205 @@
 		// 		return getApp().globalData.indexConfig.system_logo
 		// 	}
 		// },
-		onLoad(e){
+		onLoad(e) {
 			this.indexConfigFnc()
-			if(e){
+			if (e) {
 				this.onLoadParams = e;
 			}
 			let token = uni.getStorageSync('token')
-			if(token){
-				if(this.onLoadParams.invite_code&&this.onLoadParams.room_code){
+			if (token) {
+				if (this.onLoadParams.invite_code && this.onLoadParams.room_code) {
 					// uni.reLaunch({
 					// 	url: `/pages/index/index?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
 					// })
 					uni.reLaunch({
-						url:`/pages/index/friend/friend?room_code=${this.options.room_code}`
+						url: `/pages/index/friend/friend?room_code=${this.options.room_code}`
 					})
-				}else{
+				} else {
 					// uni.reLaunch({
 					// 	url: "/pages/index/index",
 					// });
 				}
 			}
 		},
-		methods:{
+		methods: {
 			async indexConfigFnc() {
 				let res = await $request('indexConfig', {});
 				// console.log(res)
 				if (res.data.code == 200) {
-					res.data.data.system_logo = filesUrl+res.data.data.system_logo
-					getApp().globalData.indexConfig=res.data.data;
+					res.data.data.system_logo = filesUrl + res.data.data.system_logo
+					getApp().globalData.indexConfig = res.data.data;
 					// console.log(res,getApp().globalData.indexConfig)
 					this.indexInfo = res.data.data;
 				}
 			},
-			async submitBtn(){
-				let res = await $request('login',this.formData);
+			async submitBtn() {
+				let res = await $request('login', this.formData);
 				// console.log(res)
 				$totast(res.data.message)
-				if(res.data.code==200){
-					let {token} = res.data.data;
+				if (res.data.code == 200) {
+					let {
+						token
+					} = res.data.data;
 					uni.setStorageSync("token", `Bearer ${token}`); // 存储token
-					setTimeout(()=>{
-						if(this.onLoadParams.invite_code&&this.onLoadParams.room_code){
+					setTimeout(() => {
+						if (this.onLoadParams.invite_code && this.onLoadParams.room_code) {
 							uni.reLaunch({
 								url: `/pages/index/index?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
 							})
-						}else{
+						} else {
 							uni.reLaunch({
 								url: "/pages/index/index",
 							});
 						}
-						
-					},1500)
+
+					}, 1500)
 				}
 			},
-			goUrl(){
-				if(this.onLoadParams.invite_code||this.onLoadParams.room_code){
+			goUrl() {
+				if (this.onLoadParams.invite_code || this.onLoadParams.room_code) {
 					uni.reLaunch({
-						url:`/pages/login/register?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
+						url: `/pages/login/register?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
 					})
-				}else{
+				} else {
 					uni.reLaunch({
-						url:`/pages/login/register`
+						url: `/pages/login/register`
 					})
 				}
-				
+
 			}
 		}
 	}
 </script>
 
 <style lang="less" scoped>
-	page{
+	page {
 		height: 100%;
 		// background-color: #040405;
-		background: linear-gradient( 0deg, #040405 0%, #23212c 100%);
+		background: linear-gradient(0deg, #040405 0%, #23212c 100%);
 	}
-	text{
+
+	text {
 		line-height: 0;
 	}
-@import url("../../static/default.less");
-.page-container{
-	height: 100%;
-	background:#000000 url('../../static/login_bk.png') no-repeat top left;
-	background-size: 100% auto;
-	.logo{
-		width: 175rpx;
-		height: 175rpx;
-		margin: 0rpx auto;
-		padding-top: 185rpx;
-		image{
-			width: 100%;
-			height: 100%;
-			border-radius: 50%;
-		}
-	}
-	.form{
-		padding-top: 206rpx;
-		width: calc(100% - 77rpx);
-		margin: 0 auto;
-		.form-item{
-			width: 100%;
-			display: flex;
-			flex-direction: column;
-			color: white;
-			margin-bottom: 52rpx;
-			.label{
-				color: #FFFFFF;
-				font-size: 28rpx;
-				line-height: 1.5;
-				margin-bottom: 8.7rpx;
-			}
-			.input{
+
+	@import url("../../static/default.less");
+
+	.page-container {
+		height: 100%;
+		background: #000000 url('../../static/login_bk.png') no-repeat top left;
+		background-size: 100% auto;
+
+		.logo {
+			width: 175rpx;
+			height: 175rpx;
+			margin: 0rpx auto;
+			padding-top: 185rpx;
+
+			image {
 				width: 100%;
-				height: 70rpx;
-				border: 1px solid #999999;
-				background-color: #111111;
-				border-radius: 20rpx;
+				height: 100%;
+				border-radius: 50%;
+			}
+		}
+
+		.form {
+			padding: 206rpx 77rpx 0rpx 77rpx;
+			justify-items: center;
+			align-items: center;
+
+			.form-item {
 				display: flex;
-				justify-content: center;
-				align-items: center;
-				input{
-					width: 100%;
-					padding-left: 47rpx;
+				flex-direction: column;
+				width: 596rpx;
+				color: white;
+				margin-bottom: 35rpx;
+
+				.label {
 					color: #FFFFFF;
-					font-size: 31.54rpx;
-					color: white;
+					font-size: 28rpx;
+					line-height: 1.5;
+					margin-bottom: 8.7rpx;
+				}
+
+				.input {
+					height: 70rpx;
+					border: 1px solid #999999;
+					background-color: #111111;
+					border-radius: 20rpx;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+
+					input {
+						width: 100%;
+						padding-left: 47rpx;
+						color: #FFFFFF;
+						font-size: 31.54rpx;
+						color: white;
+					}
+				}
+			}
+
+			.forget {
+				width: 100%;
+				display: flex;
+				justify-content: flex-end;
+
+				view {
+					// width: 191rpx;
+					height: 35rpx;
+					font-family: Source Han Sans, Source Han Sans;
+					font-weight: 400;
+					font-size: 25rpx;
+					color: #38D1DC;
+					line-height: 35rpx;
+					text-align: center;
+					font-style: normal;
+					text-decoration-line: underline;
+					text-transform: none;
 				}
 			}
 		}
-		.forget{
+
+		.submit-btn {
+			position: fixed;
+			bottom: 154rpx;
 			width: 100%;
 			display: flex;
-			justify-content: flex-end;
-			view{
-				// width: 191rpx;
-				height: 35rpx;
-				font-family: Source Han Sans, Source Han Sans;
-				font-weight: 400;
-				font-size: 25rpx;
-				color: #38D1DC;
-				line-height: 35rpx;
-				text-align: center;
-				font-style: normal;
-				text-decoration-line: underline;
-				text-transform: none;
-			}
-		}
-	}
-	.submit-btn{
-		position: fixed;
-		bottom: 154rpx;
-		width: 100%;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		view{
-			width: 526rpx;
-			height: 88rpx;
-			background: linear-gradient( 146deg, #9DFE00 0%, #14D9E5 100%);
-			border-radius: 44rpx 44rpx 44rpx 44rpx;
-			.flex-center;
-			color: #000000;
-			font-size: 31.54rpx;
-			font-weight: 500;
-		}
-	}
-	.other{
-		position: fixed;
-		bottom: 122rpx;
-		width: 100%;
-		// padding-top: 20rpx;
-		.flex-center;
-		color: #9E9E9E;
-		font-size: 24rpx;
-		.label{
-			.flex-direction;
-			.two{
-				color: #38D1DC;
-				text-decoration: underline;
-			}
-		}
-	}
-}
+			justify-content: center;
+			align-items: center;
 
+			view {
+				width: 526rpx;
+				height: 88rpx;
+				background: linear-gradient(146deg, #9DFE00 0%, #14D9E5 100%);
+				border-radius: 44rpx 44rpx 44rpx 44rpx;
+				.flex-center;
+				color: #000000;
+				font-size: 31.54rpx;
+				font-weight: 500;
+			}
+		}
+
+		.other {
+			position: fixed;
+			bottom: 122rpx;
+			width: 100%;
+			// padding-top: 20rpx;
+			.flex-center;
+			color: #9E9E9E;
+			font-size: 24rpx;
+
+			.label {
+				.flex-direction;
+
+				.two {
+					padding-left: 10rpx;
+					color: #38D1DC;
+					text-decoration: underline;
+				}
+			}
+		}
+	}
 </style>

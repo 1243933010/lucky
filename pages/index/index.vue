@@ -2,14 +2,14 @@
 	<view class="page-container" id="pageId">
 		<!-- background-color: black; -->
 		<view class="page-header" :style="{'background-color':!pageScrollBool?'black':'rgba(0,0,0,0)'}"
-		 style="z-index: 10;width:100%;position: fixed;top: 0;left: 0rpx;padding-left: 23rpx;box-sizing: border-box;padding-bottom: 50rpx;padding-right: 23rpx;">
+			style="z-index: 10;width:100%;position: fixed;top: 0;left: 0rpx;padding-left: 23rpx;box-sizing: border-box;padding-bottom: 50rpx;padding-right: 23rpx;">
 			<view class="logo1" @click="goUrl('/pages/me/recharge')">
 				<image src="../../static/me_icon.png" mode="widthFix"></image>
 				<text>{{teamInfoData.balance*1}}</text>
 				<view class="image">
 					<text>+</text>
 				</view>
-				
+
 			</view>
 			<view class="setting" @click="openDialog">
 				<view class=""></view>
@@ -53,50 +53,54 @@
 								<view class="add">
 									<image v-if="teamInfoData.today_invite_list&&teamInfoData.today_invite_list[0]"
 										:src="teamInfoData.today_invite_list[0].avatar" mode="widthFix"></image>
-									<image @click="invitation" v-if="!teamInfoData.today_invite_list[0]" src="../../static/add.png"
-										mode="widthFix"></image>
-								
+									<image @click="invitation" v-if="!teamInfoData.today_invite_list[0]"
+										src="../../static/add.png" mode="widthFix"></image>
+
 								</view>
-								<view class="name" >
-									<text v-if="teamInfoData.today_invite_list[0]">{{teamInfoData.today_invite_list[0].nickname}}</text>
-								  
+								<view class="name">
+									<text
+										v-if="teamInfoData.today_invite_list[0]">{{teamInfoData.today_invite_list[0].nickname}}</text>
+
 								</view>
-							</view>
-							<view class="item" >
-							<view class="add">
-								<image v-if="teamInfoData.today_invite_list[1]"
-									:src="teamInfoData.today_invite_list[1].avatar" mode="widthFix"></image>
-								<image @click="invitation"  v-if="!teamInfoData.today_invite_list[1]" src="../../static/add.png"
-									mode="widthFix"></image>
-							</view>
-							<view class="name" >
-								<text v-if="teamInfoData.today_invite_list[1]">{{teamInfoData.today_invite_list[0].nickname}}</text>
-							    <!-- <text>11111112121212</text> -->
-							</view>
 							</view>
 							<view class="item">
-							<view class="add">
-								<image v-if="teamInfoData.today_invite_list[2]"
-									:src="teamInfoData.today_invite_list[2].avatar" mode="widthFix"></image>
-								<image @click="invitation"  v-if="!teamInfoData.today_invite_list[2]" src="../../static/add.png"
-									mode="widthFix"></image>
-							</view>
-							<view class="name" >
-								<text v-if="teamInfoData.today_invite_list[2]">{{teamInfoData.today_invite_list[0].nickname}}</text>
-							    <!-- <text>11111112121212</text> -->
-							</view>
+								<view class="add">
+									<image v-if="teamInfoData.today_invite_list[1]"
+										:src="teamInfoData.today_invite_list[1].avatar" mode="widthFix"></image>
+									<image @click="invitation" v-if="!teamInfoData.today_invite_list[1]"
+										src="../../static/add.png" mode="widthFix"></image>
+								</view>
+								<view class="name">
+									<text
+										v-if="teamInfoData.today_invite_list[1]">{{teamInfoData.today_invite_list[0].nickname}}</text>
+									<!-- <text>11111112121212</text> -->
+								</view>
 							</view>
 							<view class="item">
-							<view class="add">
-								<image v-if="teamInfoData.today_invite_list[3]"
-									:src="teamInfoData.today_invite_list[3].avatar" mode="widthFix"></image>
-								<image @click="invitation"  v-if="!teamInfoData.today_invite_list[3]" src="../../static/add.png"
-									mode="widthFix"></image>
+								<view class="add">
+									<image v-if="teamInfoData.today_invite_list[2]"
+										:src="teamInfoData.today_invite_list[2].avatar" mode="widthFix"></image>
+									<image @click="invitation" v-if="!teamInfoData.today_invite_list[2]"
+										src="../../static/add.png" mode="widthFix"></image>
+								</view>
+								<view class="name">
+									<text
+										v-if="teamInfoData.today_invite_list[2]">{{teamInfoData.today_invite_list[0].nickname}}</text>
+									<!-- <text>11111112121212</text> -->
+								</view>
 							</view>
-							<view class="name" >
-								<text v-if="teamInfoData.today_invite_list[3]">{{teamInfoData.today_invite_list[0].nickname}}</text>
-							    <!-- <text>11111112121212</text> -->
-							</view>
+							<view class="item">
+								<view class="add">
+									<image v-if="teamInfoData.today_invite_list[3]"
+										:src="teamInfoData.today_invite_list[3].avatar" mode="widthFix"></image>
+									<image @click="invitation" v-if="!teamInfoData.today_invite_list[3]"
+										src="../../static/add.png" mode="widthFix"></image>
+								</view>
+								<view class="name">
+									<text
+										v-if="teamInfoData.today_invite_list[3]">{{teamInfoData.today_invite_list[0].nickname}}</text>
+									<!-- <text>11111112121212</text> -->
+								</view>
 							</view>
 							<view class="num">
 								<view class="add1">
@@ -184,8 +188,9 @@
 		</view>
 		<view class="uni-margin-wrap" style="margin-bottom: 173rpx;">
 			<!-- 轮播图 -->
-			<swiper v-if="swiperData.length>0" class="banner-container" :indicator-dots="false" :autoplay="false" :circular="false"
-				previous-margin="120rpx" next-margin="120rpx" @change="swipterChange" :current="swipterActive">
+			<swiper v-if="swiperData.length>0" class="banner-container" :indicator-dots="false" :autoplay="false"
+				:circular="false" previous-margin="120rpx" next-margin="120rpx" @change="swipterChange"
+				:current="swipterActive">
 				<block v-for="(item,index) in swiperData" :key="index">
 					<swiper-item class="banner-item">
 						<view class="banner-box" @click="openRoom(item,index)"
@@ -199,6 +204,9 @@
 											<text class="label">USDT</text>
 										</view>
 										<view class="wen">
+											<view
+												style="width: 9rpx;height: 9rpx;background: linear-gradient( 146deg, #9DFE00 0%, #14D9E5 100%);display: inline-block;margin-right: 10rpx;">
+											</view>
 											<text>Online Users</text>
 										</view>
 									</view>
@@ -216,7 +224,9 @@
 					</swiper-item>
 				</block>
 			</swiper>
-			<view style="color: white;width: 100%;height: 300rpx;display: flex;justify-content: center;align-items: center;" v-if="swiperData.length==0">
+			<view
+				style="color: white;width: 100%;height: 300rpx;display: flex;justify-content: center;align-items: center;"
+				v-if="swiperData.length==0">
 				<text>No Data</text>
 			</view>
 		</view>
@@ -235,7 +245,8 @@
 						</view>
 					</view>
 					<view class="bottom">
-						<text>It has fallen today <span style="color: #2cd7b5;">{{indexInfo.today_drop_count}}</span>times</text>
+						<text>It has fallen today <span
+								style="color: #2cd7b5;">{{indexInfo.today_drop_count}}</span>times</text>
 						<image src="../../static/right_arrow.png" mode="widthFix"></image>
 					</view>
 				</view>
@@ -271,21 +282,19 @@
 		<view class="faq">
 			<view class="title">
 				<text>FAQS</text>
-				<image @click="goUrl('/pages/me/fqas')" src="../../static/right_arrow_icon2.png" mode="widthFix"></image>
+				<image @click="goUrl('/pages/me/fqas')" src="../../static/right_arrow_icon2.png" mode="widthFix">
+				</image>
 			</view>
 			<view class="faq-box">
 				<view class="list">
 					<view class="item" :class="item.show?'show':'hide'" v-for="(item,index) in faqList" :key="index"
 						@click="goFaq(item)">
-						<text style="color: white;">{{item.question}}</text>
+						<text>{{item.question}}</text>
 					</view>
 				</view>
 			</view>
 		</view>
-		<view class="hr1">
-			<image src="../../static/me_icon1.png" mode="widthFix"></image>
-			<text>Notice：NoticeNoticeNoticeNoticeNoticeNoticeNoticsdsdsdsdsdssdsdsdd</text>
-		</view>
+
 		<!-- <view class="foot">
 			<view class="logo">
 				<text>LOGO</text>
@@ -302,18 +311,30 @@
 				</view>
 			</view>
 		</view> -->
-		  <!-- v-if="pageScroll<pageScrollBottom" -->
-	<view style="position: fixed;width: 100%;bottom: 0;"  v-if="pageScrollBool">
-		<view style="padding: 9rpx 0 35rpx 0;">
-			<DefaultFooter  :index="true"  :fiexed="false"  @share="$refs.invitePopup.open()"  />
+		<!-- v-if="pageScroll<pageScrollBottom" -->
+		<view style="position: fixed;width: 100%;bottom: 0;" v-if="pageScrollBool">
+			<view class="hr1">
+				<image src="../../static/me_icon1.png" mode="widthFix"></image>
+				<uni-notice-bar scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
+					text="[多行] 这是 NoticeBar 通告栏，这是 NoticeBar 通告栏，这是 NoticeBar 通告栏这是 NoticeBar 通告栏，这是 NoticeBar 通告栏，这是 NoticeBar 通告栏"></uni-notice-bar>
+			</view>
+			<view style="padding: 9rpx 0 35rpx 0;">
+				<DefaultFooter :index="true" :fiexed="false" @share="$refs.invitePopup.open()" />
+			</view>
 		</view>
-	</view>
-	<view style="padding: 9rpx 0 35rpx 0;">
-		<DefaultFooter  :index="true"  :fiexed="false" @share="$refs.invitePopup.open()" />
-	</view>
-		<FastJoin ref="fastJoin"/>
+		<view style="padding: 9rpx 0 35rpx 0;">
+			<view class="hr1">
+				<image src="../../static/me_icon1.png" mode="widthFix"></image>
+				<uni-notice-bar scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
+					text="[多行] 这是 NoticeBar 通告栏，这是 NoticeBar 通告栏，这是 NoticeBar 通告栏这是 NoticeBar 通告栏，这是 NoticeBar 通告栏，这是 NoticeBar 通告栏"></uni-notice-bar>
+			</view>
+			<view style="padding: 9rpx 0 35rpx 0;">
+				<DefaultFooter :index="true" :fiexed="false" @share="$refs.invitePopup.open()" />
+			</view>
+		</view>
+		<FastJoin ref="fastJoin" />
 		<TabPopup ref="tabPopup" />
-		<InvitePopup ref="invitePopup"/>
+		<InvitePopup ref="invitePopup" />
 		<!-- <FriendJoin ref="friendJoin" /> -->
 		<DefaultPopup ref="defaultPopup"></DefaultPopup>
 	</view>
@@ -365,8 +386,8 @@
 				amountList: [],
 				amountIndex: 0,
 				pageScroll: 0,
-				pageScrollBool:true,
-				onLoadParams:{}
+				pageScrollBool: true,
+				onLoadParams: {}
 
 				// roomList:[]
 			}
@@ -382,17 +403,17 @@
 				invite_code,
 				room_code
 			} = this.onLoadParams;
-			if(room_code){
-				setTimeout(()=>{
+			if (room_code) {
+				setTimeout(() => {
 					console.log(this.$refs)
 					this.$refs.defaultPopup.open({
-						title:'Message',
-						content:'Confirm join room?',
-						cancelText:'Cancel',
-						confirmText:'Ok',
+						title: 'Message',
+						content: 'Confirm join room?',
+						cancelText: 'Cancel',
+						confirmText: 'Ok',
 						room_code
 					})
-				},1000)
+				}, 1000)
 			}
 			// this.faqList.forEach((val, ind) => {
 			// 	val.color = this.colorList[Math.min(10, this.getRandomInt(1, 10))]
@@ -405,24 +426,24 @@
 			this.getAmountList('1');
 
 		},
-		onReachBottom(){
+		onReachBottom() {
 			this.pageScrollBool = false;
 		},
 		onPageScroll(e) {
 			// console.log(e)
-			if(this.pageScroll> e.scrollTop){
+			if (this.pageScroll > e.scrollTop) {
 				this.pageScrollBool = true;
-			}else{
+			} else {
 				this.pageScrollBool = false;
 			}
 			this.pageScroll = e.scrollTop;
 		},
 		methods: {
-			invitation(){
+			invitation() {
 				this.$refs.invitePopup.open()
 			},
-			async defaultClick(){
-				if(!this.indexInfo.room_id_10u){
+			async defaultClick() {
+				if (!this.indexInfo.room_id_10u) {
 					return
 				}
 				let res = await $request('joinSystem', {
@@ -430,7 +451,7 @@
 				});
 				// console.log(res)
 				if (res.data.code == 200) {
-					
+
 					uni.removeStorageSync('loopNum');
 					uni.removeStorageSync('loopArr');
 					uni.removeStorageSync('newLoopBool');
@@ -441,7 +462,7 @@
 				}
 				$totast(res.data.message)
 			},
-			goUrl(url){
+			goUrl(url) {
 				uni.navigateTo({
 					url
 				})
@@ -561,55 +582,55 @@
 			swipterChange(e) {
 				this.swipterActive = e.detail.current;
 			},
-		startToggle() {
-		    if (this.toggleInterval) {
-		        clearInterval(this.toggleInterval);
-		    }
-		
-		    // 每隔 2 秒执行一次
-		    this.toggleInterval = setInterval(() => {
-		        // 计算要切换状态的元素个数（至少1，最多3个）
-		        const count = this.getRandomInt(1, Math.min(2, this.faqListCopy.length));
-		        // 随机获取要切换的元素
-		        const itemsToToggle = this.getRandomElements(this.faqListCopy, count);
-		// console.log(itemsToToggle)
-		        // 将选中的元素的 show 属性设置为 true
-		        itemsToToggle.forEach(item => {
-		            item.show = true;
-		        });
-				this.faqList = itemsToToggle
-		        // 你可以在这里添加额外的逻辑，例如在下次切换前重置某些元素的 show 属性
-		    }, 2000);
-		},
-		
-		stopToggle() {
-		    if (this.toggleInterval) {
-		        clearInterval(this.toggleInterval);
-		        this.toggleInterval = null;
-		    }
-		},
-		
-		getRandomInt(min, max) {
-		    return Math.floor(Math.random() * (max - min + 1)) + min;
-		},
-		
-		getRandomElements(arr, count) {
-		    // 确保 count 不超过数组的长度
-		    if (count > arr.length) {
-		        count = arr.length;
-		    }
-		
-		    // 使用 Fisher-Yates 算法打乱数组
-		    const shuffled = arr.slice(); // 复制数组以免修改原数组
-		    for (let i = shuffled.length - 1; i > 0; i--) {
-		        const j = Math.floor(Math.random() * (i + 1));
-		        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // 交换元素
-		    }
-		
-		    // 取前 count 个元素
-		    return shuffled.slice(0, count);
-		},
-		async getFaqs() {
+			startToggle() {
+				if (this.toggleInterval) {
+					clearInterval(this.toggleInterval);
+				}
+
+				// 每隔 2 秒执行一次
+				this.toggleInterval = setInterval(() => {
+					// 计算要切换状态的元素个数（至少1，最多3个）
+					const count = this.getRandomInt(1, Math.min(2, this.faqListCopy.length));
+					// 随机获取要切换的元素
+					const itemsToToggle = this.getRandomElements(this.faqListCopy, count);
+					// console.log(itemsToToggle)
+					// 将选中的元素的 show 属性设置为 true
+					itemsToToggle.forEach(item => {
+						item.show = true;
+					});
+					this.faqList = itemsToToggle
+					// 你可以在这里添加额外的逻辑，例如在下次切换前重置某些元素的 show 属性
+				}, 2000);
+			},
+
+			stopToggle() {
+				if (this.toggleInterval) {
+					clearInterval(this.toggleInterval);
+					this.toggleInterval = null;
+				}
+			},
+
+			getRandomInt(min, max) {
+				return Math.floor(Math.random() * (max - min + 1)) + min;
+			},
+
+			getRandomElements(arr, count) {
+				// 确保 count 不超过数组的长度
+				if (count > arr.length) {
+					count = arr.length;
+				}
+
+				// 使用 Fisher-Yates 算法打乱数组
+				const shuffled = arr.slice(); // 复制数组以免修改原数组
+				for (let i = shuffled.length - 1; i > 0; i--) {
+					const j = Math.floor(Math.random() * (i + 1));
+					[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; // 交换元素
+				}
+
+				// 取前 count 个元素
+				return shuffled.slice(0, count);
+			},
+			async getFaqs() {
 				let res = await $request('faq', {});
 				// console.log(res)
 				if (res.data.code == 200) {
@@ -620,7 +641,7 @@
 					})
 					this.faqList = res.data.data.list;
 					this.faqListCopy = res.data.data.list;
-					
+
 				}
 			},
 			goFaq() {
@@ -646,7 +667,7 @@
 	}
 
 	.page-container {
-		background: linear-gradient(141deg, #1b1a1c 0%, #000  100%);
+		background: linear-gradient(141deg, #1b1a1c 0%, #000 100%);
 	}
 
 	/* 轮播图 */
@@ -663,27 +684,26 @@
 	}
 
 	.banner-box {
-		width: 100%;
 		/* 控制两张图片的间距 */
 		height: 100%;
-		padding-left: 10%;
 		position: relative;
 
 		.posi-box {
 			position: absolute;
-			width: 100%;
-			bottom: 0;
-			left: 5%;
+			bottom: 30rpx;
+			margin: 0rpx 30rpx;
+				box-sizing: border-box;
 
 			.posi-content {
-				width: 455rpx;
+				width: 404.79rpx;
 				margin: 0 auto;
 				height: 159rpx;
-				background: rgba(255, 255, 255, 0.3);
+				background: linear-gradient(146deg, rgba(255, 255, 255, 0.0784) 0%, rgba(255, 255, 255, 0.2196) 100%);
 				border-radius: 28rpx 28rpx 28rpx 28rpx;
+				box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84, 84, 84, 0.2118);
 				.flex-space-between;
 				box-sizing: border-box;
-				padding: 0rpx 22rpx;
+				padding: 22rpx;
 
 				.content-left {
 					width: 90%;
@@ -713,43 +733,36 @@
 					}
 
 					.wen {
+						margin-top: 10rpx;
 						color: #CCCCCC;
 						font-size: 21rpx;
 					}
 				}
 
 				.content-right {
-					height: 100%;
+					height: 159rpx;
 					display: flex;
-					// flex-grow: 1;
 					flex-direction: column;
 					justify-content: space-between;
 					box-sizing: border-box;
 					align-self: flex-end;
-					// justify-content: flex-end;
-					padding: 22rpx 0;
-
+					padding: 22rpx 0rpx 0rpx 0rpx;
 					.image {
 						width: 100%;
 						display: flex;
 						flex-direction: row-reverse;
-
+						margin-top: 22rpx;
 						image {
 							width: 15rpx;
-
 						}
 					}
 
 					.peo {
 						width: 100%;
-						display: flex;
-						flex-direction: row-reverse;
-
 						text {
 							width: 100%;
 							color: #EEEEEE;
 							font-size: 28rpx;
-
 						}
 					}
 
@@ -798,10 +811,11 @@
 			image {
 				width: 40rpx;
 			}
-			.image{
+
+			.image {
 				width: 32rpx;
 				height: 32rpx;
-				background: linear-gradient( 146deg, #9DFE00 0%, #14D9E5 100%);
+				background: linear-gradient(146deg, #9DFE00 0%, #14D9E5 100%);
 				box-sizing: border-box;
 				// border: 1rpx solid #DDDDDD;
 				// .flex-center;
@@ -812,7 +826,8 @@
 				align-items: center;
 				padding-left: 13rpx;
 				padding-bottom: 7rpx;
-				text{
+
+				text {
 					// width: 100%;
 					color: #222222;
 					font-size: 36rpx;
@@ -865,7 +880,7 @@
 
 			.people {
 				// background: gainsboro;
-				background:  url('../../static/index_bk5.png') no-repeat 50% 100%/cover;
+				background: url('../../static/index_bk5.png') no-repeat 50% 100%/cover;
 				border-radius: 45rpx;
 				height: 104rpx;
 				.flex-space-between;
@@ -946,11 +961,12 @@
 								width: 26rpx;
 							}
 						}
-						.name{
+
+						.name {
 							width: 69rpx;
 							color: white;
 							font-size: 24rpx;
-							text-overflow:ellipsis; 
+							text-overflow: ellipsis;
 							white-space: nowrap;
 							overflow: hidden;
 							// .vertical(1)
@@ -1039,13 +1055,16 @@
 		display: flex;
 		justify-self: flex-start;
 		margin-bottom: 59rpx;
+
 		.label {
 			display: flex;
 			flex-direction: column;
+
 			.text {
 				display: flex;
 				flex-direction: column;
 				margin-bottom: 30rpx;
+
 				.text1 {
 					font-size: 62rpx;
 					font-weight: 600;
@@ -1365,8 +1384,9 @@
 			display: flex;
 			flex-direction: row;
 			flex-wrap: wrap;
-			height: 200rpx;
-			overflow-y: auto;
+			height: 220rpx;
+			// overflow-y: auto;
+
 			.item {
 				background: #1D1B26;
 				// background: red;
@@ -1378,6 +1398,16 @@
 				padding: 0rpx 75rpx;
 				position: relative;
 				transition: opacity 0.7s ease, visibility 0.7s ease;
+				max-width: calc(100% - 150rpx);
+
+				text {
+					color: #fff;
+					line-height: 71rpx;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					overflow: hidden;
+
+				}
 			}
 
 			.show {
@@ -1393,19 +1423,26 @@
 			}
 		}
 	}
-	.hr1{
-		width: calc(100% - 42rpx);
-		margin: 0 auto;
+
+	.hr1 {
+		width: 666rpx;
+		margin: 0rpx auto;
 		background: rgba(0, 0, 0, .35);
-		padding: 10rpx 0 10rpx 10rpx;
+		padding: 5rpx;
 		border-radius: 5rpx;
 		.flex-direction;
-		
-		image{
+
+		image {
 			width: 22rpx;
 			margin-right: 15rpx;
 		}
-		text{
+
+		.uni-notice-bar {
+			margin: 0;
+			padding: 0;
+		}
+
+		text {
 			width: 600rpx;
 			color: #D8D8D8;
 			font-size: 21rpx;
