@@ -43,7 +43,16 @@
 				this.options = options;
 				this.$refs.popup.open()
 			},
-			confirm() {
+			async confirm() {
+				// let res = await $request('roomJoin',{code:this.options.room_code});
+				// $totast(res.data.message)
+				// if(res.data.code==200){
+				// 	setTimeout(()=>{
+				// 		uni.navigateTo({
+				// 			url:`/pages/index/friend/friend?id=${res.data.data.room_id}`
+				// 		})
+				// 	},1000)
+				// }
 				setTimeout(()=>{
 					uni.navigateTo({
 						url:`/pages/index/friend/friend?room_code=${this.options.room_code}`
