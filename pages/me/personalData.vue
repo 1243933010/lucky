@@ -2,7 +2,7 @@
 	<view class="page-container">
 		<DefaultHeader />
 		<view class="logo">
-			<image @click="changeImg" :src="userInfo.avatar?filesUrl1+userInfo.avatar:'../../static/default_user.png'" mode="widthFix"></image>
+			<image @click="changeImg" :src="userInfo.avatar?filesUrl1+userInfo.avatar:'../../static/default_user.png'" mode="aspectFill"></image>
 		</view>
 		<view class="form">
 			<view class="form-item" @click="setUser">
@@ -124,7 +124,7 @@
 				formData: {
 					form1: 'test',
 					form2: "123456",
-					transactionPassword:'******'
+					transactionPassword:''
 				},
 				sysInfo: {screenHeight:100},
 				userInfo:{}
@@ -151,6 +151,11 @@
 			if(e&&e.type=='bep20_address'){
 				this.$nextTick(()=>{
 				this.$refs.rechargePopup.open(2);
+				})
+			}
+			if(e&&e.type=='transactionPassword'){
+				this.$nextTick(()=>{
+				this.$refs.transactionPassword.open();
 				})
 			}
 			// this.sysInfo = sysInfo.screenHeight;

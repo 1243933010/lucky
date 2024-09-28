@@ -12,7 +12,7 @@
 					<view class="item upload" @click="upload" v-if="list.length<1">
 						<image src="../../../static/add.png" mode="widthFix"></image>
 					</view>
-					<view class="item" :class="index==activeIndex?'active':''" v-for="(item,index) in list"
+					<view class="item"  @click="upload" :class="index==activeIndex?'active':''" v-for="(item,index) in list"
 						:key="index">
 						<image :src="filesUrl1+item.url" mode="aspectFill"></image>
 					</view>

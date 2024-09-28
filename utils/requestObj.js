@@ -214,6 +214,16 @@ let requestObj = {
 		url: '/api/user/three_commission_info',
 		type: 'POST'
 	},
+	newGameStatus:{
+		name: "三级佣金信息",
+		url: '/api/game/get_game_status',
+		type: 'POST'
+	},
+	messageIndex:{
+		name: "消息接口",
+		url: '/api/message/index',
+		type: 'POST'
+	},
 	
 }
 export default requestObj;

@@ -15,7 +15,7 @@
 						</view>
 						<view class="con">
 							<image src="../static/me_icon.png" mode="widthFix"></image>
-							<text>{{withdrawConfig.balance}}</text>
+							<text>{{withdrawConfig.amount}}</text>
 						</view>
 					</view>
 					<view class="form-item">
@@ -33,7 +33,7 @@
 						</view>
 						<view class="con">
 							<!-- <image src="../static/me_icon.png" mode="widthFix"></image> -->
-							<text>{{withdrawConfig.withdraw_fee}}</text>
+							<text>{{withdrawConfig.amount-withdrawConfig.withdraw_fee}}</text>
 						</view>
 					</view>
 					<view class="form-item">
@@ -42,7 +42,7 @@
 						</view>
 						<view class="con">
 							<!-- <image src="../static/me_icon.png" mode="widthFix"></image> -->
-							<text>{{withdrawConfig.trc20_address}}</text>
+							<text>{{withdrawConfig.address2}}</text>
 						</view>
 					</view>
 				</view>

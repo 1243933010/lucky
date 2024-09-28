@@ -2,10 +2,11 @@
 	<view>
 		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="center"  >
 			<view class="aaa" style="background: #000000;padding-bottom: 20rpx;">
-				<view class="popup-content" :style="{'margin-top':marginTop}">
-					<view class="close" @click="$refs.popup.close()">
-						<image src="@/static/close.png" mode="widthFix"></image>
-					</view>
+				<view class="close" @click="$refs.popup.close()">
+					<image src="@/static/close.png" mode="widthFix"></image>
+				</view>
+				<view class="popup-content" >
+					
 					<view class="title" v-if="options.game_player">
 						<text  v-if="boolType=='3'">{{options.game_player.win_amount}}</text>
 					</view>
@@ -84,6 +85,9 @@
 				setTimeout(()=>{
 					this.boolType = '3';
 				},1000)
+				setTimeout(()=>{
+					this.$refs.popup.close()
+				},5000)
 			},
 			close(){
 				this.options = {};
@@ -104,7 +108,7 @@
 </script>
 
 <style lang="less" scoped>
-	@import url("@/static/default.less");
+@import url("@/static/default.less");
 	/deep/ .uni-popup__wrapper {
 		border-radius: 25rpx;
 		height: 100%;
@@ -144,12 +148,16 @@
 		// .flex-center;
 		max-height: 500rpx;
 		overflow-y: auto;
-		position: relative;
+		// position: relative;
 		// z-index: 1000;
 		// box-shadow: 0rpx -2rpx 9rpx 0rpx rgba(235, 235, 245, 0.302);
 		// border-radius: 61rpx 61rpx 0rpx 0rpx;
 		// border: 4rpx solid;
 		margin-bottom: 20rpx;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%,-50%);
 	}
 	.submit{
 		width: 80%;
@@ -161,23 +169,31 @@
 		border: 1px solid white;
 		border-radius: 10rpx;
 		opacity: 0;
+		// background-color: green;
+		position: absolute;
+		bottom: 8%;
+		left: 50%;
+		transform: translate(-50%,-50%);
+	}
+	.close {
+		position: fixed;
+		bottom: 56%;
+		left: 82%;
+		transform: translate(-50%,-50%);
+		z-index: 10;
+		opacity: 0;
+		// background-color: yellow;
+		image {
+			width: 43rpx;
+		}
 	}
 
 	.popup-content {
-		position: relative;
+		// position: relative;
 	
 		// padding-top: 52rpx;
 
-		.close {
-			position: fixed;
-			right: 110rpx;
-			top: 470rpx;
-			z-index: 1000;
-			opacity: 0;
-			image {
-				width: 43rpx;
-			}
-		}
+		
 
 		.title {
 			color: #FFFFFF;
@@ -263,7 +279,7 @@
 				color: #000000;
 				font-size: 31rpx;
 				margin-top: 262rpx;
-				// opacity: 0;
+				opacity: 0;
 				.flex-center;
 			}
 		}

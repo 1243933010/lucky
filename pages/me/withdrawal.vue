@@ -116,12 +116,14 @@
 				},
 				rechargeConfig:[],
 				withdrawConfig:{},
-				address:''
+				address:'',
+				userInfo:{}
 			};
 		},
 		mounted(){
 			this.getWithdrawalConfig()
 			this.getRechargeConfig()
+			this.getUser();
 		},
 		computed:{
 			logoUrl(){
@@ -151,22 +153,57 @@
 					}
 				}
 			},
+			async getUser(){
+				let res = await $request('userInfo',{});
+				console.log(res)
+				if(res.data.code==200){
+					this.userInfo = res.data.data;
+				}
+			},
 			openPopUpHandle() {
-				if(this.radioIndex==0){
-					if(!this.withdrawConfig.trc20_address){
+				if(this.userInfo.is_set_pay_password!==1){
+					this.$nextTick(()=>{
 						this.$refs.withdrawalPopupRef.open({
 							title:'Message',
-							content:'Please set the address',
+							content:'Please set the Transaction Password',
 							cancelText:'Cancel',
-							confirmText:'Ok'
+							confirmText:'Ok',
+							type:'transactionPassword'
+						})
+					})
+					return
+				}
+				if(this.radioIndex==0){
+					if(!this.withdrawConfig.trc20_address){
+						this.$nextTick(()=>{
+							this.$refs.withdrawalPopupRef.open({
+								title:'Message',
+								content:'Please set the address',
+								cancelText:'Cancel',
+								confirmText:'Ok',
+								type:'trc20_address'
+							})
 						})
 						return
 					}
 				}else{
 					if(!this.withdrawConfig.bep20_address){
-					this.$refs.withdrawalPopupRef.open()
+					this.$refs.withdrawalPopupRef.open({
+								title:'Message',
+								content:'Please set the address',
+								cancelText:'Cancel',
+								confirmText:'Ok',
+								type:'bep20_address'
+							})
 						return
 					}
+				}
+				this.withdrawConfig.amount = this.formData.amount;
+				this.withdrawConfig.address2 = this.formData.amount;
+				if(this.radioIndex==0){
+					this.withdrawConfig.address2=this.withdrawConfig.trc20_address
+				}else{
+					this.withdrawConfig.address2=this.withdrawConfig.bep20_address
 				}
 				this.$refs.popup.open()
 			},

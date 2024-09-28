@@ -45,7 +45,7 @@
 			},
 			confirm() {
 				uni.reLaunch({
-					url: '/pages/me/personalData?type=trc20_address'
+					url: `/pages/me/personalData?type=${this.options.type}`
 				})
 			}
 		}

@@ -10,8 +10,8 @@
 				</view>
 				<view class="link">
 					<view class="label">
-						<image v-if="userInfo.avatar" class="image" :src="filesUrl1+userInfo.avatar" mode="widthFix"></image>
-						<image v-if="!userInfo.avatar" class="image" src="../static/default_user.png" mode="widthFix"></image>
+						<image v-if="userInfo.avatar" class="image" :src="filesUrl1+userInfo.avatar" mode="aspectFill"></image>
+						<image v-if="!userInfo.avatar" class="image" src="../static/default_user.png" mode="aspectFill"></image>
 						<view class="text">
 							<view class="name">
 								<text>{{userInfo.nickname}}</text>
@@ -113,6 +113,7 @@
 			},
 			open(options = {type: 'center'}) {
 				this.type = options.type;
+				this.getUser()
 				this.$refs.popup.open()
 			},
 			async getUser(){
@@ -205,6 +206,7 @@
 				
 				.image{
 					width: 105rpx;
+					height: 105rpx;
 					border-radius: 50%;
 					margin-right: 32rpx
 				}

@@ -31,8 +31,10 @@
 					</view>
 				</view>
 				<view class="notice">
-					<view class="box">
-						<text>{{roomDetail.game_help}}</text>
+					<view class="box" style="padding-top: 10rpx;">
+						<!-- <text>{{roomDetail.game_help}}</text> -->
+						<uni-notice-bar scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
+							:text="messageList"></uni-notice-bar>
 					</view>
 
 				</view>
@@ -97,10 +99,11 @@
 					<view class="submit">
 						<view class="box">
 							<view class="left"></view>
-							<view class="center1" v-if="roomStatus.status!==0" >
+							<!-- :style="{'color':roomStatus.status!==0?'#aaaaaa':''}" -->
+							<view class="center1" v-if="hideButton">
 								<text>{{btnText}}</text>
 							</view>
-							<view class="center" v-if="roomStatus.status===0"  @click="submitClick" :style="{'color':roomStatus.status!==0?'#aaaaaa':''}">
+							<view class="center" v-if="showButton"  @click="submitClick" >
 								<text>{{btnText}}</text>
 							</view>
 							<view class="right">
@@ -177,12 +180,45 @@
 				borderActive: null,
 				roomInfo: {},
 				roomStatus: {},
-				btnText: 'Participate in Game',
+				// btnText: 'Participate in Game',
 				testNum: 0,
-				autoBool: false
+				autoBool: false,
+				countdownBool:null,//是否开启了倒计时
+				messageList:'',
+				messageLoopNum:3,
+				uObject:{'2':'5','5':'10','10':'15','20':'20','50':'25','100':'30'}
 			};
 		},
 		computed: {
+			btnText:{
+				get(){
+					if(this.roomStatus.is_can_start==0&&this.roomStatus.is_user_join==0){
+						//游戏未开始，用户未下注
+						return 'Participate in Game'
+					}
+					if(this.roomStatus.is_can_start==0&&this.roomStatus.is_user_join==1){
+						//游戏未开始，用户已下注
+						return 'Bet already placed'
+					}
+					if(this.roomStatus.is_can_order==0){
+						//已买定离手
+						return 'No betting allowed'
+					}
+					return 'Participate in Game';
+				},
+				set(val){
+					return val
+				}
+			},
+			showButton(){  //符合不置灰条件
+				let bool =this.roomStatus.is_can_start===0&&this.roomStatus.is_user_join===0;
+				return bool;
+			},
+			hideButton(){
+				let bool = this.roomStatus.is_can_order===0;  //已经买定离手
+				let bool1 = this.roomStatus.is_user_join===1;  //已经参与了游戏
+				return bool||bool1;
+			},
 			logoUrl() {
 				console.log(getApp().globalData)
 				return getApp().globalData.indexConfig.system_logo
@@ -242,6 +278,24 @@
 
 		},
 		methods: {
+			async messageInterval(position){
+				this.messageList  = ''
+				let res = await $request('messageIndex', 
+				{position:this.uObject[this.amountList[this.amountIndex].bet_amount.toString()]});
+				console.log(res,'666666666666')
+				if(res.data.code==200){
+					let str = ''
+					res.data.data.forEach((val,index)=>{
+						this.testInterval = setInterval(()=>{
+							if(index<=10){
+								this.messageList  =this.messageList + ` ${val.title}`;
+							}
+						},500)
+						// this.messageList  =this.messageList + val.title;
+					})
+					// this.messageList = str;
+				}
+			},
 			autoClick() {
 				this.autoBool = !this.autoBool;
 				let str = 'Successful  Auto Bet'
@@ -268,14 +322,7 @@
 				console.log(this.amountIndex, index, '11')
 				this.amountIndex = index;
 				this.amountIndex1 = index;
-				// let res = await $request('switchSystemRoom', {
-				// 	amount: this.amountList[this.amountIndex]
-				// });
-				// // console.log(res)
-				// if (res.data.code == 200) {
-				// 	// this.amountList = res.data.data.amount;
-				// 	// this.amountIndex = 0;
-				// }
+				this.messageLoopNum = 4;
 			},
 			listenNum(info) {
 				console.log(info)
@@ -323,13 +370,19 @@
 				// 每秒更新一次倒计时
 				this.intervalId = setInterval(() => {
 					time -= 1;
-
 					// 更新倒计时显示
 					this.btnText = time;
 					// 当倒计时为零或小于零时，清除定时器
 					if (time <= 0) {
 						this.clearCountdown();
 						this.btnText = "";
+						let thisSee = uni.getStorageSync('thisSee')
+						if(!thisSee){
+							thisSee = []
+							thisSee.push(`${this.roomStatus.user_id.toString()}${this.roomStatus.sn}`)
+						}
+						uni.setStorageSync('thisSee',thisSee)//设置已经看过了
+						this.getGameResult();//调接口直接打开弹窗
 					}
 				}, 1000);
 
@@ -356,19 +409,15 @@
 				}
 			},
 			async submitClick() {
-				if(this.roomStatus.status !== 0 ){
-					return false
-				}
-				// if(this.roomStatus.status == 10 ){
-				// 	return false
-				// }
-				if (this.autoBool) {
+				if (this.autoBool) {  //如果已经点了自动投注，再点击只会取消
 					this.autoBool = !this.autoBool;
-					this.btnText = 'Participate in Game'
+					// this.btnText = 'Participate in Game'
 					return
 				}
-				if (this.roomStatus.status == 0 || (this.roomStatus.is_join == 0 && this.roomStatus.status == 5)) {
+				if(this.roomStatus.is_can_order !== 0&&this.roomStatus.is_user_join==0 ){
+					//可以下单并且用户并未投注，此时可以下注
 					this.gameJoin()
+					return false
 				}
 
 			},
@@ -422,6 +471,10 @@
 					this.amountList = res.data.data;
 					res.data.data.forEach((val, index) => {
 						if (+val.bet_amount == (+this.bet_amount)) {
+							// console.log(val.bet_amount,'============')
+							// this.messageBool = null;
+							// clearInterval(this.messageBool)
+							// this.messageInterval(this.uObject[val.bet_amount.toString()])
 							this.amountIndex = index;
 							this.amountIndex1 = index;
 						}
@@ -432,6 +485,10 @@
 
 			async switchSystemRoom(e) {
 				console.log(e.detail.current, '222')
+				this.messageLoopNum = 4;
+				// this.messageBool = null;
+				// clearInterval(this.messageBool)
+				// this.messageInterval(this.uObject[this.amountList[e.detail.current].bet_amount.toString()])
 				this.amountIndex = e.detail.current;
 				// this.amountIndex1 = e.detail.current;
 				let res = await $request('switchSystemRoom', {
@@ -448,16 +505,8 @@
 				}
 			},
 			async switchSystemRoom1(e) {
-				console.log(e.detail.current, '222')
 				this.amountIndex1 = e.detail.current;
-				// let res = await $request('switchSystemRoom', {
-				// 	amount: this.amountList[this.amountIndex]
-				// });
-				// // console.log(res)
-				// if (res.data.code == 200) {
-				// 	// this.amountList = res.data.data.amount;
-				// 	// this.amountIndex = 0;
-				// }
+				// console.log(this.amountList)
 			},
 			async getRoomDetail(id) {
 				let res = await $request('roomDetail', {
@@ -512,69 +561,116 @@
 				// console.log(res)
 				if (res.data.code == 200) {
 					this.roomInfo = res.data.data;
+					this.messageLoopNum++;
+					if(this.messageLoopNum>=5){
+						this.messageLoopNum = 0;
+						this.messageInterval();
+						
+					}
 					return
 				}
 				$totast(res.data.message)
 			},
 			async getGameStatus() {
-				let res = await $request('gameStatus', {
+				// let res = await $request('gameStatus', {
+				// 	room_id: this.roomId
+				// });
+				let res = await $request('newGameStatus', {
 					room_id: this.roomId
 				});
-				// console.log(res)
 				if (res.data.code == 200) {
-					// if(this.testNum===25){
-					// 	this.testNum = -5;
+					let data = res.data.data;
+					// data = {
+					// 	end_time: 0,
+					// 	is_can_order: 1,
+					// 	is_can_start: 1,
+					// 	is_have_result: 0,
+					// 	is_user_join: 1,
+					// 	sn: "YX202409271445074111",
+					// 	user_id: 49
 					// }
-					// res.data.data.status = this.testNum+=5
-					// res.data.data.status = 20
-					this.roomStatus = res.data.data;
-					this.listenNum(res.data.data)
-					if (this.roomStatus.status == 0) {
-						if (this.autoBool) {
-							this.gameJoin()
-						}
-						uni.hideLoading()
+					this.roomStatus = data;
+					// this.listenNum(data)
+					if(data.is_can_start===0){  //如果还没有开启游戏，处理一下默认逻辑
+						
 					}
-					if (this.roomStatus.status == 15) {
-						uni.showLoading()
+					if(data.is_can_start==1){  //如果可以开启游戏，三秒倒计时启动
+			          let thisSee = uni.getStorageSync('thisSee')
+					  if(thisSee&&thisSee.includes(`${data.user_id.toString()}${data.sn}`)){  //如果缓存跟当前订单符合，说明不是第一次了，不倒计时了
+						console.log('触发--已看过当前投注')
+						// this.btnText = '111'
+						// this.getGameResult();//调接口直接打开弹窗
+					}else{  //第一次观看有倒计时
+					    if(this.countdownBool){ //如果正处于倒计时
+						   return
+					    }
+						
+					    this.countdownBool = true;//设置已经倒计时已开启状态
+						this.startCountdown(3)
 					}
-					if (this.roomStatus.status == 20) {
-						uni.hideLoading()
-						this.getGameResult();
-						setTimeout(() => {
-							uni.hideLoading()
-							this.$refs.popup.close()
-						}, 5000)
+				}
+				if(data.is_can_order===0){  //当买定离手时
+					
+				}
+				
+				// else{
+				// 	this.clearCountdown()
+				// 	// if()
+				// 	if (this.autoBool) {
+				// 		this.btnText = 'Cancel Auto Bet'
+				// 	} else {
+				// 		this.btnText = 'Participate in Game'
+				// 	}
+				// }
+				
+				
+					
+					// if (this.roomStatus.status == 0) {
+					// 	if (this.autoBool) {
+					// 		this.gameJoin()
+					// 	}
+					// 	uni.hideLoading()
+					// }
+					// if (this.roomStatus.status == 15) {
+					// 	uni.showLoading()
+					// }
+					// if (this.roomStatus.status == 20) {
+					// 	uni.hideLoading()
+					// 	this.getGameResult();
+					// 	setTimeout(() => {
+					// 		uni.hideLoading()
+					// 		this.$refs.popup.close()
+					// 	}, 5000)
 
-					}
-					if (this.roomStatus.status == 25) {
-						// uni.hideLoading()
-						// this.$refs.popup.close()
-					}
-					if (this.roomStatus.status == 15) {
-						uni.showLoading()
-					}
-					if (this.roomStatus.status == 5) {
-						// this.startCountdown()
-						if (typeof this.btnText == 'number') {
-							return
-						}
-						uni.hideLoading()
-						let end = new Date(this.roomStatus.lock_start_time).getTime();
-						let start = new Date(this.roomStatus.countdown_start_time).getTime();
-						let time = end / 1000 - start / 1000;
-						// console.log(end,start,time)
-						this.startCountdown(time)
-					} else {
-						this.clearCountdown()
-						// if()
-						if (this.autoBool) {
-							this.btnText = 'Cancel Auto Bet'
-						} else {
-							this.btnText = 'Participate in Game'
-						}
+					// }
+					// if (this.roomStatus.status == 25) {
+					// 	// uni.hideLoading()
+					// 	// this.$refs.popup.close()
+					// }
+					// if (this.roomStatus.status == 15) {
+					// 	uni.showLoading()
+					// }
+					// if (this.roomStatus.status == 5) {
+					// 	// this.startCountdown()
+					// 	if (typeof this.btnText == 'number') {
+					// 		return
+					// 	}
+					// 	uni.hideLoading()
+					// 	let end = new Date(this.roomStatus.lock_start_time).getTime();
+					// 	let start = new Date(this.roomStatus.countdown_start_time).getTime();
+					// 	let time = end / 1000 - start / 1000;
+					// 	// console.log(end,start,time)
+					// 	this.startCountdown(time)
+					// } else {
+					// 	this.clearCountdown()
+					// 	// if()
+					// 	if (this.autoBool) {
+					// 		this.btnText = 'Cancel Auto Bet'
+					// 	} else {
+					// 		this.btnText = 'Participate in Game'
+					// 	}
 
-					}
+					// }
 
 					return
 				}

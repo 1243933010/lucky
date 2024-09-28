@@ -131,7 +131,7 @@
 			this.pageScrollBool = false;
 		},
 		onPageScroll(e) {
-			console.log(e)
+			// console.log(e)
 			if(this.pageScroll> e.scrollTop){
 				this.pageScrollBool = true;
 			}else{

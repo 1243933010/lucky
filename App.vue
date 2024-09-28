@@ -10,6 +10,7 @@
 			console.log('App Launch')
 			this.startPolling();
 			this.indexConfigFnc();
+			uni.setStorageSync('thisSee',[])
 		},
 		onShow: function() {
 			console.log('App Show')

@@ -316,7 +316,7 @@
 			<view class="hr1">
 				<image src="../../static/me_icon1.png" mode="widthFix"></image>
 				<uni-notice-bar scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
-					text="[多行] 这是 NoticeBar 通告栏，这是 NoticeBar 通告栏，这是 NoticeBar 通告栏这是 NoticeBar 通告栏，这是 NoticeBar 通告栏，这是 NoticeBar 通告栏"></uni-notice-bar>
+					:text="messageList"></uni-notice-bar>
 			</view>
 			<view style="padding: 9rpx 0 35rpx 0;">
 				<DefaultFooter :index="true" :fiexed="false" @share="$refs.invitePopup.open()" />
@@ -326,7 +326,7 @@
 			<view class="hr1">
 				<image src="../../static/me_icon1.png" mode="widthFix"></image>
 				<uni-notice-bar scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
-					text="[多行] 这是 NoticeBar 通告栏，这是 NoticeBar 通告栏，这是 NoticeBar 通告栏这是 NoticeBar 通告栏，这是 NoticeBar 通告栏，这是 NoticeBar 通告栏"></uni-notice-bar>
+					:text="messageList"></uni-notice-bar>
 			</view>
 			<view style="padding: 9rpx 0 35rpx 0;">
 				<DefaultFooter :index="true" :fiexed="false" @share="$refs.invitePopup.open()" />
@@ -387,8 +387,10 @@
 				amountIndex: 0,
 				pageScroll: 0,
 				pageScrollBool: true,
-				onLoadParams: {}
-
+				onLoadParams: {},
+				messageList:'',
+				messageBool:null,
+				
 				// roomList:[]
 			}
 		},
@@ -424,7 +426,7 @@
 			this.indexConfig();
 			this.teamInfo();
 			this.getAmountList('1');
-
+			this.messageInterval()
 		},
 		onReachBottom() {
 			this.pageScrollBool = false;
@@ -438,7 +440,45 @@
 			}
 			this.pageScroll = e.scrollTop;
 		},
+		destroyed(){
+			this.messageBool = null
+		},
 		methods: {
+			async messageInterval(){
+				this.messageList  = ''
+				let res = await $request('messageIndex', {position:'1'});
+				console.log(res,'666666666666')
+				if(res.data.code==200){
+					let str = ''
+					res.data.data.forEach((val,index)=>{
+						this.testInterval = setInterval(()=>{
+							if(index<=10){
+								this.messageList  =this.messageList + ` ${val.title}`;
+							}
+						},500)
+						// this.messageList  =this.messageList + val.title;
+					})
+					// this.messageList = str;
+				}
+				this.messageBool = setInterval(async()=>{
+					this.messageList  = ''
+					this.testInterval = null;
+					let res = await $request('messageIndex', {position:'1'});
+					console.log(res,'666666666666')
+					if(res.data.code==200){
+						let str = ''
+						res.data.data.forEach((val,index)=>{
+							this.testInterval = setInterval(()=>{
+								if(index<=10){
+									this.messageList  =this.messageList + val.title;
+								}
+							},500)
+							// this.messageList  =this.messageList + val.title;
+						})
+						// this.messageList = str;
+					}
+				},5000)
+			},
 			invitation() {
 				this.$refs.invitePopup.open()
 			},

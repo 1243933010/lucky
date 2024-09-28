@@ -93,6 +93,7 @@
 			},
 			goItem(){
 				this.requestForm.page=1;
+				this.list = []
 				this.gameRecords();
 			},
 			async gameRecords(){
@@ -101,7 +102,7 @@
 				uni.hideLoading();
 				// console.log(res)
 				if(res.data.code==200){
-					this.list = res.data.data.data;
+					this.list.push(...res.data.data.data);
 				}
 			}
 		}
