@@ -215,7 +215,7 @@
 											<image src="../../static/right_arrow.png" mode="widthFix"></image>
 										</view>
 										<view class="peo">
-											<text>({{item.virtual_initial_online_count}})</text>
+											<text>({{item.player_count}})</text>
 										</view>
 									</view>
 								</view>
@@ -315,7 +315,7 @@
 		<view style="position: fixed;width: 100%;bottom: 0;" v-if="pageScrollBool">
 			<view class="hr1">
 				<image src="../../static/me_icon1.png" mode="widthFix"></image>
-				<uni-notice-bar scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
+				<uni-notice-bar  :speed="50" scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
 					:text="messageList"></uni-notice-bar>
 			</view>
 			<view style="padding: 9rpx 0 35rpx 0;">
@@ -325,7 +325,7 @@
 		<view style="padding: 9rpx 0 35rpx 0;">
 			<view class="hr1">
 				<image src="../../static/me_icon1.png" mode="widthFix"></image>
-				<uni-notice-bar scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
+				<uni-notice-bar :speed="50" scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
 					:text="messageList"></uni-notice-bar>
 			</view>
 			<view style="padding: 9rpx 0 35rpx 0;">
@@ -452,8 +452,8 @@
 					let str = ''
 					res.data.data.forEach((val,index)=>{
 						this.testInterval = setInterval(()=>{
-							if(index<=10){
-								this.messageList  =this.messageList + ` ${val.title}`;
+							if(index<=5){
+								this.messageList  =this.messageList + `${val.title}`;
 							}
 						},500)
 						// this.messageList  =this.messageList + val.title;
@@ -469,8 +469,8 @@
 						let str = ''
 						res.data.data.forEach((val,index)=>{
 							this.testInterval = setInterval(()=>{
-								if(index<=10){
-									this.messageList  =this.messageList + val.title;
+								if(index<=5){
+									this.messageList  =this.messageList +`${ val.title}`;
 								}
 							},500)
 							// this.messageList  =this.messageList + val.title;

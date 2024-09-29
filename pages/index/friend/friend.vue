@@ -168,6 +168,7 @@
 		<Popup ref="popup" />
 		<ShareCom ref="shareCom" />
 		<TextCom ref="textCom" />
+		<NumCom ref="numCom" />
 	</view>
 </template>
 
@@ -175,6 +176,7 @@
 	import Popup from './components/dialog.vue';
 	import ShareCom from './components/share.vue';
 	import TextCom from './components/text.vue';
+	import NumCom from '../hall/components/ten.vue';
 	import {
 		$request,
 		$totast,
@@ -184,7 +186,8 @@
 		components: {
 			Popup,
 			ShareCom,
-			TextCom
+			TextCom,
+			NumCom
 		},
 		data() {
 			return {
@@ -414,7 +417,7 @@
 					obj.is_multiple = 1;
 					obj.multiple = this.uList[this.borderActive];
 				}
-				let res = await $request('gameJoin',obj);
+				let res = await $request('gameJoin',{...obj,room_id:this.roomId});
 				$totast(res.data.message)
 				if(res.data.code==200){
 					this.getRoomDetail(this.roomId)
@@ -613,6 +616,7 @@
 					// 	user_id: 49
 					// }
 					this.roomStatus = data;
+					this.$refs.numCom.open({num:data.countdown_end_time})
 					// this.listenNum(data)
 					if(data.is_can_start===0){  //如果还没有开启游戏，处理一下默认逻辑
 						

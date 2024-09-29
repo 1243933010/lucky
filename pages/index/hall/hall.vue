@@ -33,7 +33,7 @@
 				<view class="notice">
 					<view class="box" style="padding-top: 10rpx;">
 						<!-- <text>{{roomDetail.game_help}}</text> -->
-						<uni-notice-bar scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
+						<uni-notice-bar  :speed="50" scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
 							:text="messageList"></uni-notice-bar>
 					</view>
 
@@ -46,7 +46,7 @@
 						</view>
 						<view class="right">
 							<view class=""></view>
-							<text>{{roomInfo.online}}people are ready</text>
+							<text>{{roomInfo.joined}}people are ready</text>
 						</view>
 					</view>
 				</view>
@@ -134,6 +134,7 @@
 		<Popup ref="popup" />
 		<ShareCom ref="shareCom" />
 		<TextCom ref="textCom" />
+		<NumCom ref="numCom" />
 
 		<view class="fixed-1">
 			<view class="content">
@@ -153,6 +154,7 @@
 	import Popup from './components/dialog.vue';
 	import ShareCom from './components/share.vue';
 	import TextCom from './components/text.vue';
+	import NumCom from './components/ten.vue';
 	import {
 		$request,
 		$totast,
@@ -162,7 +164,8 @@
 		components: {
 			Popup,
 			ShareCom,
-			TextCom
+			TextCom,
+			NumCom
 		},
 		data() {
 			return {
@@ -186,7 +189,7 @@
 				countdownBool:null,//是否开启了倒计时
 				messageList:'',
 				messageLoopNum:3,
-				uObject:{'2':'5','5':'10','10':'15','20':'20','50':'25','100':'30'}
+				uObject:{'2':'5','5':'10','10':'15','20':'20','50':'25','100':'30'},
 			};
 		},
 		computed: {
@@ -266,14 +269,14 @@
 			// uni.removeStorageSync('loopNum');
 			// uni.removeStorageSync('loopArr');
 			// uni.removeStorageSync('newLoopBool');
-			this.startPolling();
+			// this.startPolling();
 			this.startPolling1();
 			// this.getAmountList()
 			this.getAmountListInRoom()
 
 		},
 		beforeDestroy() {
-			this.stopPolling();
+			// this.stopPolling();
 			this.stopPolling1();
 
 		},
@@ -282,7 +285,7 @@
 				this.messageList  = ''
 				let res = await $request('messageIndex', 
 				{position:this.uObject[this.amountList[this.amountIndex].bet_amount.toString()]});
-				console.log(res,'666666666666')
+				// console.log(res,'666666666666')
 				if(res.data.code==200){
 					let str = ''
 					res.data.data.forEach((val,index)=>{
@@ -312,7 +315,7 @@
 				})
 			},
 			goUrl() {
-				this.stopPolling();
+				// this.stopPolling();
 				this.stopPolling1();
 				uni.navigateTo({
 					url: '/pages/me/recharge'
@@ -400,14 +403,14 @@
 					this.intervalId = null;
 				}
 			},
-			async startPolling() {
-				// 启动轮询，每隔 1 秒调用一次
-				this.polling = true;
-				while (this.polling) {
-					await this.getRoomInfo(); // 等待请求返回
-					await this.sleep(2000); // 等待 1 秒后再继续轮询
-				}
-			},
+			// async startPolling() {
+			// 	// 启动轮询，每隔 1 秒调用一次
+			// 	this.polling = true;
+			// 	while (this.polling) {
+			// 		await this.getRoomInfo(); // 等待请求返回
+			// 		await this.sleep(2000); // 等待 1 秒后再继续轮询
+			// 	}
+			// },
 			async submitClick() {
 				if (this.autoBool) {  //如果已经点了自动投注，再点击只会取消
 					this.autoBool = !this.autoBool;
@@ -435,7 +438,7 @@
 					// obj.multiple = this.borderActive;
 					obj.multiple = arr[this.borderActive];
 				}
-				let res = await $request('gameJoin', obj);
+				let res = await $request('gameJoin', {...obj,room_id:this.roomId});
 				$totast(res.data.message)
 				if (res.data.code == 200) {
 					this.getRoomDetail(this.roomId)
@@ -527,14 +530,14 @@
 				}
 				$totast(res.data.message)
 			},
-			async startPolling() {
-				// 启动轮询，每隔 1 秒调用一次
-				this.polling = true;
-				while (this.polling) {
-					await this.getRoomInfo(); // 等待请求返回
-					await this.sleep(2000); // 等待 1 秒后再继续轮询
-				}
-			},
+			// async startPolling() {
+			// 	// 启动轮询，每隔 1 秒调用一次
+			// 	this.polling = true;
+			// 	while (this.polling) {
+			// 		await this.getRoomInfo(); // 等待请求返回
+			// 		await this.sleep(2000); // 等待 1 秒后再继续轮询
+			// 	}
+			// },
 			async startPolling1() {
 				// 启动轮询，每隔 1 秒调用一次
 				this.polling1 = true;
@@ -543,10 +546,10 @@
 					await this.sleep(2000); // 等待 1 秒后再继续轮询
 				}
 			},
-			stopPolling() {
-				// 停止轮询
-				this.polling = false;
-			},
+			// stopPolling() {
+			// 	// 停止轮询
+			// 	this.polling = false;
+			// },
 			stopPolling1() {
 				// 停止轮询
 				this.polling1 = false;
@@ -554,23 +557,23 @@
 			sleep(ms) {
 				return new Promise(resolve => setTimeout(resolve, ms));
 			},
-			async getRoomInfo() {
-				let res = await $request('roomInfo', {
-					room_id: this.roomId
-				});
-				// console.log(res)
-				if (res.data.code == 200) {
-					this.roomInfo = res.data.data;
-					this.messageLoopNum++;
-					if(this.messageLoopNum>=5){
-						this.messageLoopNum = 0;
-						this.messageInterval();
+			// async getRoomInfo() {
+			// 	let res = await $request('roomInfo', {
+			// 		room_id: this.roomId
+			// 	});
+			// 	// console.log(res)
+			// 	if (res.data.code == 200) {
+			// 		this.roomInfo = res.data.data;
+			// 		this.messageLoopNum++;
+			// 		if(this.messageLoopNum>=5){
+			// 			this.messageLoopNum = 0;
+			// 			this.messageInterval();
 						
-					}
-					return
-				}
-				$totast(res.data.message)
-			},
+			// 		}
+			// 		return
+			// 	}
+			// 	$totast(res.data.message)
+			// },
 			async getGameStatus() {
 				// let res = await $request('gameStatus', {
 				// 	room_id: this.roomId
@@ -579,6 +582,15 @@
 					room_id: this.roomId
 				});
 				if (res.data.code == 200) {
+					
+					this.roomInfo = res.data.data.room_info;
+					this.messageLoopNum++;
+					if(this.messageLoopNum>=5){
+						this.messageLoopNum = 0;
+						this.messageInterval();
+						
+					}
+					
 					let data = res.data.data;
 					// data = {
 					// 	end_time: 0,
@@ -590,6 +602,9 @@
 					// 	user_id: 49
 					// }
 					this.roomStatus = data;
+					this.$refs.numCom.open({num:data.countdown_end_time})
+					 // this.$refs.numCom.open({num:'2024-09-29 01:011:11'}) 
+					// this.$refs.numCom.open({num:9})
 					// this.listenNum(data)
 					if(data.is_can_start===0){  //如果还没有开启游戏，处理一下默认逻辑
 						

@@ -73,7 +73,7 @@
 	.popup-content {
 		width: 666rpx;
 		// height: 1118rpx;
-		max-height: 800rpx;
+		max-height: 700rpx;
 		// overflow-y: auto;
 		background: #000000;
 		box-shadow: 0rpx -2rpx 9rpx 0rpx rgba(235, 235, 245, 0.302);

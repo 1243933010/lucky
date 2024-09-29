@@ -24,7 +24,7 @@
 						</view>
 						<view class="con">
 							<!-- <image src="../static/me_icon.png" mode="widthFix"></image> -->
-							<text>{{withdrawConfig.withdraw_fee}}</text>
+							<text>{{withdrawConfig.withdraw_fee*100}}%</text>
 						</view>
 					</view>
 					<view class="form-item">
@@ -33,7 +33,7 @@
 						</view>
 						<view class="con">
 							<!-- <image src="../static/me_icon.png" mode="widthFix"></image> -->
-							<text>{{withdrawConfig.amount-withdrawConfig.withdraw_fee}}</text>
+							<text>{{withdrawConfig.amount-(withdrawConfig.amount*withdrawConfig.withdraw_fee)}}</text>
 						</view>
 					</view>
 					<view class="form-item">

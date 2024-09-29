@@ -67,7 +67,7 @@
 						</view>
 						<view class="input">
 							<view class="left">
-								<input type="text" v-model="address" />
+								<input type="text" :disabled="true" v-model="address" />
 							</view>
 							<!-- <view class="right">
 								<text>Copy</text>
@@ -161,6 +161,9 @@
 				}
 			},
 			openPopUpHandle() {
+				if(!this.formData.amount){
+					return
+				}
 				if(this.userInfo.is_set_pay_password!==1){
 					this.$nextTick(()=>{
 						this.$refs.withdrawalPopupRef.open({
