@@ -58,7 +58,7 @@
 							@change="switchSystemRoom1" :indicator-dots="false" :autoplay="false">
 							<swiper-item v-for="(item,index) in amountList" :key="index">
 								<view class="box" v-if="amountIndex1===index"
-									:style="{'left':(320-(amountIndex1+1)*135)+'rpx'}">
+									:style="{'left':posiLen+'rpx'}">
 									<!-- :class="index==uActive?'uActive':''" -->
 									<view class="item" @click="radioChoose(item,index)"
 										v-for="(item,index) in amountList" :key="index">
@@ -113,7 +113,7 @@
 							</view>
 						</view>
 					</view>
-					<view class="hr" v-if="roomStatus.status===0">
+					<view class="hr">
 						<view class="box" @click="autoClick" v-if="!autoBool">
 							<text> Auto Bet</text>
 						</view>
@@ -135,6 +135,7 @@
 		<ShareCom ref="shareCom" />
 		<TextCom ref="textCom" />
 		<NumCom ref="numCom" />
+		<LoadingCom ref="loadingCom" />
 
 		<view class="fixed-1">
 			<view class="content">
@@ -155,6 +156,7 @@
 	import ShareCom from './components/share.vue';
 	import TextCom from './components/text.vue';
 	import NumCom from './components/ten.vue';
+	import LoadingCom from './components/loading.vue';
 	import {
 		$request,
 		$totast,
@@ -165,7 +167,8 @@
 			Popup,
 			ShareCom,
 			TextCom,
-			NumCom
+			NumCom,
+			LoadingCom
 		},
 		data() {
 			return {
@@ -193,9 +196,32 @@
 			};
 		},
 		computed: {
+			posiLen(){
+				if(this.amountIndex1==0){
+					return 340
+				}else if(this.amountIndex1==1){
+					return 260
+				}else  if(this.amountIndex1==2){
+					return 110
+				}else  if(this.amountIndex1==3){
+					return -20
+				}else if (this.amountIndex1==4){
+					return -160
+				}else  if(this.amountIndex1==5){
+					return -300
+				}
+				return 0
+			},
 			btnText:{
 				get(){
+					if(this.autoBool){
+						return 'Cancel Auto Bet'
+					}
 					if(this.roomStatus.is_can_start==0&&this.roomStatus.is_user_join==0){
+						//游戏未开始，用户未下注
+						return 'Participate in Game'
+					}
+					if(this.roomStatus.is_can_start===1&&this.roomStatus.is_can_order===1&&this.roomStatus.is_user_join===0){
 						//游戏未开始，用户未下注
 						return 'Participate in Game'
 					}
@@ -207,6 +233,7 @@
 						//已买定离手
 						return 'No betting allowed'
 					}
+					
 					return 'Participate in Game';
 				},
 				set(val){
@@ -215,11 +242,13 @@
 			},
 			showButton(){  //符合不置灰条件
 				let bool =this.roomStatus.is_can_start===0&&this.roomStatus.is_user_join===0;
-				return bool;
+				let bool1 = this.roomStatus.is_can_start===1&&this.roomStatus.is_can_order===1&&this.roomStatus.is_user_join===0;
+				let bool2 = this.autoBool;
+				return bool||bool1||bool2;
 			},
 			hideButton(){
-				let bool = this.roomStatus.is_can_order===0;  //已经买定离手
-				let bool1 = this.roomStatus.is_user_join===1;  //已经参与了游戏
+				let bool = this.roomStatus.is_can_order===0&&!this.autoBool;  //已经买定离手
+				let bool1 = this.roomStatus.is_user_join===1&&!this.autoBool;  //已经参与了游戏
 				return bool||bool1;
 			},
 			logoUrl() {
@@ -293,7 +322,7 @@
 							if(index<=10){
 								this.messageList  =this.messageList + ` ${val.title}`;
 							}
-						},500)
+						},1000)
 						// this.messageList  =this.messageList + val.title;
 					})
 					// this.messageList = str;
@@ -305,9 +334,16 @@
 				if (!this.autoBool) {
 					str = ' Auto Bet has been canceled'
 				}
+				
 				if (this.autoBool) {
 					this.btnText = 'Cancel Auto Bet'
-					this.gameJoin();
+					if(this.roomStatus.is_can_start==1||this.roomStatus.is_user_join==1){
+						//游戏未开始，用户已下注
+						return 'Bet already placed'
+					}else{
+						this.gameJoin();
+					}
+					
 				}
 				uni.showToast({
 					icon: 'none',
@@ -326,6 +362,20 @@
 				this.amountIndex = index;
 				this.amountIndex1 = index;
 				this.messageLoopNum = 4;
+				this.amountList.forEach((val)=>{
+					if(val.bet_amount==this.amountList[this.amountIndex].bet_amount){
+						this.roomId = val.id;
+						this.getRoomDetail(this.roomId)
+					}
+				})
+				this.allClose();
+			},
+			allClose(){
+				this.$nextTick(()=>{
+					this.$refs.popup.close();
+					this.$refs.numCom.close();
+					this.$refs.loadingCom.close();
+				})
 			},
 			listenNum(info) {
 				console.log(info)
@@ -501,6 +551,13 @@
 				if (res.data.code == 200) {
 					// this.amountList = res.data.data.amount;
 					// this.amountIndex = 0;
+					this.amountList.forEach((val)=>{
+						if(val.bet_amount==this.amountList[this.amountIndex].bet_amount){
+							this.roomId = val.id;
+							this.getRoomDetail(this.roomId)
+						}
+					})
+					this.allClose();
 					uni.showToast({
 						icon: 'none',
 						title: 'The basic betting amount has been switched'
@@ -585,8 +642,9 @@
 					
 					this.roomInfo = res.data.data.room_info;
 					this.messageLoopNum++;
-					if(this.messageLoopNum>=5){
+					if(this.messageLoopNum>=10){
 						this.messageLoopNum = 0;
+						clearInterval(this.testInterval)
 						this.messageInterval();
 						
 					}
@@ -602,26 +660,41 @@
 					// 	user_id: 49
 					// }
 					this.roomStatus = data;
-					this.$refs.numCom.open({num:data.countdown_end_time})
+					// this.$refs.numCom.open({num:data.countdown_end_time,room_id: this.roomId})
 					 // this.$refs.numCom.open({num:'2024-09-29 01:011:11'}) 
 					// this.$refs.numCom.open({num:9})
 					// this.listenNum(data)
 					if(data.is_can_start===0){  //如果还没有开启游戏，处理一下默认逻辑
 						
 					}
+					if(data.is_can_order==1&&data.is_can_start==0&&data.is_user_join==0&&this.autoBool){
+						//符合游戏未开始，已自动下注
+						this.gameJoin();
+					}
+					if(data.is_can_order==1&&data.is_can_start==0&&data.is_user_join==1){
+		
+						this.$nextTick(()=>{
+							this.$refs.loadingCom.open();
+						})
+					}else{
+						this.$nextTick(()=>{
+							this.$refs.loadingCom.close();
+						})
+					}
 					if(data.is_can_start==1){  //如果可以开启游戏，三秒倒计时启动
 			          let thisSee = uni.getStorageSync('thisSee')
 					  if(thisSee&&thisSee.includes(`${data.user_id.toString()}${data.sn}`)){  //如果缓存跟当前订单符合，说明不是第一次了，不倒计时了
 						console.log('触发--已看过当前投注')
 						// this.btnText = '111'
-						// this.getGameResult();//调接口直接打开弹窗
+						this.getGameResult();//调接口直接打开弹窗
 					}else{  //第一次观看有倒计时
-					    if(this.countdownBool){ //如果正处于倒计时
-						   return
-					    }
+					this.$refs.numCom.open({num:data.countdown_end_time,room_id: this.roomId})
+					    // if(this.countdownBool){ //如果正处于倒计时
+						   // return
+					    // }
 						
-					    this.countdownBool = true;//设置已经倒计时已开启状态
-						this.startCountdown(3)
+					    // this.countdownBool = true;//设置已经倒计时已开启状态
+						// this.startCountdown(3)
 					}
 				}
 				if(data.is_can_order===0){  //当买定离手时

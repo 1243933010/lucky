@@ -6,10 +6,7 @@
 					<view class="popup-content">
 						<view class="box">
 							<view class="label">
-								<text>waiting for other players to place bets</text>
-							</view>
-							<view class="num">
-								<text>{{time}}</text>
+								<text>Waiting for others to place bets</text>
 							</view>
 						</view>
 					</view>
@@ -48,76 +45,19 @@
 				}
 				// console.log(res)
 			},
+			open() {
+				
+				 this.$nextTick(()=>{
+					 // this.$refs.popup.open()
+					 this.showBool = true;
+				 })
+				
+			},
 			close(){
-				this.bool =false;
-				this.showBool = false;
-				clearInterval(this.interTime);
-				this.interTime = null;
+				// this.$refs.popup.close()
+				 this.showBool = false;
 			},
-			open(data) {
-				 // console.log(data)
-				 if(this.options.num===data.num){
-					 
-				 	return
-				 }else{
-					 
-					 clearInterval(this.interTime);
-					 this.interTime = null
-				 }
-				  this.options = data;
-				if(!this.options.num){
-					this.bool =false;
-					this.showBool = false;
-					clearInterval(this.interTime);
-					this.interTime = null;
-					
-					// this.$nextTick(() => {
-					// 	// this.$refs.popup.close()
-					// 	// this.showBool = false;
-					// })
-					return
-				}
-				
-				
-				if(this.options.num){
-						let thisData = new Date().getTime()/1000;
-						let oldData = new Date(this.options.num).getTime()/1000;
-						// console.log(oldData-thisData)
-						if(oldData>thisData){
-							this.time = (oldData-thisData).toFixed();
-							this.timeFnc()
-							this.showBool = true;
-						}else{
-							this.interTime = null
-							 clearInterval(this.interTime);
-							 this.showBool = false;
-							 return
-							// this.getGameResult()
-						}
-						
-				}
-			},
-			async timeFnc() {
-				if (this.interTime) return;
-				this.interTime =setInterval(()=>{
-					this.time--
-					if(this.time<=0){
-						
-						 clearInterval(this.interTime);
-						 this.interTime = null
-						 this.showBool = false;
-						 this.time = null;
-						 if(this.bool){
-							 
-						 }else{
-							 clearInterval(this.interTime);
-							 this.interTime = null
-							 this.getGameResult()
-							 this.bool = false
-						 }
-					}
-				},1000) 
-			}
+			
 		}
 	}
 </script>
@@ -131,8 +71,7 @@
 		// background: url('../../../../static/share_bk.png') no-repeat 100% 100%/cover;
 		// padding-bottom: 20rpx;
 	}
-
-	.fixed{
+.fixed{
 		position: fixed;
 		width: 100%;
 		// background: red;
@@ -143,6 +82,7 @@
 		justify-content: center;
 		align-items: center;
 	}
+
 
 	.popup-content {
 		background: rgba(0, 0, 0, 0.4);

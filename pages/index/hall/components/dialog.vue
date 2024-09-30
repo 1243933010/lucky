@@ -50,30 +50,32 @@
 		},
 		computed:{
 			marginTop(){
-				// if(this.sysInfo.screenHeight<=700){
-				// 	return '360rpx'
-				// }
+				if(this.sysInfo.screenHeight<=700){
+					return '120rpx'
+				}
 				// if(this.sysInfo.screenHeight<=750&&this.sysInfo.screenHeight>700){
-				// 	return '370rpx'
+				// 	return '-80rpx'
 				// }
 				if(this.sysInfo.screenHeight<=850&&this.sysInfo.screenHeight>800){
-					return '140rpx'
+					return '70rpx'
 				}
-				// if(this.sysInfo.screenHeight<=900&&this.sysInfo.screenHeight>850){
-				// 	return '0rpx'
-				// }
-				// if(this.sysInfo.screenHeight<=1000&&this.sysInfo.screenHeight>900){
-				// 	return '-50rpx'
-				// }
-				// return '60rpx'
-				 return '0rpx'
+				if(this.sysInfo.screenHeight<=900&&this.sysInfo.screenHeight>850){
+					return '100rpx'
+				}
+				if(this.sysInfo.screenHeight<=1000&&this.sysInfo.screenHeight>900){
+					return '150rpx'
+				}
+				if(this.sysInfo.screenHeight<=1100&&this.sysInfo.screenHeight>1200){
+					return '200rpx'
+				}
+				return '0rpx'
 			}
 		},
 		mounted() {
 			console.log('111')
 			let sysInfo = uni.getSystemInfo({
 				success:(res)=>{
-					console.log(res.screenHeight,'---')
+					console.log(res.screenHeight)
 					this.sysInfo = res;
 				}
 			})
@@ -89,7 +91,7 @@
 				},1000)
 				setTimeout(()=>{
 					this.$refs.popup.close()
-				},5000)
+				},8000)
 			},
 			close(){
 				this.options = {};
@@ -148,7 +150,7 @@
 		// background-color: red;
 		// height: 100%;
 		// .flex-center;
-		max-height: 500rpx;
+		max-height: 300rpx;
 		overflow-y: auto;
 		// position: relative;
 		// z-index: 1000;
