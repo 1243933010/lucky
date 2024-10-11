@@ -1,6 +1,6 @@
 <template>
 	<view class="page-container">
-		<view class="" style="position: fixed;top: 0;width: 100%;z-index: 100;">
+		<view class="" style="position: fixed;top: 0;width: 100%;z-index: 1;">
 			<DefaultHeader />
 		</view>
 		<view class="" style="opacity: 0;">
@@ -16,7 +16,7 @@
 					<view class="text"><text>{{userInfo.balance*1}}</text> <text>USDT</text></view>
 				</view>
 				<view class="small">
-					<text>0.0295 (+1.34%)</text>
+					<text>{{userInfo.profit_percent.today_change*1}} ({{userInfo.profit_percent.percent}})</text>
 				</view>
 			</view>
 			<view class="button">
@@ -83,10 +83,10 @@
 					</view>
 				</view>
 			</view>
-			<view class="hr1">
+			<!-- <view class="hr1">
 				<image src="../../static/me_icon1.png" mode="widthFix"></image>
 				<text>Notice：NoticeNoticeNoticeNoticeNoticeNoticeNoticsdsdsdsdsdssdsdsdd</text>
-			</view>
+			</view> -->
 		</view>
 		<!-- <view style="position: fixed;width: 100%;bottom: 0;"  v-if="pageScrollBool">
 			<view style="padding: 9rpx 0 35rpx 0;">
@@ -94,6 +94,24 @@
 			</view>
 		</view> -->
 		<view style="padding: 9rpx 0 35rpx 0;">
+			<view class="hr1">
+				<image src="../../static/me_icon1.png" mode="widthFix"></image>
+				<!-- <uni-notice-bar :speed="50" scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
+					:text="messageList"></uni-notice-bar> -->
+					<view class="news-list">
+						<!-- {{ $t("index.news") }} -->
+						<view class="left-tit">
+							<!-- <image src="../../static/me_icon1.png" mode="widthFix"></image> -->
+						</view>
+						<view class="news-swiper">
+							<swiper class="swiper" vertical circular autoplay :duration="1000">
+								<swiper-item v-for="(item, index) in messageList" :key="index" @click="newLink(item)">
+									<view class="swiper-item">{{ item.title_en }}</view>
+								</swiper-item>
+							</swiper>
+						</view>
+					</view>
+			</view>
 			<DefaultFooter :fiexed="false"  @share="$refs.invitePopup.open()"   /> 
 		</view>
 		<InvitePopup ref="invitePopup"/>
@@ -118,14 +136,18 @@
 		},
 		data() {
 			return {
-				userInfo:{},
+				userInfo:{
+					profit_percent:{}
+				},
 				pageScroll: 0,
-				pageScrollBool:true
+				pageScrollBool:true,
+				messageList:[]
 			};
 		},
 		
 		onLoad(){
 			this.getUser();
+			this.messageInterval()
 		},
 		onReachBottom(){
 			this.pageScrollBool = false;
@@ -140,9 +162,35 @@
 			this.pageScroll = e.scrollTop;
 		},
 		methods:{
+			async messageInterval(){
+				this.messageList  = [];
+				let res = await $request('messageIndex', {position:'1'});
+				// console.log(res,'666666666666')
+				if(res.data.code==200){
+					// let str = ''
+					// res.data.data.forEach((val,index)=>{
+					// 	this.testInterval = setInterval(()=>{
+					// 		if(index<=5){
+					// 			this.messageList  =this.messageList + `${val.title}`;
+					// 		}
+					// 	},500)
+					// 	// this.messageList  =this.messageList + val.title;
+					// })
+					this.messageList = res.data.data;
+				}
+				this.messageBool = setInterval(async()=>{
+					this.messageList  = []
+					// this.testInterval = null;
+					clearInterval(this.messageBool)
+					let res = await $request('messageIndex', {position:'1'});
+					if(res.data.code==200){
+						this.messageList = res.data.data;
+					}
+				},5000)
+			},
 			goUrl(url){
 				if(!url){
-					// uni.clearStorage();
+					uni.clearStorageSync();
 					uni.showToast({
 						icon:'none',
 						title:'success'
@@ -172,6 +220,81 @@
 <style lang="less" scoped>
 	@import url("../../static/default.less");
 	
+	.hr1 {
+		width: 666rpx;
+		margin: 0rpx auto;
+		background: rgba(0, 0, 0, .35);
+		padding: 5rpx;
+		border-radius: 5rpx;
+		.flex-direction;
+	
+		image {
+			width: 22rpx;
+			margin-right: 15rpx;
+		}
+	
+		.uni-notice-bar {
+			margin: 0;
+			padding: 0;
+		}
+	
+		text {
+			width: 600rpx;
+			color: #D8D8D8;
+			font-size: 21rpx;
+			line-height: 2;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+		}
+		.news-list {
+			width: 100%;
+			margin: 0rpx auto;
+			// margin-left: -30rpx;
+			// margin-right: -30rpx;
+			padding: 10rpx 0rpx;
+			// background-color: white;
+			border-radius: 20rpx;
+			.flex-direction;
+			flex-direction: row;
+			// color: #D8D8D8;
+			color: white;
+			.left-tit {
+				// margin-right: 38rpx;
+				// border-radius: 0 50px 50px 0;
+				// padding: 10rpx 30rpx;
+				// background: linear-gradient(0deg, #fd631f 0%, #fd7e1f 100%);
+				// background: linear-gradient(90deg, #1098B7 0%, #64BAB4 100%);
+				// background: #F96932;
+				// color: #F96932;
+				font-size: 24rpx;
+				image{
+					width:29rpx;
+					margin-right: 10rpx;
+				}
+			}
+		
+			.news-swiper {
+		
+				min-width: 10%;
+				flex-grow: 1;
+		
+				.swiper {
+					height: 36rpx;
+		
+					.swiper-item {
+						overflow: hidden;
+						white-space: nowrap;
+						text-overflow: ellipsis;
+		
+						color: white;
+						font-size: 26rpx;
+						line-height: 36rpx;
+					}
+				}
+			}
+		}
+	}
 	page {
 		height: 100%;
 		// background-color: #040405;
@@ -291,27 +414,27 @@
 				}
 			}
 		}
-		.hr1{
-			width: calc(100% - 42rpx);
-			margin: 0 auto;
-			background: rgba(0, 0, 0, .35);
-			padding: 10rpx 0 10rpx 10rpx;
-			border-radius: 5rpx;
-			.flex-direction;
+		// .hr1{
+		// 	width: calc(100% - 42rpx);
+		// 	margin: 0 auto;
+		// 	background: rgba(0, 0, 0, .35);
+		// 	padding: 10rpx 0 10rpx 10rpx;
+		// 	border-radius: 5rpx;
+		// 	.flex-direction;
 			
-			image{
-				width: 22rpx;
-				margin-right: 15rpx;
-			}
-			text{
-				width: 600rpx;
-				color: #D8D8D8;
-				font-size: 21rpx;
-				line-height: 2;
-				white-space: nowrap;
-				text-overflow: ellipsis;
-				overflow: hidden;
-			}
-		}
+		// 	image{
+		// 		width: 22rpx;
+		// 		margin-right: 15rpx;
+		// 	}
+		// 	text{
+		// 		width: 600rpx;
+		// 		color: #D8D8D8;
+		// 		font-size: 21rpx;
+		// 		line-height: 2;
+		// 		white-space: nowrap;
+		// 		text-overflow: ellipsis;
+		// 		overflow: hidden;
+		// 	}
+		// }
 	}
 </style>

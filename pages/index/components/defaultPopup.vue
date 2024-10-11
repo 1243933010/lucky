@@ -53,11 +53,21 @@
 				// 		})
 				// 	},1000)
 				// }
-				setTimeout(()=>{
-					uni.navigateTo({
-						url:`/pages/index/friend/friend?room_code=${this.options.room_code}`
-					})
-				},1000)
+				if(this.options.onLoadParams.page=='friend'){
+					setTimeout(()=>{
+						uni.navigateTo({
+							url:`/pages/index/friend/friend?room_code=${this.options.room_code}`
+						})
+					},1000)
+				}else if(this.options.onLoadParams.page=='hall'){
+					let onLoadParams = this.options.onLoadParams;
+					setTimeout(()=>{
+						uni.navigateTo({
+							url: `/pages/index/hall/hall?id=${onLoadParams.roomId}&type=${onLoadParams.roomType}&bet_amount=${onLoadParams.bet_amount}`,
+						})
+					},1000)
+				}
+				
 				// uni.reLaunch({
 				// 	url: '/pages/me/personalData?type=trc20_address'
 				// })

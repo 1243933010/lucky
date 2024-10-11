@@ -10,10 +10,17 @@
 				</view>
 				<view class="form">
 					<view class="form-item">
-						<input v-model="formData.password" type="text" placeholder=" New Password ">
+						<input v-model="formData.password"  v-if="passBool1" type="text" placeholder=" New Password ">
+						<input v-model="formData.password" v-if="!passBool1" type="password" placeholder=" New Password ">
+					    <image v-if="!passBool1" @click="passBool1 = true" class="eye" src="../../../static/eye.png" mode="widthFix"></image>
+					    <image  v-if="passBool1"  @click="passBool1 = false" class="eye"   src="../../../static/c_eye.png" mode="widthFix"></image>
 					</view>
 					<view class="form-item">
-						<input v-model="formData.password_confirmation"  type="text" placeholder="Confirm Password">
+						<input v-model="formData.password_confirmation"  v-if="passBool2" type="text" placeholder="Confirm Password ">
+						<input v-model="formData.password_confirmation" v-if="!passBool2" type="password" placeholder="Confirm Password">
+						<image v-if="!passBool2" @click="passBool2 = true" class="eye" src="../../../static/eye.png" mode="widthFix"></image>
+						<image  v-if="passBool2"  @click="passBool2 = false" class="eye"   src="../../../static/c_eye.png" mode="widthFix"></image>
+						<!-- <input v-model="formData.password_confirmation"  type="text" placeholder="Confirm Password"> -->
 					</view>
 					
 					<view class="send">
@@ -50,7 +57,8 @@
 				},
 				codeText:'Send',
 				timeFnc: null,
-				
+				passBool1:false,
+				passBool2:false,
 			};
 		},
 		methods: {
@@ -159,6 +167,10 @@
 					width: 100%;
 					color: #999999;
 					font-size: 24rpx;
+				}
+				.eye{
+					width: 24rpx;
+					margin-right: 30rpx;
 				}
 			}
 			.send{

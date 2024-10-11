@@ -3,28 +3,40 @@
 		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="center"  >
 			<view class="aaa" style="background: #000000;padding-bottom: 20rpx;">
 				<!-- :style="{'margin-top':marginTop}" -->
-				<view class="close" @click="$refs.popup.close()">
-					<image src="@/static/close.png" mode="widthFix"></image>
-				</view>
-				<view class="popup-content" :style="{'margin-top':marginTop}" >
-					
-					<view class="title" v-if="options.game_player">
-						<text  v-if="boolType=='3'">{{options.game_player.win_amount}}</text>
-					</view>
-					<view class="form" v-if="boolType=='3'">
-						<view class="form-item" v-for="(item,index) in options.game_players" :key="index">
-							<view class="left">
-								<text>{{item.nickname}}</text>
+				
+				<view class="popup-content" :style="{'top':`${marginTop}%`}" >
+					<view class="box">
+						<view class="close" @click="$refs.popup.close()" >
+							<image src="@/static/close.png" mode="widthFix"></image>
+						</view>
+						<view class="form-me" style="padding-bottom: 0px;" v-if="boolType=='3'&&options.game_player">
+							<view class="form-item">
+								<view class="left">
+									<text v-if="+options.game_player.win_amount">{{+options.game_player.win_amount+(+options.game_player.empty_win_amount)}}</text>
+									<text v-if="!(+options.game_player.win_amount)">0</text>
+								</view>
+								<!-- <view class="right">
+									<text>{{options.game_player.win_amount||0}}</text>
+								</view> -->
 							</view>
-							<view class="right">
-								<text>{{item.win_amount?item.win_amount:''}}</text>
+						</view>
+						<!-- <view style="width: 100%;height: 50rpx;"></view> -->
+						<view class="form" v-show="boolType=='3'">
+							<view class="form-item" v-for="(item,index) in options.game_players" :key="index">
+								<view class="left">
+									<text>{{item.nickname}}</text>
+								</view>
+								<view class="right">
+									<text>{{item.win_amount?item.win_amount:''}}</text>
+								</view>
 							</view>
+						</view>
+						<view class="submit">
+							<text>play game</text>
 						</view>
 					</view>
 				</view>
-				<view class="submit">
-					<text>play game</text>
-				</view>
+				
 				<view class="gif">
 					<image :src="url" mode="widthFix"></image>
 				</view>
@@ -50,33 +62,42 @@
 		},
 		computed:{
 			marginTop(){
+				// return  '0rpx'
+				// return  `${this.sysInfo.screenHeight/2 - 150}px`
 				if(this.sysInfo.screenHeight<=700){
-					return '120rpx'
+					return '62'
 				}
 				// if(this.sysInfo.screenHeight<=750&&this.sysInfo.screenHeight>700){
 				// 	return '-80rpx'
 				// }
-				if(this.sysInfo.screenHeight<=850&&this.sysInfo.screenHeight>800){
-					return '70rpx'
+				if(this.sysInfo.screenHeight<=820&&this.sysInfo.screenHeight>800){
+					return '51'
+				}
+				if(this.sysInfo.screenHeight<=850&&this.sysInfo.screenHeight>820){
+					return '61'
 				}
 				if(this.sysInfo.screenHeight<=900&&this.sysInfo.screenHeight>850){
-					return '100rpx'
+					return '55'
+				}
+				if(this.sysInfo.screenHeight<=950&&this.sysInfo.screenHeight>900){
+					return '58'
 				}
 				if(this.sysInfo.screenHeight<=1000&&this.sysInfo.screenHeight>900){
-					return '150rpx'
+					return '37'
 				}
 				if(this.sysInfo.screenHeight<=1100&&this.sysInfo.screenHeight>1200){
-					return '200rpx'
+					return '56'
 				}
-				return '0rpx'
+				return  '56'
 			}
 		},
 		mounted() {
-			console.log('111')
 			let sysInfo = uni.getSystemInfo({
 				success:(res)=>{
 					console.log(res.screenHeight)
 					this.sysInfo = res;
+					// console.log('111')
+					
 				}
 			})
 		},
@@ -129,6 +150,7 @@
 		z-index: -10;
 		image{
 			width: 100%;
+			height: 100%;
 		}
 	}
 	.aaa{
@@ -145,149 +167,98 @@
 	}
 
 	.popup-content {
-		width: 500rpx;
-		margin-top: 360rpx;
-		// background-color: red;
-		// height: 100%;
-		// .flex-center;
-		max-height: 300rpx;
+		width: 560rpx;
+		height: 720rpx;
 		overflow-y: auto;
-		// position: relative;
-		// z-index: 1000;
-		// box-shadow: 0rpx -2rpx 9rpx 0rpx rgba(235, 235, 245, 0.302);
-		// border-radius: 61rpx 61rpx 0rpx 0rpx;
-		// border: 4rpx solid;
 		margin-bottom: 20rpx;
 		position: absolute;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%,-50%);
-	}
-	.submit{
-		width: 80%;
-		margin: 0rpx auto;
-		color: white;
-		.flex-center;
-		box-sizing: border-box;
-		padding: 40rpx 0;
-		border: 1px solid white;
-		border-radius: 10rpx;
-		opacity: 0;
-		// background-color: green;
-		position: absolute;
-		bottom: 8%;
-		left: 50%;
-		transform: translate(-50%,-50%);
-	}
-	.close {
-		position: fixed;
-		bottom: 56%;
-		left: 82%;
-		transform: translate(-50%,-50%);
-		z-index: 10;
-		opacity: 0;
-		// background-color: yellow;
-		image {
-			width: 43rpx;
-		}
-	}
-
-	.popup-content {
-		// position: relative;
-	
-		// padding-top: 52rpx;
-
-		
-
-		.title {
-			color: #FFFFFF;
-			font-weight: 45rpx;
-			font-weight: 600;
-			margin-bottom: 61rpx;
-			box-sizing: border-box;
-			padding-left: 52rpx;
-			padding-right: 52rpx;
-		}
-		.form{
+		.box{
 			width: 100%;
-			box-sizing: border-box;
-			padding-left: 52rpx;
-			padding-right: 52rpx;
-			padding-bottom: 52rpx;
-			
-			.form-item{
-				// width: 596rpx;
-				height: 70rpx;
-				// background: #111111;
-				border-radius: 18rpx 18rpx 18rpx 18rpx;
-				// border: 1rpx solid #999999;
-				margin-bottom: 35rpx;
-				box-sizing: border-box;
-				padding-left: 17rpx;
-				// padding-top: 21rpx;
-				// padding-bottom: 21rpx;
-				.flex-space-between;
+			height: 100%;
+			// background-color: green;
+			position: relative;
+			.submit{
+				width: 100%;
+				height: 80rpx;
 				color: white;
+				.flex-center;
+				opacity: 0;
+				background-color: green;
+				position: absolute;
+				bottom: 7%;
+				left: 0rpx;
+			}
+			.close {
+				position: absolute;
+				right: 0rpx;
+				top: 40rpx;
+				transform: translate(-50%,-50%);
+				z-index: 10;
+				opacity: 0;
+				background-color: yellow;
+				// z-index: 1000;
+				image {
+					width: 43rpx;
+				}
+			}
+			.form-me{
+				position: absolute;
+				left: 130rpx;
+				top: -15rpx;
+				// margin-bottom: 50rpx;
+				.form-item{
+					font-size: 50rpx;
+					font-weight: 600;
+					color: white;
+				}
 				
 			}
-			.send{
-				width: 105%;
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				margin-bottom: 106rpx;
-				input{
-					width: 350rpx;
+			.title {
+				color: #FFFFFF;
+				font-weight: 45rpx;
+				font-weight: 600;
+				margin-bottom: 61rpx;
+				box-sizing: border-box;
+				padding-left: 52rpx;
+				padding-right: 52rpx;
+				
+			}
+			.form{
+				position: absolute;
+				left: 0;
+				top: 60rpx;
+				width: 100%;
+				z-index: 10;
+				box-sizing: border-box;
+				padding-left: 52rpx;
+				padding-right: 52rpx;
+				padding-bottom: 52rpx;
+				height: 500rpx;
+				overflow-y: auto;
+				// background-color: red;
+				.form-item{
+					// width: 596rpx;
 					height: 70rpx;
-					background: #111111;
+					// background: #111111;
 					border-radius: 18rpx 18rpx 18rpx 18rpx;
-					border: 1rpx solid #999999;
-					// margin-bottom: 35rpx;
+					// border: 1rpx solid #999999;
+					margin-bottom: 35rpx;
 					box-sizing: border-box;
 					padding-left: 17rpx;
-					padding-top: 21rpx;
-					padding-bottom: 21rpx;
-					display: flex;
-					flex-direction: row;
-					align-items: center;
-					color: #999999;
-					font-size: 24rpx;
-				}
-				.btn{
-					width: 175rpx;
-					display: flex;
-					// flex-grow: 1;
-					height: 70rpx;
-					background: #222222;
-					border-radius: 44rpx 44rpx 44rpx 44rpx;
+					// padding-top: 21rpx;
+					// padding-bottom: 21rpx;
+					.flex-space-between;
+					color: white;
 					
-					view{
-						width: 100%;
-						height: 100%;
-						font-weight: 500;
-						font-size: 32rpx;
-						background-image: linear-gradient(55.53466052546843deg, #9DFE00 0%, #14D9E5 100%);
-						-webkit-background-clip: text;
-						background-clip: text;
-						color: transparent;
-						.flex-center;
-					}
 				}
-			}
-			.submit{
-				width: 526rpx;
-				height: 88rpx;
-				background: linear-gradient( 146deg, #9DFE00 0%, #14D9E5 100%);
-				border-radius: 44rpx 44rpx 44rpx 44rpx;
-				margin: 0 auto;
-				color: #000000;
-				font-size: 31rpx;
-				margin-top: 262rpx;
-				opacity: 0;
-				.flex-center;
 			}
 		}
-
-		
 	}
+	
+	
+
+	
 </style>

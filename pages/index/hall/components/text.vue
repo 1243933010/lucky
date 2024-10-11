@@ -142,7 +142,7 @@
 
 		.form {
 			width: calc(100% - 20rpx);
-			max-height: 800rpx;
+			max-height: 550rpx;
 			overflow-y: auto;
 			margin: 0 auto;
 			box-sizing: border-box;

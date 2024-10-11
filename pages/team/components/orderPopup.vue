@@ -8,7 +8,7 @@
 				<view class="title">
 					<text>Reward details</text>
 				</view>
-				<scroll-view scroll-y="true" style="height: 800rpx;">
+				<scroll-view scroll-y="true" style="height: 600rpx;" @scrolltolower="scrolltolower">
 					<view class="list">
 						<view class="item" v-for="(item,index) in list" :key="index">
 							<view class="left">
@@ -29,36 +29,50 @@
 					</view>
 				</scroll-view>
 			</view>
-	</uni-popup>
+		</uni-popup>
 	</view>
 </template>
 
 <script>
 	import {
-		$request,$totast
+		$request,
+		$totast
 	} from "@/utils/request";
 	export default {
 		name: "defaultPopup",
 		data() {
 			return {
 				type: 'center',
-				list:[
-					{time:'2022-15-66',amount:'-100',status_text:'Withdraw'},
-				]
-				
+				list: [],
+				requestObj:{
+					page:1,
+					limit:10
+				}
+
 			};
 		},
 		methods: {
-			open(options = {type: 'center'}) {
+			open(options = {
+				type: 'center'
+			}) {
 				this.type = options.type;
+				this.list = [];
 				this.getRechargesAndWithdraws()
 				this.$refs.popup.open()
 			},
-			async getRechargesAndWithdraws(){
-				let res = await $request('teamAccountLogs',{});
-				console.log(res)
-				if(res.data.code==200){
-					this.list = res.data.data.data;
+			scrolltolower(e){
+				console.log(e)
+				this.requestObj.page++;
+				this.getRechargesAndWithdraws()
+			},
+			async getRechargesAndWithdraws() {
+				uni.showLoading()
+				let res = await $request('teamAccountLogs', this.requestObj);
+				uni.hideLoading()
+				// console.log(res)
+				if (res.data.code == 200) {
+					// this.list = res.data.data.data;
+					this.list.push(...res.data.data.data);
 				}
 			},
 		}
@@ -83,7 +97,7 @@
 
 	.popup-content {
 		position: relative;
-	
+
 		padding-top: 52rpx;
 
 		.close {
@@ -105,48 +119,56 @@
 			padding-left: 52rpx;
 			padding-right: 52rpx;
 		}
-		.list{
+
+		.list {
 			width: 100%;
-			.item{
+
+			.item {
 				width: 613rpx;
 				height: 105rpx;
 				margin: 0 auto;
-				background: linear-gradient( 146deg, rgba(68,68,68,0.5) 0%, rgba(0,0,0,0.5) 100%);
-				box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84,84,84,0.2118);
+				background: linear-gradient(146deg, rgba(68, 68, 68, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%);
+				box-shadow: inset 7rpx 7rpx 28rpx 0rpx rgba(84, 84, 84, 0.2118);
 				border-radius: 18rpx;
 				position: relative;
 				box-sizing: border-box;
-				padding:17rpx;
+				padding: 17rpx;
 				margin-bottom: 19rpx;
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
-				.left{
+
+				.left {
 					display: flex;
 					flex-direction: column;
 					justify-content: flex-start;
-					.title{
+
+					.title {
 						color: #FFFFFF;
 						font-size: 28rpx;
 						margin-bottom: 17rpx;
 						padding-left: 0;
-						text{
+
+						text {
 							text-align: left;
 						}
 					}
-					.time{
+
+					.time {
 						color: #999999;
 						font-size: 21rpx;
 					}
 				}
-				.right{
+
+				.right {
 					color: #FFFFFF;
 					font-size: 35rpx;
 				}
-				.status{
+
+				.status {
 					width: 105rpx;
 					height: 32rpx;
-					background: linear-gradient( 136deg, rgba(21,191,253,0.7) 0%, rgba(156,55,253,0.7) 100%);
+					background: linear-gradient(136deg, rgba(21, 191, 253, 0.7) 0%, rgba(156, 55, 253, 0.7) 100%);
 					border-radius: 2rpx 18rpx 2rpx 18rpx;
 					position: absolute;
 					top: 0;
@@ -159,6 +181,6 @@
 			}
 		}
 
-		
+
 	}
 </style>

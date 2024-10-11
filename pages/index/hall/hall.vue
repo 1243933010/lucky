@@ -31,10 +31,21 @@
 					</view>
 				</view>
 				<view class="notice">
-					<view class="box" style="padding-top: 10rpx;">
+					<view class="box" >
 						<!-- <text>{{roomDetail.game_help}}</text> -->
-						<uni-notice-bar  :speed="50" scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
-							:text="messageList"></uni-notice-bar>
+						<!-- <uni-notice-bar  :speed="50" scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
+							:text="messageList"></uni-notice-bar> -->
+							<view class="news-list">
+								<view class="left-tit">
+								</view>
+								<view class="news-swiper">
+									<swiper class="swiper" vertical circular autoplay :duration="1000">
+										<swiper-item v-for="(item, index) in messageList" :key="index" @click="newLink(item)">
+											<view class="swiper-item">{{ item.title_en }}</view>
+										</swiper-item>
+									</swiper>
+								</view>
+							</view>
 					</view>
 
 				</view>
@@ -107,9 +118,19 @@
 								<text>{{btnText}}</text>
 							</view>
 							<view class="right">
-								<image @click="$refs.textCom.open()" src="../../../static/hell_icon4.png"
-									mode="widthFix">
-								</image>
+								<view class="right-top" @click="orderPopupOpen">
+									<image src="../../../static/liu.png" mode="widthFix"></image>
+									<text>Record</text>
+								</view>
+								<view class="hr-t">
+									
+								</view>
+								<view class="right-bottom">
+									<image @click="$refs.textCom.open()" src="../../../static/hell_icon4.png"
+										mode="widthFix">
+									</image>
+									<text>Rules</text>
+								</view>
 							</view>
 						</view>
 					</view>
@@ -136,6 +157,7 @@
 		<TextCom ref="textCom" />
 		<NumCom ref="numCom" />
 		<LoadingCom ref="loadingCom" />
+		<OrderPopup ref="orderPopup" />
 
 		<view class="fixed-1">
 			<view class="content">
@@ -157,6 +179,7 @@
 	import TextCom from './components/text.vue';
 	import NumCom from './components/ten.vue';
 	import LoadingCom from './components/loading.vue';
+	import OrderPopup from './components/orderPopup.vue';
 	import {
 		$request,
 		$totast,
@@ -168,7 +191,8 @@
 			ShareCom,
 			TextCom,
 			NumCom,
-			LoadingCom
+			LoadingCom,
+			OrderPopup
 		},
 		data() {
 			return {
@@ -190,9 +214,10 @@
 				testNum: 0,
 				autoBool: false,
 				countdownBool:null,//是否开启了倒计时
-				messageList:'',
-				messageLoopNum:3,
+				messageList:[],
+				messageLoopNum:9,
 				uObject:{'2':'5','5':'10','10':'15','20':'20','50':'25','100':'30'},
+				randomBool:false
 			};
 		},
 		computed: {
@@ -229,6 +254,10 @@
 						//游戏未开始，用户已下注
 						return 'Bet already placed'
 					}
+					if(this.roomStatus.is_can_start==1&&this.roomStatus.is_user_join==1){
+						//游戏已进入倒计时，用户已下注
+						return 'Bet already placed'
+					}
 					if(this.roomStatus.is_can_order==0){
 						//已买定离手
 						return 'No betting allowed'
@@ -253,6 +282,7 @@
 			},
 			logoUrl() {
 				console.log(getApp().globalData)
+				return this.userInfo.avatar?filesUrl+this.userInfo.avatar:''
 				return getApp().globalData.indexConfig.system_logo
 			},
 			filesUrl1() {
@@ -310,23 +340,34 @@
 
 		},
 		methods: {
-			async messageInterval(position){
-				this.messageList  = ''
-				let res = await $request('messageIndex', 
-				{position:this.uObject[this.amountList[this.amountIndex].bet_amount.toString()]});
-				// console.log(res,'666666666666')
+			orderPopupOpen(){
+				console.log(this.roomStatus,this.roomDetail)
+				this.$refs.orderPopup.open({roomId: this.roomDetail.id,game_id:this.roomStatus.game_id})
+			},
+			async messageInterval(){
+				this.messageList  = [];
+				let res = await $request('messageIndex', {position:'1'});
+				console.log(res,'666666666666')
 				if(res.data.code==200){
-					let str = ''
-					res.data.data.forEach((val,index)=>{
-						this.testInterval = setInterval(()=>{
-							if(index<=10){
-								this.messageList  =this.messageList + ` ${val.title}`;
-							}
-						},1000)
-						// this.messageList  =this.messageList + val.title;
-					})
-					// this.messageList = str;
+					// let str = ''
+					// res.data.data.forEach((val,index)=>{
+					// 	this.testInterval = setInterval(()=>{
+					// 		if(index<=5){
+					// 			this.messageList  =this.messageList + `${val.title}`;
+					// 		}
+					// 	},500)
+					// 	// this.messageList  =this.messageList + val.title;
+					// })
+					this.messageList = res.data.data;
 				}
+				// this.messageBool = setInterval(async()=>{
+				// 	this.messageList  = []
+				// 	this.testInterval = null;
+				// 	let res = await $request('messageIndex', {position:'1'});
+				// 	if(res.data.code==200){
+				// 		this.messageList = res.data.data;
+				// 	}
+				// },5000)
 			},
 			autoClick() {
 				this.autoBool = !this.autoBool;
@@ -358,7 +399,7 @@
 				})
 			},
 			async radioChoose(item, index) {
-				console.log(this.amountIndex, index, '11')
+				// console.log(this.amountIndex, index, '11')
 				this.amountIndex = index;
 				this.amountIndex1 = index;
 				this.messageLoopNum = 4;
@@ -366,6 +407,7 @@
 					if(val.bet_amount==this.amountList[this.amountIndex].bet_amount){
 						this.roomId = val.id;
 						this.getRoomDetail(this.roomId)
+						this.randomBool = true;
 					}
 				})
 				this.allClose();
@@ -413,10 +455,13 @@
 			},
 			share() {
 				let info = {
-					detail: this.roomDetail,
-					info: this.roomInfo
+					// detail: this.roomDetail,
+					// info: this.roomInfo
+					roomId:this.roomId, 
+					roomType:this.roomType, 
+					bet_amount:this.bet_amount
 				}
-				this.$refs.shareCom.open(info)
+				this.$refs.shareCom.open({...info,page:'hall'})
 
 			},
 			startCountdown(time) {
@@ -478,7 +523,7 @@
 				let obj = {
 					is_multiple: ''
 				};
-				console.log(this.borderActive)
+				// console.log(this.borderActive)
 				let arr = [2, 5, 10]
 				if (this.borderActive == null) {
 					obj.is_multiple = 0;
@@ -551,10 +596,12 @@
 				if (res.data.code == 200) {
 					// this.amountList = res.data.data.amount;
 					// this.amountIndex = 0;
+					this.bet_amount = this.amountList[this.amountIndex].bet_amount
 					this.amountList.forEach((val)=>{
 						if(val.bet_amount==this.amountList[this.amountIndex].bet_amount){
 							this.roomId = val.id;
 							this.getRoomDetail(this.roomId)
+							this.randomBool = true;
 						}
 					})
 					this.allClose();
@@ -566,6 +613,7 @@
 			},
 			async switchSystemRoom1(e) {
 				this.amountIndex1 = e.detail.current;
+				this.bet_amount = this.amountList[this.amountIndex1].bet_amount
 				// console.log(this.amountList)
 			},
 			async getRoomDetail(id) {
@@ -575,6 +623,7 @@
 				// console.log(res)
 				if (res.data.code == 200) {
 					this.roomDetail = res.data.data;
+					this.roomId =  res.data.data.id;
 					return
 				}
 				$totast(res.data.message)
@@ -642,11 +691,15 @@
 					
 					this.roomInfo = res.data.data.room_info;
 					this.messageLoopNum++;
+					// this.messageInterval();
+					// console.log(this.messageLoopNum)
 					if(this.messageLoopNum>=10){
 						this.messageLoopNum = 0;
-						clearInterval(this.testInterval)
+						// clearInterval(this.testInterval)
 						this.messageInterval();
 						
+					}else{
+						// this.messageInterval();
 					}
 					
 					let data = res.data.data;
@@ -674,9 +727,10 @@
 					if(data.is_can_order==1&&data.is_can_start==0&&data.is_user_join==1){
 		
 						this.$nextTick(()=>{
-							this.$refs.loadingCom.open();
+							this.$refs.loadingCom.open(this.roomStatus.game_id);
 						})
 					}else{
+						
 						this.$nextTick(()=>{
 							this.$refs.loadingCom.close();
 						})
@@ -688,8 +742,10 @@
 						// this.btnText = '111'
 						this.getGameResult();//调接口直接打开弹窗
 					}else{  //第一次观看有倒计时
-					this.$refs.numCom.open({num:data.countdown_end_time,room_id: this.roomId})
-					    // if(this.countdownBool){ //如果正处于倒计时
+					// console.log('---',this.$refs.numCom.open)
+					this.$refs.numCom.open({num:data.countdown_end_time,room_id: this.roomId,random:this.randomBool})
+					   this.randomBool = false;
+						// if(this.countdownBool){ //如果正处于倒计时
 						   // return
 					    // }
 						
@@ -766,8 +822,11 @@
 			},
 			async getGameResult() {
 				let res = await $request('gameResult', {
-					room_id: this.roomId
+					// room_id: this.roomDetail.id,
+					game_id:this.roomStatus.game_id
 				});
+				this.getRoomDetail(this.roomId)
+				this.getUser();
 				if (res.data.code == 200) {
 					this.$refs.popup.open(res.data.data)
 				}
@@ -784,6 +843,62 @@
 		height: 100vh;
 		// background: #000;
 	}
+	/deep/ uni-swiper-item{
+		overflow: visible;
+	}
+	.news-list {
+		width: 100%;
+		margin: 0rpx auto;
+		// margin-left: -30rpx;
+		// margin-right: -30rpx;
+		// padding: 10rpx 0rpx;
+		// background-color: white;
+		// border-radius: 20rpx;
+		.flex-direction;
+		flex-direction: row;
+		// color: #D8D8D8;
+		// color: #F96932;
+		color: white;
+		.left-tit {
+			// margin-right: 38rpx;
+			// border-radius: 0 50px 50px 0;
+			// padding: 10rpx 30rpx;
+			// background: linear-gradient(0deg, #fd631f 0%, #fd7e1f 100%);
+			// background: linear-gradient(90deg, #1098B7 0%, #64BAB4 100%);
+			// background: #F96932;
+			// color: #F96932;
+			font-size: 24rpx;
+			image{
+				width:29rpx;
+				margin-right: 10rpx;
+			}
+		}
+	
+		.news-swiper {
+			// min-width: 10%;
+			// flex-grow: 1;
+			width: 100%;
+			height: 36rpx;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			.swiper {
+				width: 100%;
+				height: 36rpx;
+				text-align: center;
+				.swiper-item {
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+	
+					color: white;
+					font-size: 26rpx;
+					line-height: 36rpx;
+				}
+			}
+		}
+	}
+	
 
 	.fixed-1 {
 		position: fixed;
@@ -936,8 +1051,8 @@
 
 			.user-right {
 				image {
-					width: 55rpx;
-					height: 55rpx;
+					width: 65rpx;
+					height: 65rpx;
 					border-radius: 50%;
 				}
 
@@ -1151,15 +1266,49 @@
 				}
 
 				.right {
-					width: 65rpx;
-					height: 65rpx;
-					border-radius: 50%;
-					border: 1px solid darkgrey;
+					box-sizing: border-box;
+					// width: 91rpx;
+					height: 161rpx;
+					// background: #000000;
+					border-radius: 4rpx;
+					border: 1px solid #FFFFFF;
+					// opacity: 0.4;
 					background: rgba(0, 0, 0, 0.4);
-					.flex-center;
-
+					position: relative;
+					// width: 65rpx;
+					// height: 65rpx;
+					// border-radius: 50%;
+					// border: 1px solid darkgrey;
+					// background: rgba(0, 0, 0, 0.4);
+					.flex-column;
+					
+					.right-top,.right-bottom{
+						box-sizing: border-box;
+						padding: 13rpx 10rpx;
+						height: 50%;
+						.flex-column;
+					}
+					// .right-bottom{
+					// 	// margin-bottom: 15rpx;
+					// 	// border-bottom: 1px solid #333333;
+					// 	border-top: 1px solid red;
+					// 	// padding-bottom: 15rpx;
+					// }
+					.hr-t{
+						position: absolute;
+						width: 100%;
+						background: #333333;
+						height: 1px;
+						top: 53%;
+						left: 0rpx;
+					}
 					image {
 						width: 37rpx;
+						margin-bottom: 10rpx;
+					}
+					text{
+						color: #CCCCCC;
+						font-size: 22rpx;
 					}
 				}
 			}

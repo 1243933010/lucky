@@ -52,7 +52,7 @@
 							<view class="item">
 								<view class="add">
 									<image v-if="teamInfoData.today_invite_list&&teamInfoData.today_invite_list[0]"
-										:src="teamInfoData.today_invite_list[0].avatar" mode="widthFix"></image>
+										:src="filesUrl1+teamInfoData.today_invite_list[0].avatar" mode="widthFix"></image>
 									<image @click="invitation" v-if="!teamInfoData.today_invite_list[0]"
 										src="../../static/add.png" mode="widthFix"></image>
 
@@ -66,7 +66,7 @@
 							<view class="item">
 								<view class="add">
 									<image v-if="teamInfoData.today_invite_list[1]"
-										:src="teamInfoData.today_invite_list[1].avatar" mode="widthFix"></image>
+										:src="filesUrl1+teamInfoData.today_invite_list[1].avatar" mode="widthFix"></image>
 									<image @click="invitation" v-if="!teamInfoData.today_invite_list[1]"
 										src="../../static/add.png" mode="widthFix"></image>
 								</view>
@@ -79,7 +79,7 @@
 							<view class="item">
 								<view class="add">
 									<image v-if="teamInfoData.today_invite_list[2]"
-										:src="teamInfoData.today_invite_list[2].avatar" mode="widthFix"></image>
+										:src="filesUrl1+teamInfoData.today_invite_list[2].avatar" mode="widthFix"></image>
 									<image @click="invitation" v-if="!teamInfoData.today_invite_list[2]"
 										src="../../static/add.png" mode="widthFix"></image>
 								</view>
@@ -92,7 +92,7 @@
 							<view class="item">
 								<view class="add">
 									<image v-if="teamInfoData.today_invite_list[3]"
-										:src="teamInfoData.today_invite_list[3].avatar" mode="widthFix"></image>
+										:src="filesUrl1+teamInfoData.today_invite_list[3].avatar" mode="widthFix"></image>
 									<image @click="invitation" v-if="!teamInfoData.today_invite_list[3]"
 										src="../../static/add.png" mode="widthFix"></image>
 								</view>
@@ -287,9 +287,10 @@
 			</view>
 			<view class="faq-box">
 				<view class="list">
-					<view class="item" :class="item.show?'show':'hide'" v-for="(item,index) in faqList" :key="index"
+					<!-- :class="item.show?'show':'hide'" -->
+					<view class="item"  v-for="(item,index) in faqList" :key="index"
 						@click="goFaq(item)">
-						<text>{{item.question}}</text>
+						<text v-if="index<=4">{{item.question}}</text>
 					</view>
 				</view>
 			</view>
@@ -315,18 +316,42 @@
 		<view style="position: fixed;width: 100%;bottom: 0;" v-if="pageScrollBool">
 			<view class="hr1">
 				<image src="../../static/me_icon1.png" mode="widthFix"></image>
-				<uni-notice-bar  :speed="50" scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
-					:text="messageList"></uni-notice-bar>
+				<!-- <uni-notice-bar  :speed="50" scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
+					:text="messageList"></uni-notice-bar> -->
+					<view class="news-list">
+						<view class="left-tit">
+						</view>
+						<view class="news-swiper">
+							<swiper class="swiper" vertical circular autoplay :duration="500">
+								<swiper-item v-for="(item, index) in messageList" :key="index" @click="newLink(item)">
+									<view class="swiper-item">{{ item.title_en }}</view>
+								</swiper-item>
+							</swiper>
+						</view>
+					</view>
 			</view>
 			<view style="padding: 9rpx 0 35rpx 0;">
 				<DefaultFooter :index="true" :fiexed="false" @share="$refs.invitePopup.open()" />
 			</view>
 		</view>
-		<view style="padding: 9rpx 0 35rpx 0;">
+		<view style="padding: 9rpx 0 35rpx 0;" v-if="!pageScrollBool">
 			<view class="hr1">
 				<image src="../../static/me_icon1.png" mode="widthFix"></image>
-				<uni-notice-bar :speed="50" scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
-					:text="messageList"></uni-notice-bar>
+				<!-- <uni-notice-bar :speed="50" scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
+					:text="messageList"></uni-notice-bar> -->
+					<view class="news-list">
+						<!-- {{ $t("index.news") }} -->
+						<view class="left-tit">
+							<!-- <image src="../../static/me_icon1.png" mode="widthFix"></image> -->
+						</view>
+						<view class="news-swiper">
+							<swiper class="swiper" vertical circular autoplay :duration="1000">
+								<swiper-item v-for="(item, index) in messageList" :key="index" @click="newLink(item)">
+									<view class="swiper-item">{{ item.title_en }}</view>
+								</swiper-item>
+							</swiper>
+						</view>
+					</view>
 			</view>
 			<view style="padding: 9rpx 0 35rpx 0;">
 				<DefaultFooter :index="true" :fiexed="false" @share="$refs.invitePopup.open()" />
@@ -403,9 +428,11 @@
 			this.onLoadParams = e;
 			let {
 				invite_code,
-				room_code
+				room_code,
+				roomId,
+				page
 			} = this.onLoadParams;
-			if (room_code) {
+			if (page=='friend') {
 				setTimeout(() => {
 					console.log(this.$refs)
 					this.$refs.defaultPopup.open({
@@ -413,7 +440,19 @@
 						content: 'Confirm join room?',
 						cancelText: 'Cancel',
 						confirmText: 'Ok',
-						room_code
+						// room_code
+						onLoadParams:this.onLoadParams
+					})
+				}, 1000)
+			}else if(page=='hall'){
+				setTimeout(() => {
+					console.log(this.$refs)
+					this.$refs.defaultPopup.open({
+						title: 'Message',
+						content: 'Confirm join room?',
+						cancelText: 'Cancel',
+						confirmText: 'Ok',
+						onLoadParams:this.onLoadParams
 					})
 				}, 1000)
 			}
@@ -421,7 +460,7 @@
 			// 	val.color = this.colorList[Math.min(10, this.getRandomInt(1, 10))]
 			// })
 			// console.log(Math.min(10, this.getRandomInt(1, 10)))
-			this.startToggle();
+			// this.startToggle();
 			this.getFaqs();
 			this.indexConfig();
 			this.teamInfo();
@@ -433,49 +472,46 @@
 		},
 		onPageScroll(e) {
 			// console.log(e)
-			if (this.pageScroll > e.scrollTop) {
+			if (this.pageScroll > (e.scrollTop+40)) {
+				// console.log('11111',e.scrollTop)
+				// setTimeout(()=>{
+				// 	this.pageScrollBool = true;
+				// },500)
 				this.pageScrollBool = true;
-			} else {
+			} else{
 				this.pageScrollBool = false;
 			}
-			this.pageScroll = e.scrollTop;
+			setTimeout(()=>{
+				this.pageScroll = e.scrollTop;
+			},500)
 		},
 		destroyed(){
 			this.messageBool = null
 		},
 		methods: {
 			async messageInterval(){
-				this.messageList  = ''
+				this.messageList  = [];
 				let res = await $request('messageIndex', {position:'1'});
-				console.log(res,'666666666666')
+				// console.log(res,'666666666666')
 				if(res.data.code==200){
-					let str = ''
-					res.data.data.forEach((val,index)=>{
-						this.testInterval = setInterval(()=>{
-							if(index<=5){
-								this.messageList  =this.messageList + `${val.title}`;
-							}
-						},500)
-						// this.messageList  =this.messageList + val.title;
-					})
-					// this.messageList = str;
+					// let str = ''
+					// res.data.data.forEach((val,index)=>{
+					// 	this.testInterval = setInterval(()=>{
+					// 		if(index<=5){
+					// 			this.messageList  =this.messageList + `${val.title}`;
+					// 		}
+					// 	},500)
+					// 	// this.messageList  =this.messageList + val.title;
+					// })
+					this.messageList = res.data.data;
 				}
 				this.messageBool = setInterval(async()=>{
-					this.messageList  = ''
-					this.testInterval = null;
+					this.messageList  = []
+					// this.testInterval = null;
+					clearInterval(this.messageBool)
 					let res = await $request('messageIndex', {position:'1'});
-					console.log(res,'666666666666')
 					if(res.data.code==200){
-						let str = ''
-						res.data.data.forEach((val,index)=>{
-							this.testInterval = setInterval(()=>{
-								if(index<=5){
-									this.messageList  =this.messageList +`${ val.title}`;
-								}
-							},500)
-							// this.messageList  =this.messageList + val.title;
-						})
-						// this.messageList = str;
+						this.messageList = res.data.data;
 					}
 				},5000)
 			},
@@ -556,6 +592,18 @@
 				// console.log(res)
 				if (res.data.code == 200) {
 					this.teamInfoData = res.data.data;
+		// 			this.teamInfoData.today_invite_list=[ {
+  //       "avatar": "http://dummyimage.com/100x100",
+  //       "nickname": "手军单小达 力根何龙程" },
+		// {
+		// "avatar": "http://dummyimage.com/100x100",
+		// "nickname": "手军单小达 力根何龙程" },
+		// {
+		// "avatar": "http://dummyimage.com/100x100",
+		// "nickname": "手军单小达 力根何龙程" },
+		// {
+		// "avatar": "http://dummyimage.com/100x100",
+		// "nickname": "手军单小达 力根何龙程" }]
 				}
 			},
 			async indexConfig() {
@@ -721,6 +769,53 @@
 		display: flex;
 		justify-content: center;
 		position: relative;
+	}
+	.news-list {
+		width: 100%;
+		margin: 0rpx auto;
+		// margin-left: -30rpx;
+		// margin-right: -30rpx;
+		padding: 10rpx 0rpx;
+		// background-color: white;
+		border-radius: 20rpx;
+		.flex-direction;
+		flex-direction: row;
+		// color: #D8D8D8;
+		color: white;
+		.left-tit {
+			// margin-right: 38rpx;
+			// border-radius: 0 50px 50px 0;
+			// padding: 10rpx 30rpx;
+			// background: linear-gradient(0deg, #fd631f 0%, #fd7e1f 100%);
+			// background: linear-gradient(90deg, #1098B7 0%, #64BAB4 100%);
+			// background: #F96932;
+			// color: #F96932;
+			font-size: 24rpx;
+			image{
+				width:29rpx;
+				margin-right: 10rpx;
+			}
+		}
+	
+		.news-swiper {
+	
+			min-width: 10%;
+			flex-grow: 1;
+	
+			.swiper {
+				height: 36rpx;
+	
+				.swiper-item {
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+	
+					color: white;
+					font-size: 26rpx;
+					line-height: 36rpx;
+				}
+			}
+		}
 	}
 
 	.banner-box {
@@ -1408,7 +1503,7 @@
 	.faq {
 		box-sizing: border-box;
 		// padding: 0 38rpx;
-		padding: 0 38rpx 120rpx 38rpx;
+		padding: 0 38rpx 30rpx 38rpx;
 		// margin-bottom: 118rpx;
 
 		.title {
@@ -1428,7 +1523,7 @@
 			display: flex;
 			flex-direction: row;
 			flex-wrap: wrap;
-			height: 220rpx;
+			// height: 220rpx;
 			// overflow-y: auto;
 
 			.item {

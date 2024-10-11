@@ -13,11 +13,25 @@
 						<input type="text" placeholder="输入登录密码">
 					</view> -->
 					<view class="form-item">
+						<input v-model="formData.pay_password"  v-if="passBool1" type="text" placeholder=" New Password ">
+						<input v-model="formData.pay_password" v-if="!passBool1" type="password" placeholder=" New Password ">
+					    <image v-if="!passBool1" @click="passBool1 = true" class="eye" src="../../../static/eye.png" mode="widthFix"></image>
+					    <image  v-if="passBool1"  @click="passBool1 = false" class="eye"   src="../../../static/c_eye.png" mode="widthFix"></image>
+					</view>
+					<view class="form-item">
+						<input v-model="formData.pay_password_confirmation"  v-if="passBool2" type="text" placeholder="Confirm Password ">
+						<input v-model="formData.pay_password_confirmation" v-if="!passBool2" type="password" placeholder="Confirm Password">
+						<image v-if="!passBool2" @click="passBool2 = true" class="eye" src="../../../static/eye.png" mode="widthFix"></image>
+						<image  v-if="passBool2"  @click="passBool2 = false" class="eye"   src="../../../static/c_eye.png" mode="widthFix"></image>
+						<!-- <input v-model="formData.password_confirmation"  type="text" placeholder="Confirm Password"> -->
+					</view>
+					
+					<!-- <view class="form-item">
 						<input type="text" v-model="formData.pay_password" placeholder="Transaction Password">
 					</view>
 					<view class="form-item">
 						<input type="text" v-model="formData.pay_password_confirmation"  placeholder="Confirm Transaction Password">
-					</view>
+					</view> -->
 					<view class="send">
 						<input  v-model="formData.email_code"  type="text" placeholder="Email Verification Code">
 						<view class="btn">
@@ -52,6 +66,8 @@
 				},
 				codeText:'Send',
 				timeFnc: null,
+				passBool1:false,
+				passBool2:false,
 				
 			};
 		},
@@ -161,6 +177,10 @@
 					width: 100%;
 					color: #999999;
 					font-size: 24rpx;
+				}
+				.eye{
+					width: 24rpx;
+					margin-right: 30rpx;
 				}
 			}
 			.send{

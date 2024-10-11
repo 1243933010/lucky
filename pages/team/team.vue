@@ -1,6 +1,6 @@
 <template>
 	<view class="page-container">
-		<view class="" style="position: fixed;top: 0;width: 100%;z-index: 100;background: #000;">
+		<view class="" style="position: fixed;top: 0;width: 100%;z-index: 1;background: #000;">
 			<DefaultHeader />
 		</view>
 		<view class="" style="opacity: 0;">
@@ -128,7 +128,7 @@
 							<text>{{userInfoData.rank}}</text>
 						</view>
 						<view class="logo">
-							<image :src="userInfoData.avatar?userInfoData.avatar:'../../static/default_user.png'"
+							<image :src="userInfoData.avatar? userInfoData.avatar:'../../static/default_user.png'"
 								mode="widthFix"></image>
 						</view>
 						<view class="name">
@@ -144,7 +144,7 @@
 				<view class="header">
 					<view class="item two" v-if="paiList.length&&paiList[1]">
 						<view class="logo">
-							<image :src="paiList[1].avatar?paiList[1].avatar:'../../static/default_user.png'" mode="widthFix">
+							<image :src="paiList[1].avatar?filesUrl1+paiList[1].avatar:'../../static/default_user.png'" mode="widthFix">
 							</image>
 							<view class="text">
 								<view class="name">
@@ -161,7 +161,7 @@
 					</view>
 					<view class="item one" v-if="paiList[0]">
 						<view class="logo">
-							<image :src="paiList[0].avatar?paiList[0].avatar:'../../static/default_user.png'" mode="widthFix"></image>
+							<image :src="paiList[0].avatar?filesUrl1+paiList[0].avatar:'../../static/default_user.png'" mode="widthFix"></image>
 							<view class="text">
 								<view class="name">
 									<text>{{paiList[0].nickname||''}}</text>
@@ -177,7 +177,7 @@
 					</view>
 					<view class="item three" v-if="paiList[2]">
 						<view class="logo">
-							<image :src="paiList[2].avatar?paiList[2].avatar:'../../static/default_user.png'"  mode="widthFix"></image>
+							<image :src="paiList[2].avatar?filesUrl1+paiList[2].avatar:'../../static/default_user.png'"  mode="widthFix"></image>
 							<view class="text">
 								<view class="name">
 									<text>{{paiList[2].nickname||''}}</text>
@@ -200,7 +200,7 @@
 								<text>{{item.rank||""}}</text>
 							</view>
 							<view class="logo">
-								<image :src="item.avatar?item.avatar:'../../static/default_user.png'" mode="widthFix"></image>
+								<image :src="item.avatar?filesUrl1+item.avatar:'../../static/default_user.png'" mode="widthFix"></image>
 							</view>
 							<view class="name">
 								<text>{{item.nickname||''}}</text>
@@ -226,7 +226,7 @@
 		<OrderPopup ref="orderPopup" />
 		<Transfer ref="transfer" @updateData="updateData" />
 		<InvitePopup ref="invitePopup" />
-		<FixedCom :bkColor="1111" />
+		<!-- <FixedCom :bkColor="1111" /> -->
 		<!-- <TransferPopup ref="transferPopup" /> -->
 	</view>
 </template>
@@ -288,7 +288,7 @@
 			this.pageScrollBool = false;
 		},
 		onPageScroll(e) {
-			console.log(e, this.pageScroll)
+			// console.log(e, this.pageScroll)
 			if (this.pageScroll < e.scrollTop) {
 				this.pageScrollBool = false;
 			} else {
@@ -336,6 +336,7 @@
 			},
 			setIndex(index) {
 				this.index = index;
+				this.getTodayGameRank()
 			},
 			Invite() {
 				this.$refs.invitePopup.open()
@@ -363,7 +364,8 @@
 				}
 			},
 			async getCommissionInfo() {
-				let res = await $request('commissionInfo', {});
+				let res = await $request('commissionInfo', {"page": 1,
+  "limit": 10});
 
 				if (res.data.code == 200) {
 					this.commissionInfo = res.data.data;
@@ -393,7 +395,7 @@
 						"rank": 3,
 					}
 				]
-				let res = await $request('todayGameRank', {});
+				let res = await $request('todayGameRank', {is_all:this.index});
 				
 				if (res.data.code == 200) {
 					

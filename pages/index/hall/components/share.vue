@@ -29,7 +29,8 @@
 									<text>invitation link</text>
 								</view>
 								<view class="input">
-									<text>{{`${this.userInfo.host_url}/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`}}</text>
+									<text v-if="options.page=='friend'">{{`${this.userInfo.host_url}/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`}}</text>
+									<text v-if="options.page=='hall'">{{`${this.userInfo.host_url}/#/pages/login/login?invite_code=${this.userInfo.invite_code}&roomId=${this.options.roomId}&roomType=${this.options.roomType}&bet_amount=${this.options.bet_amount}&page=${this.options.page}`}}</text>
 								</view>
 							</view>
 							<view class="btn">
@@ -62,14 +63,14 @@
 						title: 'Amount of money',
 						value: '5USD'
 					},
-					{
-						title: 'Maximum capacity',
-						value: '150people'
-					},
-					{
-						title: 'Automatic dissolution',
-						value: '24h'
-					},
+					// {
+					// 	title: 'Maximum capacity',
+					// 	value: '150people'
+					// },
+					// {
+					// 	title: 'Automatic dissolution',
+					// 	value: '24h'
+					// },
 				],
 				options: {},
 				userInfo:{}
@@ -77,7 +78,13 @@
 		},
 		methods: {
 			async inviteLink(){
-				let res = await $request('inviteLink',{room_id:this.options.detail.id});
+				let room_id = '';
+				if(this.options.page=='friend'){
+					room_id = this.options.detail.id
+				}else{
+					room_id = this.options.roomId
+				}
+				let res = await $request('inviteLink',{room_id});
 				console.log(res)
 				if(res.data.code==200){
 					this.userInfo = res.data.data;
@@ -91,17 +98,26 @@
 					// }
 					let info = res.data.data;
 					this.dataList = [
-						{title:'Table name',value:info.room_title+'sdddddddddddddddddddddddddddddddddddddddddddddd'},
+						{title:'Table name',value:info.room_title},
 						{title:'Amount of money',value:info.room_bet_amount*1+'USDT'},
-						{title:'Maximum capacity',value:info.room_max_people+'people'},
-						{title:'Automatic dissolution',value:info.room_dismiss_time},
+						// {title:'Maximum capacity',value:info.room_max_people+'people'},
+						// {title:'Automatic dissolution',value:info.room_dismiss_time},
 					]
 					// console.log(this.userInfo)
 				}
 			},
 			copyLink() {
+				let url = '';
+				console.log(this.options)
+				let host = 'http://localhost:8080'
+				host = this.userInfo.host_url;
+				if(this.options.page=='friend'){
+					url = `${host}/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}&page=${this.options.page}`
+				}else{
+					url = `${host}/#/pages/login/login?invite_code=${this.userInfo.invite_code}&roomId=${this.options.roomId}&roomType=${this.options.roomType}&bet_amount=${this.options.bet_amount}&page=${this.options.page}`
+				}
 				uni.setClipboardData({
-					data:`${this.userInfo.host_url}/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`,
+					data:url,
 					// data:`http://localhost:8080/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`,
 					success:(res)=>{
 						uni.showToast({

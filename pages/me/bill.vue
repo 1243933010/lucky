@@ -12,19 +12,19 @@
 				</view>
 				<view class="fixed" v-show="showBool">
 					<view class="con">
-						<view class="item" @click="goItem('')">
+						<view class="item" @click="goItem('recharge')">
 							<text>Recharge</text>
 						</view>
-						<view class="item" @click="goItem('')">
+						<view class="item" @click="goItem('withdrawal')">
 							<text>Withdrawal</text>
 						</view>
-						<view class="item" @click="goItem('')">
+						<view class="item" @click="goItem('bonus_transfer')">
 							<text>Bonus transfer</text>
 						</view>
-						<view class="item" @click="goItem('')">
+						<view class="item" @click="goItem('system_room')">
 							<text>System room record</text>
 						</view>
-						<view class="item" @click="goItem('')">
+						<view class="item" @click="goItem('friend_room')">
 							<text>Friend room record</text>
 						</view>
 					</view>
@@ -34,7 +34,12 @@
 				<view class="item" v-for="(item,index) in list" :key="index">
 					<view class="bill-left">
 						<view class="logo">
-							<image src="../../static/logo.png" mode="widthFix"></image>
+							<image v-if="item.type=='recharge'" src="../../static/bill_icon1.png" mode="widthFix"></image>
+							<image v-if="item.type=='withdrawal'" src="../../static/bill_icon2.png" mode="widthFix"></image>
+							<image v-if="item.type=='bonus_transfer'" src="../../static/bill_icon4.png" mode="widthFix"></image>
+							<image v-if="item.type=='system_room'" src="../../static/bill_icon3.png" mode="widthFix"></image>
+							<image v-if="item.type=='friend_room'" src="../../static/bill_icon3.png" mode="widthFix"></image>
+							<!-- <image src="../../static/logo.png" mode="widthFix"></image> -->
 						</view>
 						<view class="label">
 							<view class="name">
@@ -91,8 +96,9 @@
 			shai(){
 				this.showBool = !this.showBool;
 			},
-			goItem(){
+			goItem(type){
 				this.requestForm.page=1;
+				this.requestForm.type = type;
 				this.list = []
 				this.gameRecords();
 			},
@@ -197,7 +203,7 @@
 						margin-right: 20rpx;
 						image{
 							width: 100%;
-							border-radius: 50%;
+							// border-radius: 50%;
 						}
 					}
 					.label{

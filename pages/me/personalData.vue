@@ -58,7 +58,8 @@
 					<!-- <image class="arrow" src="../../static/right_arrow.png" mode="widthFix"></image> -->
 				</view>
 			</view>
-			<view class="form-item" :style="sysInfo.screenHeight < 850 ? 'padding-bottom:300rpx' : ''">
+			<!-- :style="sysInfo.screenHeight < 850 ? 'padding-bottom:300rpx' : ''" -->
+			<view class="form-item" style="padding-bottom:300rpx;">
 				<view class="label">
 					<text>Withdrawal address</text>
 				</view>
@@ -198,6 +199,9 @@
 				// console.log(res)
 				if(res.data.code==200){
 					this.userInfo = res.data.data;
+					if(this.userInfo.is_set_pay_password==1){
+						this.formData.transactionPassword = '***'
+					}
 				}
 			},
 			setAddress(type){

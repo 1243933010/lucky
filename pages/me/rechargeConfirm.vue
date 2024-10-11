@@ -67,7 +67,7 @@
 						</view>
 						<view class="input">
 							<view class="left">
-								<input type="text" v-model="rechargeConfig.address" />
+								<input type="text" :disabled="true" v-model="rechargeConfig.address" />
 							</view>
 							<view class="right" @click="copy(rechargeConfig.address)">
 								<text>Copy</text>

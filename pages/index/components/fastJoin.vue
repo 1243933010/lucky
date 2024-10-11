@@ -41,7 +41,13 @@
 								</view>
 								<view class="usdt">
 									<view class="">
-										<text class="num">{{item.bet_amount*1}}</text>
+										<!-- <text class="num">{{item.bet_amount*1}}</text> -->
+										<image  class="num" v-if="item.bet_amount*1==2" src="../../../static/big_icon_2.png" mode="widthFix"></image>
+										<image  class="num" v-if="item.bet_amount*1==5" src="../../../static/big_icon_5.png" mode="widthFix"></image>
+										<image  class="num s10" v-if="item.bet_amount*1==10" src="../../../static/big_icon_10.png" mode="widthFix"></image>
+										<image  class="num s10" v-if="item.bet_amount*1==20" src="../../../static/big_icon_20.png" mode="widthFix"></image>
+										<image  class="num s10" v-if="item.bet_amount*1==50" src="../../../static/big_icon_50.png" mode="widthFix"></image>
+										<image  class="num s100" v-if="item.bet_amount*1==100" src="../../../static/big_icon_100.png" mode="widthFix"></image>
 										<text>USDT</text>
 									</view>
 								</view>
@@ -69,7 +75,13 @@
 								</view>
 								<view class="usdt">
 									<view class="">
-										<text class="num">{{item.bet_amount*1}}</text>
+										<!-- <text class="num">{{item.bet_amount*1}}</text> -->
+										<image  class="num" v-if="item.bet_amount*1==2" src="../../../static/big_icon_2.png" mode="widthFix"></image>
+										<image  class="num" v-if="item.bet_amount*1==5" src="../../../static/big_icon_5.png" mode="widthFix"></image>
+										<image  class="num s10" v-if="item.bet_amount*1==10" src="../../../static/big_icon_10.png" mode="widthFix"></image>
+										<image  class="num s10" v-if="item.bet_amount*1==20" src="../../../static/big_icon_20.png" mode="widthFix"></image>
+										<image  class="num s10" v-if="item.bet_amount*1==50" src="../../../static/big_icon_50.png" mode="widthFix"></image>
+										<image  class="num s100" v-if="item.bet_amount*1==100" src="../../../static/big_icon_100.png" mode="widthFix"></image>
 										<text>USDT</text>
 									</view>
 								</view>
@@ -381,12 +393,22 @@
 							// position: relative;
 							.num{
 								position: absolute;
-								top: 0;
+								top: -20rpx;
 								left: 30rpx;
 								font-size: 90rpx;
 								color: white;
 								font-weight: 600;
 								
+							}
+							image{
+								width: 50rpx;
+								height: 46rpx;
+							}
+							.s10{
+								width: 100rpx;
+							}
+							.s100{
+								width: 150rpx;
 							}
 						}
 

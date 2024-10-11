@@ -60,16 +60,42 @@
 							</view>
 							<view class="item">
 								<view class="left">
+									<text>Minimum opening number</text>
+								</view>
+								<view class="right">
+									<text>({{roomInfo.online}}/{{roomDetail.min_start_players}})</text>
+								</view>
+							</view>
+							<!-- <view class="item">
+								<view class="left">
 									<text>Automatic dissolution</text>
 								</view>
 								<view class="right">
 									<text>{{roomDetail.valid_time}}hours</text>
 								</view>
-							</view>
+							</view> -->
 						</view>
 						<view class="notice">
 							<view class="box">
-								<text>{{roomDetail.game_help}}</text>
+								<!-- <text>{{roomDetail.game_help}}</text> -->
+								<view class="hr1">
+									<!-- <image src="../../../static/me_icon1.png" mode="widthFix"></image> -->
+									<!-- <uni-notice-bar :speed="50" scrollable singlet color="#D8D8D8" background-color="" class="uni-notice-bar"
+										:text="messageList"></uni-notice-bar> -->
+										<view class="news-list">
+											<!-- {{ $t("index.news") }} -->
+											<view class="left-tit">
+												<!-- <image src="../../static/me_icon1.png" mode="widthFix"></image> -->
+											</view>
+											<view class="news-swiper">
+												<swiper class="swiper" vertical circular autoplay :duration="1000">
+													<swiper-item v-for="(item, index) in messageList" :key="index" @click="newLink(item)">
+														<view class="swiper-item">{{ item.title_en }}</view>
+													</swiper-item>
+												</swiper>
+											</view>
+										</view>
+								</view>
 							</view>
 						</view>
 					</view>
@@ -94,10 +120,11 @@
 
 			<view class="big-icon">
 				<view class="box">
-					<image v-if="btnText==3" src="../../../static/friend_icon5.png" mode="aspectFit"></image>
+					<!-- <image v-if="btnText==3" src="../../../static/friend_icon5.png" mode="aspectFit"></image>
 					<image v-if="btnText==2" src="../../../static/friend_icon4.png" mode="aspectFit"></image>
-					<image v-if="btnText==1" src="../../../static/friend_icon3.png" mode="aspectFit"></image>
-					<image style="opacity: 0;" v-if="!['1','2','3'].includes(btnText)" src="../../../static/friend_icon3.png" mode="widthFix"></image>
+					<image v-if="btnText==1" src="../../../static/friend_icon3.png" mode="aspectFit"></image> -->
+					 <!-- v-if="!['1','2','3'].includes(btnText)" -->
+					<image style="opacity: 0;" src="../../../static/friend_icon3.png" mode="widthFix"></image>
 				</view>
 			</view>
 
@@ -134,6 +161,7 @@
 			<view class="submit">
 				<view class="box">
 					<view class="left"></view>
+					<!-- :style="{'color':roomStatus.status!==0?'#aaaaaa':''}" -->
 					<view class="center1" v-if="hideButton">
 						<text>{{btnText}}</text>
 					</view>
@@ -141,11 +169,23 @@
 						<text>{{btnText}}</text>
 					</view>
 					<view class="right">
-						<image  @click="$refs.textCom.open()" src="../../../static/hell_icon4.png" mode="widthFix"></image>
+						<view class="right-top" @click="orderPopupOpen">
+							<image src="../../../static/liu.png" mode="widthFix"></image>
+							<text>Record</text>
+						</view>
+						<view class="hr-t">
+							
+						</view>
+						<view class="right-bottom">
+							<image @click="$refs.textCom.open()" src="../../../static/hell_icon4.png"
+								mode="widthFix">
+							</image>
+							<text>Rules</text>
+						</view>
 					</view>
 				</view>
 			</view>
-			<view class="hr" v-if="roomStatus.status===0">
+			<view class="hr" >
 				<view class="box"  @click="autoClick" v-if="!autoBool">
 					<!-- <image src="../../../static/friend_icon2.png" mode="widthFix"></image> -->
 					<text>Auto Bet</text>
@@ -169,14 +209,20 @@
 		<ShareCom ref="shareCom" />
 		<TextCom ref="textCom" />
 		<NumCom ref="numCom" />
+		<LoadingCom ref="loadingCom" />
+		<OrderPopup ref="orderPopup" />
+		
 	</view>
 </template>
 
 <script>
-	import Popup from './components/dialog.vue';
-	import ShareCom from './components/share.vue';
-	import TextCom from './components/text.vue';
+	// import '../hall/components/ten.vue'
+	import Popup from '../hall/components/dialog.vue';
+	import ShareCom from '../hall/components/share.vue';
+	import TextCom from '../hall/components/text.vue';
 	import NumCom from '../hall/components/ten.vue';
+	import LoadingCom from '../hall/components/loading.vue';
+	import OrderPopup from '../hall/components/orderPopup.vue';
 	import {
 		$request,
 		$totast,
@@ -187,7 +233,9 @@
 			Popup,
 			ShareCom,
 			TextCom,
-			NumCom
+			NumCom,
+			LoadingCom,
+			OrderPopup
 		},
 		data() {
 			return {
@@ -208,6 +256,8 @@
 				type:'',
 				room_code:'',
 				intervalIdTwo:null,
+				messageList:[],
+				messageLoopNum:9,
 				testList:[],
 				randomIndex:4,
 				countdownBool:null,//是否开启了倒计时
@@ -216,7 +266,14 @@
 		computed: {
 			btnText:{
 				get(){
+					if(this.autoBool){
+						return 'Cancel Auto Bet'
+					}
 					if(this.roomStatus.is_can_start==0&&this.roomStatus.is_user_join==0){
+						//游戏未开始，用户未下注
+						return 'Participate in Game'
+					}
+					if(this.roomStatus.is_can_start===1&&this.roomStatus.is_can_order===1&&this.roomStatus.is_user_join===0){
 						//游戏未开始，用户未下注
 						return 'Participate in Game'
 					}
@@ -224,10 +281,15 @@
 						//游戏未开始，用户已下注
 						return 'Bet already placed'
 					}
+					if(this.roomStatus.is_can_start==1&&this.roomStatus.is_user_join==1){
+						//游戏已进入倒计时，用户已下注
+						return 'Bet already placed'
+					}
 					if(this.roomStatus.is_can_order==0){
 						//已买定离手
 						return 'No betting allowed'
 					}
+					
 					return 'Participate in Game';
 				},
 				set(val){
@@ -236,15 +298,18 @@
 			},
 			showButton(){  //符合不置灰条件
 				let bool =this.roomStatus.is_can_start===0&&this.roomStatus.is_user_join===0;
-				return bool;
+				let bool1 = this.roomStatus.is_can_start===1&&this.roomStatus.is_can_order===1&&this.roomStatus.is_user_join===0;
+				let bool2 = this.autoBool;
+				return bool||bool1||bool2;
 			},
 			hideButton(){
-				let bool = this.roomStatus.is_can_order===0;  //已经买定离手
-				let bool1 = this.roomStatus.is_user_join===1;  //已经参与了游戏
+				let bool = this.roomStatus.is_can_order===0&&!this.autoBool;  //已经买定离手
+				let bool1 = this.roomStatus.is_user_join===1&&!this.autoBool;  //已经参与了游戏
 				return bool||bool1;
 			},
 			logoUrl(){
 				console.log(getApp().globalData)
+				return this.userInfo.avatar?filesUrl+this.userInfo.avatar:''
 				return getApp().globalData.indexConfig.system_logo
 			},
 			filesUrl1() {
@@ -287,7 +352,7 @@
 			// this.getRoomDetail(this.roomId)
 		},
 		mounted() {
-			this.startPolling();
+			// this.startPolling();
 			this.startPolling1();
 			// this.startCountdown(3400001);
 			// this.getGameStatus()
@@ -298,6 +363,17 @@
 			this.clearCountdown();
 		},
 		methods: {
+			orderPopupOpen(){
+				this.$refs.orderPopup.open({roomId:this.roomDetail.id,game_id:this.roomStatus.game_id})
+			},
+			async messageInterval(){
+				this.messageList  = [];
+				let res = await $request('messageIndex', {position:'1'});
+				console.log(res,'666666666666')
+				if(res.data.code==200){
+					this.messageList = res.data.data;
+				}
+			},
 			async joinFriendRoom(room_code){
 				let res = await $request('roomJoin', {
 					code:room_code
@@ -311,19 +387,26 @@
 				$totast(res.data.message)
 			},
 			autoClick(){
-				this.autoBool = !this.autoBool;
-				let str = 'Successful  Auto Bet'
-				if(!this.autoBool){
-					str = ' Auto Bet has been canceled'
-				}
-				if(this.autoBool){
-					this.btnText = 'Cancel Auto Bet'
+			this.autoBool = !this.autoBool;
+			let str = 'Successful  Auto Bet'
+			if (!this.autoBool) {
+				str = ' Auto Bet has been canceled'
+			}
+			
+			if (this.autoBool) {
+				this.btnText = 'Cancel Auto Bet'
+				if(this.roomStatus.is_can_start==1||this.roomStatus.is_user_join==1){
+					//游戏未开始，用户已下注
+					return 'Bet already placed'
+				}else{
 					this.gameJoin();
 				}
-				uni.showToast({
-					icon:'none',
-					title:str
-				})
+				
+			}
+			uni.showToast({
+				icon: 'none',
+				title: str
+			})
 			},
 			
 			goUrl(){
@@ -336,6 +419,14 @@
 			async radioChoose(item, index) {
 				console.log(this.amountIndex,index,'11')
 				this.amountIndex = index;
+				this.amountList.forEach((val)=>{
+					if(val.bet_amount==this.amountList[this.amountIndex].bet_amount){
+						this.roomId = val.id;
+						this.getRoomDetail(this.roomId)
+						this.randomBool = true;
+					}
+				})
+				this.allClose();
 				// let res = await $request('switchSystemRoom', {
 				// 	amount: this.amountList[this.amountIndex]
 				// });
@@ -344,6 +435,13 @@
 				// 	// this.amountList = res.data.data.amount;
 				// 	// this.amountIndex = 0;
 				// }
+			},
+			allClose(){
+				this.$nextTick(()=>{
+					this.$refs.popup.close();
+					this.$refs.numCom.close();
+					this.$refs.loadingCom.close();
+				})
 			},
 			listenNum(info) {
 				console.log(info)
@@ -510,24 +608,42 @@
 				}
 			},
 			async getRoomDetail(id) {
+				// let res = await $request('roomDetail', {
+				// 	id
+				// });
+				// // console.log(res)
+				// if (res.data.code == 200) {
+				// 	this.roomDetail = res.data.data;
+				// 	let info = {
+				// 		detail: this.roomDetail,
+				// 		info: this.roomInfo,
+				// 		room_id:id
+				// 	}
+					// let end = new Date(this.roomDetail.dismiss_time).getTime();
+					// let start = new Date().getTime();
+					// let time = end -start;
+					// console.log(end,start,time)
+					// this.startCountdown1(time)
+					// if(this.type){
+					// 	this.$refs.shareCom.open(info)
+					// }
+				// 	return
+				// }
+				// $totast(res.data.message)
 				let res = await $request('roomDetail', {
 					id
 				});
 				// console.log(res)
 				if (res.data.code == 200) {
 					this.roomDetail = res.data.data;
-					let info = {
-						detail: this.roomDetail,
-						info: this.roomInfo,
-						room_id:id
-					}
+					this.roomId =  res.data.data.id;
 					let end = new Date(this.roomDetail.dismiss_time).getTime();
 					let start = new Date().getTime();
 					let time = end -start;
 					console.log(end,start,time)
 					this.startCountdown1(time)
 					if(this.type){
-						this.$refs.shareCom.open(info)
+						this.$refs.shareCom.open({...info,page:'friend'})
 					}
 					return
 				}
@@ -541,14 +657,14 @@
 				}
 				$totast(res.data.message)
 			},
-			async startPolling() {
-				// 启动轮询，每隔 1 秒调用一次
-				this.polling = true;
-				while (this.polling) {
-					await this.getRoomInfo(); // 等待请求返回
-					await this.sleep(2000); // 等待 1 秒后再继续轮询
-				}
-			},
+			// async startPolling() {
+			// 	// 启动轮询，每隔 1 秒调用一次
+			// 	this.polling = true;
+			// 	while (this.polling) {
+			// 		await this.getRoomInfo(); // 等待请求返回
+			// 		await this.sleep(2000); // 等待 1 秒后再继续轮询
+			// 	}
+			// },
 			async startPolling1() {
 				// 启动轮询，每隔 1 秒调用一次
 				this.polling1 = true;
@@ -568,43 +684,55 @@
 			sleep(ms) {
 				return new Promise(resolve => setTimeout(resolve, ms));
 			},
-			async getRoomInfo() {
-				let res = await $request('roomInfo', {
-					room_id: this.roomId
-				});
-				// console.log(res)
-				if (res.data.code == 200) {
-					this.roomInfo = res.data.data;
-					this.randomIndex++
-					if(this.randomIndex==5){
-						let list = [];
-						 this.roomInfo.joined_users.forEach((val)=>{
-							 list.push({url:val})
-						 })
-						list.forEach(avatar => {
-							// 随机生成位置偏移量
-							const offsetX =Math.floor((Math.random()+0.2) * 285);
-							const offsetY = Math.floor(Math.random() * 35);
-							// 应用偏移量
+			// async getRoomInfo() {
+			// 	let res = await $request('roomInfo', {
+			// 		room_id: this.roomId
+			// 	});
+			// 	// console.log(res)
+			// 	if (res.data.code == 200) {
+			// 		this.roomInfo = res.data.data;
+			// 		this.randomIndex++
+			// 		if(this.randomIndex==5){
+			// 			let list = [];
+			// 			 this.roomInfo.joined_users.forEach((val)=>{
+			// 				 list.push({url:val})
+			// 			 })
+			// 			list.forEach(avatar => {
+			// 				// 随机生成位置偏移量
+			// 				const offsetX =Math.floor((Math.random()+0.2) * 285);
+			// 				const offsetY = Math.floor(Math.random() * 35);
+			// 				// 应用偏移量
 							
-							avatar.left = `${offsetX}`;
-							avatar.top = `${offsetY}`;
-						});
-						this.testList = list;
-						this.randomIndex=0
-					}
+			// 				avatar.left = `${offsetX}`;
+			// 				avatar.top = `${offsetY}`;
+			// 			});
+			// 			this.testList = list;
+			// 			this.randomIndex=0
+			// 		}
 					
 					
 					
-					return
-				}
-				$totast(res.data.message)
-			},
+			// 		return
+			// 	}
+			// 	$totast(res.data.message)
+			// },
 			async getGameStatus() {
 				let res = await $request('newGameStatus', {
 					room_id: this.roomId
 				});
 				if (res.data.code == 200) {
+					this.roomInfo = res.data.data.room_info;
+					this.messageLoopNum++;
+					// this.messageInterval();
+					// console.log(this.messageLoopNum)
+					if(this.messageLoopNum>=10){
+						this.messageLoopNum = 0;
+						// clearInterval(this.testInterval)
+						this.messageInterval();
+						
+					}else{
+						// this.messageInterval();
+					}
 					let data = res.data.data;
 					// data = {
 					// 	end_time: 0,
@@ -616,29 +744,46 @@
 					// 	user_id: 49
 					// }
 					this.roomStatus = data;
-					this.$refs.numCom.open({num:data.countdown_end_time})
-					// this.listenNum(data)
-					if(data.is_can_start===0){  //如果还没有开启游戏，处理一下默认逻辑
-						
-					}
-					if(data.is_can_start==1){  //如果可以开启游戏，三秒倒计时启动
-				      let thisSee = uni.getStorageSync('thisSee')
-					  if(thisSee&&thisSee.includes(`${data.user_id.toString()}${data.sn}`)){  //如果缓存跟当前订单符合，说明不是第一次了，不倒计时了
-						console.log('触发--已看过当前投注')
-						// this.btnText = '111'
-						// this.getGameResult();//调接口直接打开弹窗
-					}else{  //第一次观看有倒计时
-					    if(this.countdownBool){ //如果正处于倒计时
-						   return
-					    }
-						
-					    this.countdownBool = true;//设置已经倒计时已开启状态
-						this.startCountdown(3)
-					}
-				}
-				if(data.is_can_order===0){  //当买定离手时
 					
-				}
+					if(data.is_can_start===0){  //如果还没有开启游戏，处理一下默认逻辑
+							
+						}
+						if(data.is_can_order==1&&data.is_can_start==0&&data.is_user_join==0&&this.autoBool){
+							//符合游戏未开始，已自动下注
+							this.gameJoin();
+						}
+						if(data.is_can_order==1&&data.is_can_start==0&&data.is_user_join==1){
+							
+							this.$nextTick(()=>{
+								this.$refs.loadingCom.open();
+							})
+						}else{
+							
+							this.$nextTick(()=>{
+								this.$refs.loadingCom.close();
+							})
+						}
+						if(data.is_can_start==1){  //如果可以开启游戏，三秒倒计时启动
+					      let thisSee = uni.getStorageSync('thisSee')
+						  if(thisSee&&thisSee.includes(`${data.user_id.toString()}${data.sn}`)){  //如果缓存跟当前订单符合，说明不是第一次了，不倒计时了
+							console.log('触发--已看过当前投注')
+							// this.btnText = '111'
+							this.getGameResult();//调接口直接打开弹窗
+						}else{  //第一次观看有倒计时
+						// console.log('---',this.$refs.numCom.open)
+						this.$refs.numCom.open({num:data.countdown_end_time,room_id: this.roomId,random:this.randomBool})
+						   this.randomBool = false;
+							// if(this.countdownBool){ //如果正处于倒计时
+							   // return
+						    // }
+							
+						    // this.countdownBool = true;//设置已经倒计时已开启状态
+							// this.startCountdown(3)
+						}
+					}
+					if(data.is_can_order===0){  //当买定离手时
+						
+					}
 				
 					return
 				}
@@ -646,8 +791,11 @@
 			},
 			async getGameResult() {
 				let res = await $request('gameResult', {
-					room_id: this.roomId
+					// room_id: this.roomDetail.id,
+					game_id:this.roomStatus.game_id
 				});
+				this.getRoomDetail(this.roomId)
+				this.getUser();
 				if (res.data.code == 200) {
 					this.$refs.popup.open(res.data.data)
 				}
@@ -659,7 +807,7 @@
 					info: this.roomInfo,
 					room_id:this.roomId
 				}
-				this.$refs.shareCom.open(info)
+				this.$refs.shareCom.open({...info,page:'friend'})
 			
 			},
 		}
@@ -671,9 +819,86 @@
 
 	page {
 		// height: 100vh;
-		background: url('../../../static/friend_bk.png') no-repeat 100% 100%/cover;
+		background: url('../../../static/friend_bk.png') no-repeat 100% 10%/cover;
 	}
-
+	/deep/ uni-swiper-item{
+		overflow: visible;
+	}
+	.hr1 {
+		width: 666rpx;
+		margin: 0rpx auto;
+		// background: rgba(0, 0, 0, .35);
+		padding: 5rpx;
+		border-radius: 5rpx;
+		.flex-direction;
+	
+		image {
+			width: 22rpx;
+			margin-right: 15rpx;
+		}
+	
+		.uni-notice-bar {
+			margin: 0;
+			padding: 0;
+		}
+	
+		text {
+			width: 600rpx;
+			color: #D8D8D8;
+			font-size: 21rpx;
+			line-height: 2;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+		}
+		.news-list {
+			width: 100%;
+			margin: 0rpx auto;
+			// margin-left: -30rpx;
+			// margin-right: -30rpx;
+			padding: 10rpx 0rpx;
+			// background-color: white;
+			border-radius: 20rpx;
+			.flex-direction;
+			flex-direction: row;
+			// color: #D8D8D8;
+			color: white;
+			.left-tit {
+				// margin-right: 38rpx;
+				// border-radius: 0 50px 50px 0;
+				// padding: 10rpx 30rpx;
+				// background: linear-gradient(0deg, #fd631f 0%, #fd7e1f 100%);
+				// background: linear-gradient(90deg, #1098B7 0%, #64BAB4 100%);
+				// background: #F96932;
+				// color: #F96932;
+				font-size: 24rpx;
+				image{
+					width:29rpx;
+					margin-right: 10rpx;
+				}
+			}
+		
+			.news-swiper {
+		
+				min-width: 10%;
+				flex-grow: 1;
+		
+				.swiper {
+					height: 36rpx;
+		
+					.swiper-item {
+						overflow: hidden;
+						white-space: nowrap;
+						text-overflow: ellipsis;
+		
+						color: white;
+						font-size: 26rpx;
+						line-height: 36rpx;
+					}
+				}
+			}
+		}
+	}
 	.posi {
 		position: fixed;
 		bottom: 42rpx;
@@ -783,8 +1008,8 @@
 
 			.user-right {
 				image {
-					width: 55rpx;
-					height: 55rpx;
+					width: 65rpx;
+					height: 65rpx;
 					border-radius: 50%;
 				}
 
@@ -1133,14 +1358,49 @@
 				}
 
 				.right {
-					width: 65rpx;
-					height: 65rpx;
-					border-radius: 50%;
-					border: 1px solid darkgrey;
-					.flex-center;
-
+					box-sizing: border-box;
+					// width: 91rpx;
+					height: 161rpx;
+					// background: #000000;
+					border-radius: 4rpx;
+					border: 1px solid #FFFFFF;
+					// opacity: 0.4;
+					background: rgba(0, 0, 0, 0.4);
+					position: relative;
+					// width: 65rpx;
+					// height: 65rpx;
+					// border-radius: 50%;
+					// border: 1px solid darkgrey;
+					// background: rgba(0, 0, 0, 0.4);
+					.flex-column;
+					
+					.right-top,.right-bottom{
+						box-sizing: border-box;
+						padding: 13rpx 10rpx;
+						height: 50%;
+						.flex-column;
+					}
+					// .right-bottom{
+					// 	// margin-bottom: 15rpx;
+					// 	// border-bottom: 1px solid #333333;
+					// 	border-top: 1px solid red;
+					// 	// padding-bottom: 15rpx;
+					// }
+					.hr-t{
+						position: absolute;
+						width: 100%;
+						background: #333333;
+						height: 1px;
+						top: 53%;
+						left: 0rpx;
+					}
 					image {
 						width: 37rpx;
+						margin-bottom: 10rpx;
+					}
+					text{
+						color: #CCCCCC;
+						font-size: 22rpx;
 					}
 				}
 			}

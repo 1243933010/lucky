@@ -1,24 +1,26 @@
 <template>
 	<view>
-		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="center">
-			<view class="popup-content">
-				<view class="close" @click="$refs.popup.close()">
-					<image src="@/static/close_icon2.png" mode="widthFix"></image>
-				</view>
-				<view class="copy"  @click="copy">
-					<image src="../../../static/copy_icon.png" mode="widthFix"></image>
-					<!-- <image :src="userInfo.avatar?filesUrl1+userInfo.avatar:'@/static/default_user.png'" mode="widthFix"></image> -->
-				    <text>Copy Link</text>
-				</view>
-				<view class="nickname">
-					<image :src="userInfo.avatar?filesUrl1+userInfo.avatar:'@/static/default_user.png'" mode="widthFix"></image>
-					<text>{{userInfo.nickname}}</text>
-				</view>
-				<view class="my">
-					<text>My invitation code</text>
-				</view>
-				<view class="code">
-					<text>{{userInfo.invite_code}}</text>
+		<uni-popup ref="popup" borderRadius="20 20 0 0 " type="center" :isMaskClick="true">
+			<view class="test">
+				<view class="popup-content">
+					<view class="close" @click="$refs.popup.close()">
+						<image src="@/static/close_icon2.png" mode="widthFix"></image>
+					</view>
+					<view class="copy"  @click="copy">
+						<image src="../../../static/copy_icon.png" mode="widthFix"></image>
+						<!-- <image :src="userInfo.avatar?filesUrl1+userInfo.avatar:'@/static/default_user.png'" mode="widthFix"></image> -->
+					    <text>Copy Link</text>
+					</view>
+					<view class="nickname">
+						<image :src="userInfo.avatar?filesUrl1+userInfo.avatar:'@/static/default_user.png'" mode="widthFix"></image>
+						<text>{{userInfo.nickname}}</text>
+					</view>
+					<view class="my">
+						<text>My invitation code</text>
+					</view>
+					<view class="code">
+						<text>{{userInfo.invite_code}}</text>
+					</view>
 				</view>
 			</view>
 	</uni-popup>
@@ -70,14 +72,20 @@
 				}
 			},
 			copy(){
+				let url = 'http://localhost:8080';
+				url = this.userInfo.host_url;
 				uni.setClipboardData({
-					data:`${this.userInfo.host_url}/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`,
+					data:`${url}/#/pages/login/login?invite_code=${this.userInfo.invite_code}&page=bottom`,
 					// data:`http://localhost:8080/#/pages/login/login?invite_code=${this.userInfo.invite_code}&room_code=${this.userInfo.room_code}`,
 					success:(res)=>{
+						
 						uni.showToast({
 							icon:'none',
 							title:'success'
 						})
+						setTimeout(()=>{
+							this.$refs.popup.close()
+						},500)
 					}
 				})
 				// uni.setClipboardData({
@@ -99,9 +107,21 @@
 	/deep/ .uni-popup__wrapper {
 		border-radius: 25rpx;
 	}
-
+	.test{
+		width: 100%;
+		height: 100%;
+		position: fixed;
+		top: 0;
+		left: 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		// z-index: 100;
+		// background-color: red;
+	}
 	.popup-content {
 		width: 666rpx;
+		
 		// height: 1118rpx;
 		height: 991rpx;
 		// overflow-y: auto;
@@ -109,17 +129,19 @@
 		background: url('../../../static/yao_bk.png') no-repeat 100% 100%/cover;
 		// box-shadow: 0rpx -2rpx 9rpx 0rpx rgba(235, 235, 245, 0.302);
 		border-radius: 61rpx 61rpx 61rpx 61rpx;
+		z-index: 1000;
 		// border: 4rpx solid;
 	}
 
 	.popup-content {
 		position: relative;
 		padding-top: 52rpx;
+		
 		.close {
 			position: absolute;
 			left: 43rpx;
 			top: -43rpx;
-
+			// z-index: 1000;
 			image {
 				width: 43rpx;
 			}

@@ -32,10 +32,9 @@
 		data() {
 			return {
 				showBool:false,
-				bool:false,
 				options: {},
-				interTime:null,
-				time:''
+				time:'',
+				sleepBool:false
 			};
 		},
 		methods: {
@@ -49,32 +48,20 @@
 				// console.log(res)
 			},
 			close(){
-				this.bool =false;
 				this.showBool = false;
-				clearInterval(this.interTime);
-				this.interTime = null;
+				this.sleepBool = false;
 			},
 			open(data) {
 				 // console.log(data)
-				 if(this.options.num===data.num){
-					 
+				 if(this.options.num===data.num&&!data.random){
 				 	return
 				 }else{
-					 
-					 clearInterval(this.interTime);
-					 this.interTime = null
+					 this.sleepBool = false;
 				 }
 				  this.options = data;
 				if(!this.options.num){
-					this.bool =false;
 					this.showBool = false;
-					clearInterval(this.interTime);
-					this.interTime = null;
-					
-					// this.$nextTick(() => {
-					// 	// this.$refs.popup.close()
-					// 	// this.showBool = false;
-					// })
+					this.sleepBool = false;
 					return
 				}
 				
@@ -85,38 +72,31 @@
 						// console.log(oldData-thisData)
 						if(oldData>thisData){
 							this.time = (oldData-thisData).toFixed();
+							this.sleepBool = true;
 							this.timeFnc()
 							this.showBool = true;
 						}else{
-							this.interTime = null
-							 clearInterval(this.interTime);
+							this.sleepBool = false;
 							 this.showBool = false;
 							 return
-							// this.getGameResult()
 						}
 						
 				}
 			},
+			sleep(ms) {
+				return new Promise(resolve => setTimeout(resolve, ms));
+			},
 			async timeFnc() {
-				if (this.interTime) return;
-				this.interTime =setInterval(()=>{
-					this.time--
+				while (this.sleepBool) {
+					this.time--;
 					if(this.time<=0){
-						
-						 clearInterval(this.interTime);
-						 this.interTime = null
-						 this.showBool = false;
+						this.sleepBool = false;
 						 this.time = null;
-						 if(this.bool){
-							 
-						 }else{
-							 clearInterval(this.interTime);
-							 this.interTime = null
-							 this.getGameResult()
-							 this.bool = false
-						 }
+						 this.showBool = false;
+						 this.getGameResult()
 					}
-				},1000) 
+					await this.sleep(1000); // 等待 1 秒后再继续轮询
+				}
 			}
 		}
 	}

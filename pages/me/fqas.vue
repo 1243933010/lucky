@@ -7,43 +7,49 @@
 			<view class="desc">{{faqInfo.text}}</view>
 
 			<uni-collapse accordion>
-				<uni-collapse-item :title="item.question" :thumb="item.thumb" v-for="item in faqInfo.list" :key="item.id">
+				<uni-collapse-item :title="item.question" :thumb="item.thumb" v-for="item in faqInfo.list"
+					:key="item.id">
 					<view class="collapse-con">
 						<text>{{item.answer}}</text>
 					</view>
 				</uni-collapse-item>
 			</uni-collapse>
 		</view>
-		<DefaultFooter />
+		<DefaultFooter @share="$refs.invitePopup.open()" />
+		<InvitePopup ref="invitePopup" />
 	</view>
 </template>
 
 <script>
 	import {
-		$request,$totast
+		$request,
+		$totast
 	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import DefaultFooter from '../../components/defaultFooter.vue';
+	import InvitePopup from '@/pages/team/components/InvitePopup.vue';
 	export default {
 		components: {
-			DefaultHeader,DefaultFooter
+			DefaultHeader,
+			DefaultFooter,
+			InvitePopup
 		},
 		data() {
 			return {
-				faqInfo:{
-					list:[],
-					text:''
+				faqInfo: {
+					list: [],
+					text: ''
 				}
 			};
 		},
-		mounted(){
+		mounted() {
 			this.getFaqs();
 		},
-		methods:{
-			async getFaqs(){
-				let res = await $request('faq',{});
+		methods: {
+			async getFaqs() {
+				let res = await $request('faq', {});
 				console.log(res)
-				if(res.data.code==200){
+				if (res.data.code == 200) {
 					this.faqInfo = res.data.data;
 				}
 			}
@@ -57,7 +63,7 @@
 	page {
 		height: 100%;
 		// background: #201f29 url('../../static/login_bk.png') no-repeat 100% 100%;
-		background:#000 url('../../static/ku.png') no-repeat 100% 100%/cover;
+		background: #000 url('../../static/ku.png') no-repeat 100% 100%/cover;
 		background-size: 100% auto;
 	}
 
@@ -82,6 +88,13 @@
 		/deep/.uni-collapse {
 			margin-top: 34px;
 			background-color: transparent;
+
+			.uni-collapse-item__title-text {
+				width: 400rpx;
+				span {
+					width: 100%;
+				}
+			}
 
 			.uni-collapse-item {
 				margin-top: 18rpx;
@@ -111,6 +124,7 @@
 						.collapse-con {
 							padding: 20rpx;
 						}
+
 					}
 				}
 			}

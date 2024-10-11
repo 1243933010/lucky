@@ -6,7 +6,7 @@
 					<view class="popup-content">
 						<view class="box">
 							<view class="label">
-								<text>Waiting for others to place bets</text>
+								<text>Waiting for others to place bets.</text>
 							</view>
 						</view>
 					</view>
@@ -32,21 +32,22 @@
 				bool:false,
 				options: {},
 				interTime:null,
-				time:''
+				time:'',
+				game_id:''
 			};
 		},
 		methods: {
 			async getGameResult() {
 				let res = await $request('gameResult', {
-					room_id: this.options.room_id
+					game_id: this.game_id
 				});
 				if (res.data.code == 200) {
 					this.$refs.popupRef.open(res.data.data)
 				}
 				// console.log(res)
 			},
-			open() {
-				
+			open(game_id) {
+				this.game_id = game_id;
 				 this.$nextTick(()=>{
 					 // this.$refs.popup.open()
 					 this.showBool = true;
@@ -75,7 +76,7 @@
 		position: fixed;
 		width: 100%;
 		// background: red;
-		min-height: 600rpx;
+		min-height: 400rpx;
 		top: 25%;
 		left: 0;
 		display: flex;

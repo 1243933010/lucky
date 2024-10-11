@@ -19,15 +19,15 @@
 					</view>
 					<view class="form-item">
 						<input type="text" placeholder="用户名">
-					</view>
+					</view> -->
 					<view class="send">
-						<input type="text" placeholder="Email Verification Code">
+						<input  v-model="formData.email_code"  type="text" placeholder="Email Verification Code">
 						<view class="btn">
-							<view class="">
-								<text>Send</text>
+							<view class="" @click="handleTime">
+								<text>{{codeText}}</text>
 							</view>
 						</view>
-					</view> -->
+					</view>
 					<view class="submit" @click="submitBtn">
 						<text>complete</text>
 					</view>
@@ -48,9 +48,12 @@
 				type: '',
 				formData:{
 					text:'',
+					email_code:''
 					// trc20_address:'',
 					// bep20_address:''
-				}
+				},
+				codeText:'Send',
+				timeFnc: null,
 				
 			};
 		},
@@ -67,6 +70,7 @@
 				}else {
 					obj.bep20_address=this.formData.text;
 				}
+				obj.email_code = this.formData.email_code;
 				let res = await $request("userUpdate", obj)
 				// console.log(res)
 				$totast(res.data.message)
@@ -74,7 +78,30 @@
 					this.$refs.popup.close()
 					this.$emit('updateData')
 				}
-			}
+			},
+			handleTime() {
+				if (!this.formData.text) {
+					return
+				}
+				if (typeof this.codeText == "number") {
+					return false
+				}
+				this.codeText = 60;
+				this.sendEmail();
+				this.timeFnc = setInterval(() => {
+					this.codeText--;
+					if (this.codeText == 0) {
+						this.codeText = 'Send';
+						clearInterval(this.timeFnc);
+						this.timeFnc = null
+					}
+				}, 1000)
+			},
+			async sendEmail() {
+				let res = await $request("loginByCode", {scene:'change_withdraw_address'})
+				// console.log(res)
+				$totast(res.data.message)
+			},
 		}
 	}
 </script>

@@ -8,7 +8,7 @@
 				<view class="title">
 					<text>Historical records</text>
 				</view>
-				<scroll-view scroll-y="true" style="height: 800rpx;">
+				<scroll-view scroll-y="true" style="height: 600rpx;" @scrolltolower="scrolltolower">
 					<view class="list">
 						<view class="item" v-for="(item,index) in list" :key="index">
 							<view class="left">
@@ -44,21 +44,34 @@
 				type: 'center',
 				list:[
 					{time:'2022-15-66',amount:'-100',status_text:'Withdraw'},
-				]
+				],
+				requestObj:{
+					page:1,
+					limit:10
+				}
 				
 			};
 		},
 		methods: {
 			open(options = {type: 'center'}) {
 				this.type = options.type;
+				this.list = [];
+				this.requestObj.page = 1;
 				this.getRechargesAndWithdraws()
 				this.$refs.popup.open()
 			},
+			scrolltolower(e){
+				console.log(e)
+				this.requestObj.page++;
+				this.getRechargesAndWithdraws()
+			},
 			async getRechargesAndWithdraws(){
-				let res = await $request('recharges_and_withdraws',{});
-				console.log(res)
+				uni.showLoading()
+				let res = await $request('recharges_and_withdraws',this.requestObj);
+				uni.hideLoading()
+				// console.log(res)
 				if(res.data.code==200){
-					this.list = res.data.data.data;
+					this.list.push(...res.data.data.data);
 				}
 			},
 		}

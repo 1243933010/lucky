@@ -25,8 +25,10 @@
 		},
 		computed:{
 			logoUrl(){
-				console.log(getApp().globalData)
-				return getApp().globalData.indexConfig.system_logo
+				let indexConfig = uni.getStorageSync('indexConfig');
+				
+				// console.log(getApp().globalData.indexConfig.system_logo,'---')
+				return indexConfig.system_logo
 			}
 		},
 		methods:{
@@ -50,11 +52,11 @@
 		justify-content: space-between;
 		align-items: center;
 		padding-top: 73rpx;
-
+		z-index: -1;
 		.logo1 {
 			width: 100rpx;
 			height: 100rpx;
-
+			z-index: 0;
 			image {
 				width: 100%;
 				height: 100%;
@@ -68,8 +70,8 @@
 			align-items: center;
 
 			view {
-				width: 33rpx;
-				height: 5rpx;
+				width: 43rpx;
+				height: 6rpx;
 				background: #FFFFFF;
 				margin-bottom: 10rpx;
 				// border: 4rpx solid #FFFFFF;

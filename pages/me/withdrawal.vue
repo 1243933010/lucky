@@ -95,7 +95,7 @@
 	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
 	import defaultPopup from '../../components/defaultPopup.vue';
-	import OrderPopup from '../../components/orderPopup.vue';
+	import OrderPopup from '@/components/orderPopup.vue';
 	import WithdrawalPopup from './components/withdrawalPopup.vue';
 	import FixedCom from '@/components/fixed.vue';
 	export default {
@@ -127,8 +127,10 @@
 		},
 		computed:{
 			logoUrl(){
-				console.log(getApp().globalData)
-				return getApp().globalData.indexConfig.system_logo
+				let indexConfig = uni.getStorageSync('indexConfig');
+				
+				// console.log(getApp().globalData.indexConfig.system_logo,'---')
+				return indexConfig.system_logo
 			}
 		},
 		methods: {
@@ -144,13 +146,15 @@
 			chooseRadio(index) {
 				this.radioIndex = index;
 				if(this.radioIndex==0){
-					if(this.withdrawConfig.trc20_address){
-						this.address = this.withdrawConfig.trc20_address;
-					}
+					this.address = this.withdrawConfig.trc20_address;
+					// if(this.withdrawConfig.trc20_address){
+					// 	this.address = this.withdrawConfig.trc20_address;
+					// }
 				}else{
-					if(this.withdrawConfig.bep20_address){
-						this.address = this.withdrawConfig.bep20_address;
-					}
+					this.address = this.withdrawConfig.bep20_address;
+					// if(this.withdrawConfig.bep20_address){
+					// 	this.address = this.withdrawConfig.bep20_address;
+					// }
 				}
 			},
 			async getUser(){
@@ -234,7 +238,9 @@
 				}
 			},
 			async withdrawCreate(){
-				this.formData.channel = this.rechargeConfig[this.radioIndex].id
+				
+				// this.formData.channel = this.rechargeConfig[this.radioIndex].id
+				this.formData.channel =this.radioIndex==0?'trc20':'bep20';
 				let res = await $request('withdrawCreate',this.formData);
 				console.log(res)
 				$totast(res.data.message);

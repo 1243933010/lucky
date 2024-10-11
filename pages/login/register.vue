@@ -50,7 +50,7 @@
 						<text>Invitation Code</text>
 					</view>
 					<view class="input">
-						<input type="password" v-model="formData.invite_code" />
+						<input type="text" v-model="formData.invite_code" />
 					</view>
 				</view>
 			</view>
@@ -96,7 +96,7 @@
 				invite_code,
 				room_code
 			} = this.onLoadParams;
-			this.formData.invite_code = invite_code;
+			this.formData.invite_code = invite_code||'';
 			
 			this.indexConfigFnc()
 		},
@@ -113,21 +113,47 @@
 			async submitBtn() {
 				let res = await $request('region', this.formData);
 				// console.log(res)
+				// $totast(res.data.message)
+				if(res.data.code==200){
+					$totast('Email verification to be sent within 5 minutes')
+					return
+				}
 				$totast(res.data.message)
-				// if(res.data.code==200){
-
-				// }
 			},
 			goUrl() {
-				if (this.onLoadParams.invite_code || this.onLoadParams.room_code) {
-					uni.reLaunch({
-						url: `/pages/login/login?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
-					})
-				} else {
+				// if (this.onLoadParams.invite_code || this.onLoadParams.room_code) {
+				// 	uni.reLaunch({
+				// 		url: `/pages/login/login?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
+				// 	})
+				// } else {
+				// 	uni.reLaunch({
+				// 		url: `/pages/login/login`
+				// 	})
+				// }
+				
+				
+				if(this.onLoadParams.page&&this.onLoadParams.page=='friend'){
+					if (this.onLoadParams.invite_code && this.onLoadParams.room_code) {
+						uni.reLaunch({
+							url: `/pages/login/login?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
+						})
+					} 
+				}else if(this.onLoadParams.page&&this.onLoadParams.page=='hall'){
+					if (this.onLoadParams.roomId && this.onLoadParams.roomType) {
+						// uni.reLaunch({
+						// 	url: `/pages/index/index?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
+						// })
+						uni.reLaunch({
+							url: `/pages/login/login?roomId=${this.onLoadParams.roomId}&roomType=${this.onLoadParams.roomType}&bet_amount=${this.onLoadParams.bet_amount}`
+						})
+					} 
+				}else{
 					uni.reLaunch({
 						url: `/pages/login/login`
 					})
 				}
+				
+				
 			}
 		}
 	}
@@ -157,6 +183,7 @@
 			// background:  url('../../static/login_bk.png') no-repeat center center / 100% 100%;
 			background: #000000 url('../../static/login_bk.png') no-repeat top left;
 			background-size: 100% auto;
+			
 		}
 
 		.logo {
@@ -238,7 +265,7 @@
 			.flex-center;
 			color: #9E9E9E;
 			font-size: 24rpx;
-
+			padding-bottom: 140rpx;
 			.label {
 				.flex-direction;
 

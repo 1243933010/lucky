@@ -51,18 +51,18 @@
 								<image src="../static/icon_1.png" mode="widthFix"></image>
 								<text>Facebook</text>
 							</view>
-							<view class="tt">/</view>
-							<view class="item" @click="outLink(indexInfo.system_twitter)">
+							<view class="tt" v-if="indexInfo.system_twitter">/</view>
+							<view class="item" v-if="indexInfo.system_twitter" @click="outLink(indexInfo.system_twitter)">
 								<image src="../static/icon_2.png" mode="widthFix"></image>
 								<text>Twitter </text>
 							</view>
-							<view class="tt">/</view>
-							<view class="item" @click="outLink(indexInfo.system_telegram)">
+							<view class="tt" v-if="indexInfo.system_telegram">/</view>
+							<view class="item" v-if="indexInfo.system_telegram" @click="outLink(indexInfo.system_telegram)">
 								<image src="../static/icon_3.png" mode="widthFix"></image>
 								<text> Tele. </text>
 							</view>
-							<view class="tt">/</view>
-							<view class="item" @click="outLink(indexInfo.system_discord)">
+							<view class="tt" v-if="indexInfo.system_discord">/</view>
+							<view class="item" v-if="indexInfo.system_discord" @click="outLink(indexInfo.system_discord)">
 								<image src="../static/icon_4.png" mode="widthFix"></image>
 								<text> Disco.</text>
 							</view>
@@ -132,7 +132,11 @@
 				// #ifdef H5
 				console.log(type)
 				// window.open('https://www.baidu.com')
-				location.href = type;
+				if(type){
+					// location.href = type;
+					window.open(type)
+				}
+				
 				// location.href = 'https://www.baidu.com';
 				// #endif
 			}

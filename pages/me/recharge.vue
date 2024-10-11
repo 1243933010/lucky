@@ -8,7 +8,7 @@
 					<image src="../../static/recharge.png" mode="widthFix"></image>
 				</view>
 				<view class="logo">
-					<image src="../../static/logo.png" mode="widthFix"></image>
+					<image :src="logoUrl" mode="widthFix"></image>
 				</view>
 				<view class="withdraw" @click="goUrl">
 
@@ -67,7 +67,7 @@
 		$request,$totast
 	} from "@/utils/request";
 	import DefaultHeader from '../../components/defaultHeader.vue';
-	import OrderPopup from '../../components/orderPopup.vue';
+	import OrderPopup from '@/components/orderPopup.vue';
 	import FixedCom from '@/components/fixed.vue';
 	// import DefaultFooter from '../../components/defaultFooter.vue';
 	export default {
@@ -86,6 +86,14 @@
 				rechargeConfig:[],
 				list:[]
 			};
+		},
+		computed:{
+			logoUrl(){
+				let indexConfig = uni.getStorageSync('indexConfig');
+				
+				// console.log(getApp().globalData.indexConfig.system_logo,'---')
+				return indexConfig.system_logo
+			}
 		},
 		mounted(){
 			this.getRechargeConfig()

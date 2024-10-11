@@ -75,18 +75,27 @@
 			}
 			let token = uni.getStorageSync('token')
 			if (token) {
-				if (this.onLoadParams.invite_code && this.onLoadParams.room_code) {
-					// uni.reLaunch({
-					// 	url: `/pages/index/index?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
-					// })
-					uni.reLaunch({
-						url: `/pages/index/friend/friend?room_code=${this.options.room_code}`
-					})
-				} else {
-					// uni.reLaunch({
-					// 	url: "/pages/index/index",
-					// });
+				if(this.onLoadParams.page&&this.onLoadParams.page=='friend'){
+					if (this.onLoadParams.invite_code && this.onLoadParams.room_code) {
+						// uni.reLaunch({
+						// 	url: `/pages/index/index?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
+						// })
+						
+						uni.reLaunch({
+							url: `/pages/index/friend/friend?room_code=${this.options.room_code}`
+						})
+					} 
+				}else if(this.onLoadParams.page&&this.onLoadParams.page=='hall'){
+					if (this.onLoadParams.roomId && this.onLoadParams.roomType) {
+						// uni.reLaunch({
+						// 	url: `/pages/index/index?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
+						// })
+						uni.reLaunch({
+							url: `/pages/index/hall/hall?id=${this.onLoadParams.roomId}&type=${this.onLoadParams.roomType}&bet_amount=${this.onLoadParams.bet_amount}`
+						})
+					} 
 				}
+				
 			}
 		},
 		methods: {
@@ -110,29 +119,78 @@
 					} = res.data.data;
 					uni.setStorageSync("token", `Bearer ${token}`); // 存储token
 					setTimeout(() => {
-						if (this.onLoadParams.invite_code && this.onLoadParams.room_code) {
-							uni.reLaunch({
-								url: `/pages/index/index?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
-							})
-						} else {
+						if(this.onLoadParams.page&&this.onLoadParams.page=='friend'){
+							if (this.onLoadParams.invite_code && this.onLoadParams.room_code) {
+								uni.reLaunch({
+									url: `/pages/index/index?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
+								})
+							} 
+						}else if(this.onLoadParams.page&&this.onLoadParams.page=='hall'){
+							if (this.onLoadParams.roomId && this.onLoadParams.roomType) {
+								// uni.reLaunch({
+								// 	url: `/pages/index/index?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
+								// })
+								uni.reLaunch({
+									url: `/pages/index/index?roomId=${this.onLoadParams.roomId}&roomType=${this.onLoadParams.roomType}&bet_amount=${this.onLoadParams.bet_amount}`
+								})
+							} 
+						}else{
 							uni.reLaunch({
 								url: "/pages/index/index",
 							});
 						}
+						
+						///
+						
+						// if (this.onLoadParams.invite_code && this.onLoadParams.room_code) {
+						// 	uni.reLaunch({
+						// 		url: `/pages/index/index?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
+						// 	})
+						// } else {
+						// 	uni.reLaunch({
+						// 		url: "/pages/index/index",
+						// 	});
+						// }
 
 					}, 1500)
 				}
 			},
 			goUrl() {
-				if (this.onLoadParams.invite_code || this.onLoadParams.room_code) {
+				if(this.onLoadParams.page&&this.onLoadParams.page=='friend'){
+					if (this.onLoadParams.invite_code && this.onLoadParams.room_code) {
+						uni.reLaunch({
+							url: `/pages/login/register?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
+						})
+					} 
+				}else if(this.onLoadParams.page&&this.onLoadParams.page=='hall'){
+					if (this.onLoadParams.roomId && this.onLoadParams.roomType) {
+						// uni.reLaunch({
+						// 	url: `/pages/index/index?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
+						// })
+						uni.reLaunch({
+							url: `/pages/login/register?roomId=${this.onLoadParams.roomId}&roomType=${this.onLoadParams.roomType}&bet_amount=${this.onLoadParams.bet_amount}`
+						})
+					} 
+				}else if(this.onLoadParams.page&&this.onLoadParams.page=='bottom'){
 					uni.reLaunch({
-						url: `/pages/login/register?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
+						url: `/pages/login/register?invite_code=${this.onLoadParams.invite_code}`
 					})
-				} else {
+				}else{
 					uni.reLaunch({
 						url: `/pages/login/register`
 					})
 				}
+				
+				///
+				// if (this.onLoadParams.invite_code || this.onLoadParams.room_code) {
+				// 	uni.reLaunch({
+				// 		url: `/pages/login/register?invite_code=${this.onLoadParams.invite_code}&room_code=${this.onLoadParams.room_code}`
+				// 	})
+				// } else {
+				// 	uni.reLaunch({
+				// 		url: `/pages/login/register`
+				// 	})
+				// }
 
 			}
 		}
@@ -144,6 +202,7 @@
 		height: 100%;
 		// background-color: #040405;
 		background: linear-gradient(0deg, #040405 0%, #23212c 100%);
+		position: relative;
 	}
 
 	text {
@@ -230,8 +289,9 @@
 		}
 
 		.submit-btn {
-			position: fixed;
-			bottom: 154rpx;
+			// position: absolute;
+			// bottom: 154rpx;
+			padding-top: 154rpx;
 			width: 100%;
 			display: flex;
 			justify-content: center;
@@ -250,8 +310,9 @@
 		}
 
 		.other {
-			position: fixed;
-			bottom: 122rpx;
+			// position: absolute;
+			// bottom: 122rpx;
+			padding-top: 58rpx;
 			width: 100%;
 			// padding-top: 20rpx;
 			.flex-center;
