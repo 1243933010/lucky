@@ -37,15 +37,15 @@
 			};
 		},
 		methods: {
-			async getGameResult() {
-				let res = await $request('gameResult', {
-					game_id: this.game_id
-				});
-				if (res.data.code == 200) {
-					this.$refs.popupRef.open(res.data.data)
-				}
-				// console.log(res)
-			},
+			// async getGameResult() {
+			// 	let res = await $request('gameResult', {
+			// 		game_id: this.game_id
+			// 	});
+			// 	if (res.data.code == 200) {
+			// 		this.$refs.popupRef.open(res.data.data)
+			// 	}
+			// 	// console.log(res)
+			// },
 			open(game_id) {
 				this.game_id = game_id;
 				 this.$nextTick(()=>{

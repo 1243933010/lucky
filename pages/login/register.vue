@@ -114,11 +114,12 @@
 				let res = await $request('region', this.formData);
 				// console.log(res)
 				// $totast(res.data.message)
+				$totast(res.data.message)
 				if(res.data.code==200){
-					$totast('Email verification to be sent within 5 minutes')
+					// $totast('Email verification to be sent within 5 minutes')
 					return
 				}
-				$totast(res.data.message)
+				
 			},
 			goUrl() {
 				// if (this.onLoadParams.invite_code || this.onLoadParams.room_code) {

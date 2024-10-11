@@ -34,17 +34,19 @@
 				showBool:false,
 				options: {},
 				time:'',
-				sleepBool:false
+				sleepBool:false,
+				game_id:''
 			};
 		},
 		methods: {
 			async getGameResult() {
-				let res = await $request('gameResult', {
-					room_id: this.options.room_id
-				});
-				if (res.data.code == 200) {
-					this.$refs.popupRef.open(res.data.data)
-				}
+				// let res = await $request('gameResult', {
+				// 	game_id: this.game_id
+				// });
+				// if (res.data.code == 200) {
+				// 	this.$refs.popupRef.open(res.data.data)
+				// }
+				this.$refs.popupRef.open(this.game_id)
 				// console.log(res)
 			},
 			close(){
@@ -53,6 +55,7 @@
 			},
 			open(data) {
 				 // console.log(data)
+				 this.game_id = data.game_id;
 				 if(this.options.num===data.num&&!data.random){
 				 	return
 				 }else{

@@ -518,6 +518,7 @@
 				let res = await $request('gameJoin',{...obj,room_id:this.roomId});
 				$totast(res.data.message)
 				if(res.data.code==200){
+					this.getUser();
 					this.getRoomDetail(this.roomId)
 				}else{
 					this.autoBool = false;
@@ -771,7 +772,7 @@
 							this.getGameResult();//调接口直接打开弹窗
 						}else{  //第一次观看有倒计时
 						// console.log('---',this.$refs.numCom.open)
-						this.$refs.numCom.open({num:data.countdown_end_time,room_id: this.roomId,random:this.randomBool})
+						this.$refs.numCom.open({num:data.countdown_end_time,room_id: this.roomId,random:this.randomBool,game_id:this.roomStatus.game_id})
 						   this.randomBool = false;
 							// if(this.countdownBool){ //如果正处于倒计时
 							   // return

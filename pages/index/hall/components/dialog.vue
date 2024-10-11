@@ -54,6 +54,7 @@
 		name: "defaultPopup",
 		data() {
 			return {
+				game_id:'',
 				options:{},
 				boolType:'1',
 				url:'',
@@ -102,14 +103,28 @@
 			})
 		},
 		methods: {
+			async getGameResult(game_id) {
+				let res = await $request('gameResult', {
+					game_id: this.game_id
+				});
+				if (res.data.code == 200) {
+					this.options = res.data.data
+					// this.$refs.popupRef.open(res.data.data)
+				}
+				// console.log(res)
+			},
 			open(data) {
-				this.options = data;
+				this.game_id = data;
 				this.boolType = '2';
 				this.url = `${test}?${Math.random()}`
+				this.options = {}
 				this.$refs.popup.open();
 				setTimeout(()=>{
 					this.boolType = '3';
 				},1000)
+				setTimeout(()=>{
+					this.getGameResult(data)
+				},3000)
 				setTimeout(()=>{
 					this.$refs.popup.close()
 				},8000)
